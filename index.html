@@ -250,8 +250,9 @@
   }
   .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
   .grid-3{ display:grid; grid-template-columns:repeat(3, 1fr); gap:12px; }
-  @media(max-width:900px){ .grid-3{ grid-template-columns:1fr 1fr; } }
-  @media(max-width:700px){ .grid-2, .grid-3{ grid-template-columns:1fr; } }
+  .grid-4{ display:grid; grid-template-columns:repeat(4, 1fr); gap:12px; }
+  @media(max-width:900px){ .grid-3, .grid-4{ grid-template-columns:1fr 1fr; } }
+  @media(max-width:700px){ .grid-2, .grid-3, .grid-4{ grid-template-columns:1fr; } }
 
   .field label{
     display:block; font-size:11px; font-weight:600;
@@ -490,6 +491,11 @@
   .badge.pending{ background:#fffbeb; color:#92400e; }
   .badge.read{ background:#eff6ff; color:#1e40af; }
   .badge.rejected{ background:#fef2f2; color:#b91c1c; }
+  .badge.draft{ background:#f1f5f9; color:#475569; }
+  .badge.on-track{ background:#ecfdf5; color:#047857; }
+  .badge.at-risk{ background:#fffbeb; color:#92400e; }
+  .badge.delayed{ background:#fef2f2; color:#b91c1c; }
+  .badge.completed{ background:#dbeafe; color:#1e40af; }
   .pwd{ font-family:monospace; background:#f1f5f9;
     padding:3px 8px; border-radius:6px; font-size:12px; }
 
@@ -550,7 +556,171 @@
     background:linear-gradient(90deg,var(--danger),#f87171);
   }
 
-  /* ============ RESPONSIVE ============ */
+  /* ============ GOOGLE DRIVE LINK SECTION ============ */
+  .gdrive-section {
+    background: #f0f9ff;
+    border: 1px solid #bae6fd;
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-top: 12px;
+  }
+  .gdrive-section h4 {
+    font-size: 12px;
+    color: #0369a1;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .gdrive-section .field {
+    margin-bottom: 8px;
+  }
+  .gdrive-section .field:last-child {
+    margin-bottom: 0;
+  }
+  .gdrive-section input {
+    background: #fff;
+  }
+  .gdrive-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    background: #e0f2fe;
+    color: #0369a1;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 10.5px;
+    font-weight: 600;
+    border: 1px solid #bae6fd;
+    transition: .15s;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  .gdrive-badge:hover {
+    background: #bae6fd;
+    color: #075985;
+    transform: translateY(-1px);
+    box-shadow: 0 2px 6px rgba(3,105,161,.15);
+  }
+  .gdrive-modal-banner {
+    background:#f0f9ff; border:1px solid #bae6fd; border-radius:8px;
+    padding:8px 12px; margin-bottom:12px; font-size:11px;
+    color:#0369a1; display:flex; align-items:center; gap:8px;
+  }
+  .gdrive-modal-banner a {
+    background:#0369a1; color:#fff; padding:4px 10px;
+    border-radius:6px; text-decoration:none; font-weight:600;
+    font-size:10.5px; white-space:nowrap;
+    transition:.15s;
+  }
+  .gdrive-modal-banner a:hover {
+    background: #075985;
+  }
+
+  /* ============ PROGRAM KERJA TAHUNAN (NEW) ============ */
+  .program-summary-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+  .program-summary-card {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 14px;
+    box-shadow: var(--shadow);
+    border-left: 3px solid var(--primary);
+    text-align: center;
+  }
+  .program-summary-card .num {
+    font-size: 24px;
+    font-weight: 700;
+    color: var(--primary-dark);
+  }
+  .program-summary-card .lbl {
+    font-size: 10px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .3px;
+    margin-top: 4px;
+  }
+  .program-summary-card.on-track { border-left-color: var(--success); }
+  .program-summary-card.at-risk { border-left-color: var(--warning); }
+  .program-summary-card.delayed { border-left-color: var(--danger); }
+  .program-summary-card.completed { border-left-color: var(--primary-light); }
+
+  /* Timeline / Gantt-like bar */
+  .timeline-bar-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 180px;
+  }
+  .timeline-bar-bg {
+    flex: 1;
+    height: 8px;
+    background: #e2e8f0;
+    border-radius: 4px;
+    overflow: hidden;
+    position: relative;
+  }
+  .timeline-bar-fill {
+    height: 100%;
+    border-radius: 4px;
+    transition: width .4s ease;
+  }
+  .timeline-bar-fill.plan { background: #93c5fd; }
+  .timeline-bar-fill.actual { background: var(--success); }
+  .timeline-bar-fill.actual.late { background: var(--danger); }
+  .timeline-bar-fill.actual.warn { background: var(--warning); }
+
+  /* Progress input */
+  .progress-input-wrap {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .progress-input-wrap input[type=number] {
+    width: 60px;
+    padding: 5px 8px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 12px;
+    text-align: center;
+  }
+  .progress-input-wrap .pct {
+    font-size: 12px;
+    color: var(--muted);
+  }
+
+  /* Quarter tabs */
+  .quarter-tabs {
+    display: flex;
+    gap: 4px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .quarter-tabs button {
+    padding: 6px 14px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+    background: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--muted);
+    transition: .15s;
+  }
+  .quarter-tabs button:hover {
+    background: #eff6ff;
+    color: var(--primary);
+  }
+  .quarter-tabs button.active {
+    background: var(--primary);
+    color: #fff;
+    border-color: var(--primary);
+  }
+
+  /* Responsive */
   @media(max-width:640px){
     nav.tabs{ top:56px; padding:0 12px; }
     main.content{ padding:14px; }
@@ -559,6 +729,7 @@
     .kpi-card .val{ font-size:20px; }
     .filter-bar select, .filter-bar input{ min-width:110px; font-size:11px; }
     .ci-icon-btn{ width:32px; height:32px; font-size:14px; }
+    .program-summary-grid { grid-template-columns: repeat(2, 1fr); }
   }
 </style>
 </head>
@@ -633,6 +804,7 @@
     <button data-tab="pengajuan"  data-i18n="tab_pengajuan">Form Material Approval</button>
     <button data-tab="loam"       data-i18n="tab_loam">LOAM</button>
     <button data-tab="monitoring" data-i18n="tab_monitoring">Monitoring LOAM</button>
+    <button data-tab="program"    data-i18n="tab_program">📅 Program Kerja Tahunan</button>
     <button data-tab="master"     data-i18n="tab_master">Master Data</button>
     <button data-tab="laporan"    data-i18n="tab_laporan">Laporan &amp; Audit</button>
     <button data-tab="riwayat"    data-i18n="tab_riwayat" id="tabRiwayat">Riwayat</button>
@@ -643,13 +815,17 @@
   <main class="content">
 
     <!-- ============================================================ -->
-    <!-- TAB: DASHBOARD (REVISI: KPI dari data LOAM)                   -->
+    <!-- TAB: DASHBOARD                                                -->
     <!-- ============================================================ -->
     <section class="tab-panel active" id="panel-dashboard">
       <div class="panel-head">
         <div>
           <h2 data-i18n="title_dashboard">Ringkasan Kepatuhan SOP-Z02_C</h2>
           <div class="subtitle" data-i18n="dashboard_sub">Material Approval — PT Indo Sultan Jaya</div>
+        </div>
+        <div style="display:flex; gap:6px;">
+          <button class="btn btn-outline btn-sm" onclick="printTab('panel-dashboard')">🖨️ Cetak</button>
+          <button class="btn btn-outline btn-sm" onclick="saveAsPDF('panel-dashboard')">📄 Save as PDF</button>
         </div>
       </div>
       <div class="notice info" id="roleNotice"></div>
@@ -711,6 +887,10 @@
           <h2 data-i18n="title_pengajuan">Form Material Approval (FR-Z02-01_C), Tanggal Berlaku: 20 FEB 2025</h2>
           <div class="subtitle" data-i18n="pengajuan_sub">Sesuai SOP-Z02_C Material Approval</div>
         </div>
+        <div style="display:flex; gap:6px;">
+          <button class="btn btn-outline btn-sm" onclick="printTab('panel-pengajuan')">🖨️ Cetak</button>
+          <button class="btn btn-outline btn-sm" onclick="saveAsPDF('panel-pengajuan')">📄 Save as PDF</button>
+        </div>
       </div>
 
       <div class="form-section form-ma-header">
@@ -751,6 +931,20 @@
             </select>
           </div>
         </div>
+
+        <!-- GOOGLE DRIVE LINK SECTION - SECTION A -->
+        <div class="gdrive-section" style="margin-top:16px;">
+          <h4>📂 Link Penyimpanan Google Drive — A. Informasi Material / Supplier</h4>
+          <div class="field">
+            <label>Link Folder Google Drive untuk Form MA</label>
+            <input type="url" id="f_gdrive_link"
+                   value="https://drive.google.com/drive/folders/1RImKs9eRz1BPffKhwUkgTqZuwe-pqy7r?usp=drive_link"
+                   style="background:#fff;">
+            <div style="font-size:10.5px; color:#0369a1; margin-top:4px;">
+              💡 Masukkan link folder Google Drive untuk menyimpan hasil upload/kamera/tanda tangan form ini.
+            </div>
+          </div>
+        </div>
       </div>
 
       <div class="form-section">
@@ -763,6 +957,16 @@
           <label><input type="checkbox"><span data-i18n="form_lainnya">Alasan Lainnya</span></label>
         </div>
         <div id="alasanLainnyaDetail" style="margin-top:12px;"></div>
+        <!-- GOOGLE DRIVE LINK SECTION - SECTION B -->
+        <div class="gdrive-section" style="margin-top:12px;">
+          <h4>📂 Link Google Drive — B. Alasan Persetujuan</h4>
+          <div class="field">
+            <label>Link Folder Google Drive</label>
+            <input type="url" id="f_gdrive_b"
+                   value="https://drive.google.com/drive/folders/1YvdhQyCRaTYwCMS0phHkL1LiqlcmJGHV?usp=drive_link"
+                   style="background:#fff;">
+          </div>
+        </div>
       </div>
 
       <div class="form-section">
@@ -783,17 +987,31 @@
       <div class="form-section">
         <h3><span class="num">F</span><span data-i18n="form_section_f">Persetujuan General Manager Operational</span></h3>
         <div id="gmChecklist"></div>
+        <!-- GOOGLE DRIVE LINK SECTION - F -->
+        <div class="gdrive-section" style="margin-top:12px;">
+          <h4>📂 Link Google Drive — F. Persetujuan GM Operational</h4>
+          <div class="field">
+            <label>Link Folder Google Drive</label>
+            <input type="url" id="f_gdrive_f"
+                   value="https://drive.google.com/drive/folders/1lL-N8woEkqfdPX6_86VzP-CLf2dqCVex?usp=drive_link"
+                   style="background:#fff;">
+          </div>
+        </div>
       </div>
     </section>
 
     <!-- ============================================================ -->
-    <!-- TAB: LOAM (REVISI: Contoh data dummy otomatis)                -->
+    <!-- TAB: LOAM                                                     -->
     <!-- ============================================================ -->
     <section class="tab-panel" id="panel-loam">
       <div class="panel-head">
         <div>
           <h2 data-i18n="title_loam">List of Approved Material (LOAM)</h2>
           <div class="subtitle" data-i18n="loam_sub">FR-Z02-02_C — Tgl. Berlaku: 20 FEB 2025</div>
+        </div>
+        <div style="display:flex; gap:6px;">
+          <button class="btn btn-outline btn-sm" onclick="printTab('panel-loam')">🖨️ Cetak</button>
+          <button class="btn btn-outline btn-sm" onclick="saveAsPDF('panel-loam')">📄 Save as PDF</button>
         </div>
       </div>
 
@@ -822,6 +1040,20 @@
           <div class="field"><label data-i18n="th_masa_berlaku">Masa Berlaku</label><input type="date" id="loam_masa_berlaku"></div>
         </div>
 
+        <!-- GOOGLE DRIVE LINK SECTION UNTUK LOAM -->
+        <div class="gdrive-section" style="margin-top:12px;">
+          <h4>📂 Link Penyimpanan Google Drive — LOAM</h4>
+          <div class="field">
+            <label>Link Folder Google Drive untuk LOAM</label>
+            <input type="url" id="loam_gdrive_link"
+                   value="https://drive.google.com/drive/folders/1LiqXOwTEpz-uzXa6RhZHQSXKJ4mH0Zyx?usp=drive_link"
+                   style="background:#fff;">
+            <div style="font-size:10.5px; color:#0369a1; margin-top:4px;">
+              💡 Masukkan link folder Google Drive untuk menyimpan dokumen pendukung LOAM ini.
+            </div>
+          </div>
+        </div>
+
         <div class="checklist-item" style="margin-top:12px;">
           <div class="ci-head">
             <span class="ci-num">📎</span>
@@ -845,7 +1077,8 @@
             </div>
             <div class="ci-field">
               <label>Link Cloud Storage (Google Drive, dll.)</label>
-              <input type="url" placeholder="https://drive.google.com/...">
+              <input type="url" placeholder="https://drive.google.com/..."
+                     value="https://drive.google.com/drive/folders/1LiqXOwTEpz-uzXa6RhZHQSXKJ4mH0Zyx?usp=drive_link">
             </div>
           </div>
         </div>
@@ -872,10 +1105,11 @@
                 <th data-i18n="th_nomor_sert">No. Sertifikat Halal</th>
                 <th data-i18n="th_masa_berlaku">Masa Berlaku</th>
                 <th data-i18n="th_dokumen">Dokumen Pendukung</th>
+                <th data-i18n="action">Aksi</th>
               </tr>
             </thead>
             <tbody id="tblLoam">
-              <tr class="empty-row"><td colspan="11"><span class="icon">📚</span><span data-i18n="empty_data">Belum ada data</span></td></tr>
+              <tr class="empty-row"><td colspan="12"><span class="icon">📚</span><span data-i18n="empty_data">Belum ada data</span></td></tr>
             </tbody>
           </table>
         </div>
@@ -890,6 +1124,10 @@
         <div>
           <h2 data-i18n="title_monitoring">Monitoring Distribusi &amp; Review LOAM</h2>
           <div class="subtitle" data-i18n="monitoring_sub">Pemantauan dan Pembaharuan LOAM (SOP-Z02_C butir 7.5.5 &amp; 7.6)</div>
+        </div>
+        <div style="display:flex; gap:6px;">
+          <button class="btn btn-outline btn-sm" onclick="printTab('panel-monitoring')">🖨️ Cetak</button>
+          <button class="btn btn-outline btn-sm" onclick="saveAsPDF('panel-monitoring')">📄 Save as PDF</button>
         </div>
       </div>
 
@@ -1051,6 +1289,210 @@
     </section>
 
     <!-- ============================================================ -->
+    <!-- TAB: PROGRAM KERJA TAHUNAN                                    -->
+    <!-- ============================================================ -->
+    <section class="tab-panel" id="panel-program">
+      <div class="panel-head">
+        <div>
+          <h2 data-i18n="title_program">📅 Program Kerja Tahunan &amp; Jadwal Pelaksanaan</h2>
+          <div class="subtitle" data-i18n="program_sub">Plan vs Actual — Monitoring Realisasi Program Kerja</div>
+        </div>
+        <div style="display:flex; gap:6px; flex-wrap:wrap;">
+          <button class="btn btn-outline btn-sm" onclick="printTab('panel-program')">🖨️ Cetak</button>
+          <button class="btn btn-outline btn-sm" onclick="saveAsPDF('panel-program')">📄 Save as PDF</button>
+          <button class="btn btn-outline btn-sm admin-purchasing-only" onclick="exportProgramData('excel')">📊 Export Excel</button>
+          <button class="btn btn-outline btn-sm admin-purchasing-only" onclick="exportProgramData('json')">📋 Export JSON</button>
+          <button class="btn btn-outline btn-sm admin-purchasing-only" onclick="importProgramData()">📥 Import JSON</button>
+        </div>
+      </div>
+
+      <!-- Ringkasan KPI Program -->
+      <div class="program-summary-grid" id="programSummaryGrid">
+        <div class="program-summary-card">
+          <div class="num" id="progTotal">0</div>
+          <div class="lbl" data-i18n="prog_total">Total Program</div>
+        </div>
+        <div class="program-summary-card on-track">
+          <div class="num" id="progOnTrack">0</div>
+          <div class="lbl" data-i18n="prog_on_track">On Track</div>
+        </div>
+        <div class="program-summary-card at-risk">
+          <div class="num" id="progAtRisk">0</div>
+          <div class="lbl" data-i18n="prog_at_risk">At Risk</div>
+        </div>
+        <div class="program-summary-card delayed">
+          <div class="num" id="progDelayed">0</div>
+          <div class="lbl" data-i18n="prog_delayed">Delayed</div>
+        </div>
+        <div class="program-summary-card completed">
+          <div class="num" id="progCompleted">0</div>
+          <div class="lbl" data-i18n="prog_completed">Selesai</div>
+        </div>
+        <div class="program-summary-card">
+          <div class="num" id="progAvgAchievement">0%</div>
+          <div class="lbl" data-i18n="prog_avg_achievement">Rata-rata Capaian</div>
+        </div>
+      </div>
+
+      <!-- Filter & Toolbar Program -->
+      <div class="filter-bar" id="filterProgram"></div>
+      <div class="toolbar" id="toolbarProgram"></div>
+
+      <!-- Form Tambah/Edit Program -->
+      <div id="programAddForm" class="form-section" style="display:none;">
+        <h3>
+          <span class="num" id="programFormIcon">+</span>
+          <span id="programFormTitle" data-i18n="prog_add_title">Tambah Program Kerja</span>
+          <span class="hint" data-i18n="prog_form_hint">Isi data program kerja tahunan</span>
+        </h3>
+        <div class="grid-3">
+          <div class="field">
+            <label data-i18n="prog_nama">Nama Program</label>
+            <input type="text" id="prog_nama" placeholder="Contoh: Audit Supplier Halal">
+          </div>
+          <div class="field">
+            <label data-i18n="prog_departemen">Departemen Penanggung Jawab</label>
+            <select id="prog_departemen">
+              <option value="">— Pilih Departemen —</option>
+            </select>
+          </div>
+          <div class="field">
+            <label data-i18n="prog_kategori">Kategori Program</label>
+            <select id="prog_kategori">
+              <option value="">—</option>
+              <option value="audit" data-i18n="prog_kat_audit">Audit</option>
+              <option value="pelatihan" data-i18n="prog_kat_pelatihan">Pelatihan</option>
+              <option value="review" data-i18n="prog_kat_review">Review Berkala</option>
+              <option value="sertifikasi" data-i18n="prog_kat_sertifikasi">Sertifikasi</option>
+              <option value="monitoring" data-i18n="prog_kat_monitoring">Monitoring</option>
+              <option value="lainnya" data-i18n="prog_kat_lainnya">Lainnya</option>
+            </select>
+          </div>
+          <div class="field">
+            <label data-i18n="prog_tahun">Tahun Program</label>
+            <select id="prog_tahun">
+              <option value="2025">2025</option>
+              <option value="2026">2026</option>
+              <option value="2027">2027</option>
+              <option value="2028">2028</option>
+              <option value="2029">2029</option>
+              <option value="2030">2030</option>
+            </select>
+          </div>
+          <div class="field">
+            <label data-i18n="prog_plan_mulai">Plan Mulai</label>
+            <input type="date" id="prog_plan_mulai">
+          </div>
+          <div class="field">
+            <label data-i18n="prog_plan_selesai">Plan Selesai</label>
+            <input type="date" id="prog_plan_selesai">
+          </div>
+          <div class="field">
+            <label data-i18n="prog_actual_mulai">Actual Mulai</label>
+            <input type="date" id="prog_actual_mulai">
+          </div>
+          <div class="field">
+            <label data-i18n="prog_actual_selesai">Actual Selesai</label>
+            <input type="date" id="prog_actual_selesai">
+          </div>
+          <div class="field">
+            <label data-i18n="prog_target">Target Capaian (%)</label>
+            <input type="number" id="prog_target" min="0" max="100" value="100">
+          </div>
+          <div class="field">
+            <label data-i18n="prog_realisasi">Realisasi Capaian (%)</label>
+            <input type="number" id="prog_realisasi" min="0" max="100" value="0">
+          </div>
+          <div class="field">
+            <label data-i18n="prog_anggaran">Anggaran (Rp)</label>
+            <input type="number" id="prog_anggaran" min="0" value="0" placeholder="0">
+          </div>
+          <div class="field">
+            <label data-i18n="prog_status">Status Program</label>
+            <select id="prog_status">
+              <option value="draft" data-i18n="prog_status_draft">Draft</option>
+              <option value="on-track" data-i18n="prog_status_on_track">On Track</option>
+              <option value="at-risk" data-i18n="prog_status_at_risk">At Risk</option>
+              <option value="delayed" data-i18n="prog_status_delayed">Delayed</option>
+              <option value="completed" data-i18n="prog_status_completed">Selesai</option>
+            </select>
+          </div>
+        </div>
+        <div class="field" style="margin-top:12px;">
+          <label data-i18n="prog_keterangan">Keterangan / Catatan</label>
+          <textarea id="prog_keterangan" rows="2" placeholder="Keterangan tambahan..."></textarea>
+        </div>
+        <div class="field" style="margin-top:12px;">
+          <label data-i18n="prog_gdrive_link">Link Google Drive Dokumen Pendukung</label>
+          <input type="url" id="prog_gdrive_link"
+                 placeholder="https://drive.google.com/drive/folders/..."
+                 value="https://drive.google.com/drive/folders/1AqyDcZQLmP-1Fsnj8g89dFsD64n795pK?usp=drive_link">
+        </div>
+        <div style="margin-top:14px; display:flex; gap:8px;">
+          <button class="btn btn-success" onclick="saveProgram()" data-i18n="btn_save">Simpan</button>
+          <button class="btn btn-outline" onclick="cancelProgramAdd()" data-i18n="btn_cancel">Batal</button>
+        </div>
+      </div>
+
+      <!-- Quarter Filter -->
+      <div class="quarter-tabs" id="quarterTabs">
+        <button data-quarter="all" class="active" data-i18n="prog_q_all">Semua</button>
+        <button data-quarter="q1" data-i18n="prog_q1">Q1 (Jan-Mar)</button>
+        <button data-quarter="q2" data-i18n="prog_q2">Q2 (Apr-Jun)</button>
+        <button data-quarter="q3" data-i18n="prog_q3">Q3 (Jul-Sep)</button>
+        <button data-quarter="q4" data-i18n="prog_q4">Q4 (Okt-Des)</button>
+      </div>
+
+      <!-- Tabel Program Kerja -->
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table class="data" id="tblProgram">
+            <thead>
+              <tr>
+                <th data-i18n="th_no">No</th>
+                <th data-i18n="prog_nama">Nama Program</th>
+                <th data-i18n="prog_departemen">Departemen</th>
+                <th data-i18n="prog_kategori">Kategori</th>
+                <th data-i18n="prog_plan_jadwal">Plan (Mulai - Selesai)</th>
+                <th data-i18n="prog_actual_jadwal">Actual (Mulai - Selesai)</th>
+                <th data-i18n="prog_progress">Progress</th>
+                <th data-i18n="prog_status">Status</th>
+                <th data-i18n="action">Aksi</th>
+              </tr>
+            </thead>
+            <tbody id="tblProgramBody">
+              <tr class="empty-row"><td colspan="9"><span class="icon">📅</span><span data-i18n="empty_data">Belum ada data</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Ringkasan per Departemen -->
+      <div class="form-section" style="margin-top:20px;">
+        <h3><span class="num">📊</span><span data-i18n="prog_dept_summary">Ringkasan per Departemen</span></h3>
+        <div class="table-wrap">
+          <div class="table-scroll">
+            <table class="data">
+              <thead>
+                <tr>
+                  <th data-i18n="th_no">No</th>
+                  <th data-i18n="prog_departemen">Departemen</th>
+                  <th data-i18n="prog_total_prog">Total Program</th>
+                  <th data-i18n="prog_on_track">On Track</th>
+                  <th data-i18n="prog_delayed">Delayed</th>
+                  <th data-i18n="prog_avg_achievement">Rata-rata Capaian</th>
+                </tr>
+              </thead>
+              <tbody id="tblDeptSummary">
+                <tr class="empty-row"><td colspan="6"><span class="icon">🏢</span><span data-i18n="empty_data">Belum ada data</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
     <!-- TAB: MASTER DATA                                              -->
     <!-- ============================================================ -->
     <section class="tab-panel" id="panel-master">
@@ -1058,6 +1500,10 @@
         <div>
           <h2 data-i18n="title_master">Master Data Material &amp; Supplier</h2>
           <div class="subtitle" data-i18n="master_sub">Referensi Material, Supplier, dan Produsen</div>
+        </div>
+        <div style="display:flex; gap:6px;">
+          <button class="btn btn-outline btn-sm" onclick="printTab('panel-master')">🖨️ Cetak</button>
+          <button class="btn btn-outline btn-sm" onclick="saveAsPDF('panel-master')">📄 Save as PDF</button>
         </div>
       </div>
 
@@ -1075,10 +1521,11 @@
                 <th data-i18n="th_nama">Nama</th>
                 <th data-i18n="th_jenis">Jenis Bahan</th>
                 <th data-i18n="th_kategori">Kategori</th>
+                <th data-i18n="action">Aksi</th>
               </tr>
             </thead>
             <tbody>
-              <tr class="empty-row"><td colspan="5"><span class="icon">📦</span><span data-i18n="empty_data">Belum ada data</span></td></tr>
+              <tr class="empty-row"><td colspan="6"><span class="icon">📦</span><span data-i18n="empty_data">Belum ada data</span></td></tr>
             </tbody>
           </table>
         </div>
@@ -1094,10 +1541,11 @@
                 <th data-i18n="th_nama">Nama</th>
                 <th data-i18n="th_negara">Negara</th>
                 <th data-i18n="th_status">Status</th>
+                <th data-i18n="action">Aksi</th>
               </tr>
             </thead>
             <tbody>
-              <tr class="empty-row"><td colspan="4"><span class="icon">🏭</span><span data-i18n="empty_data">Belum ada data</span></td></tr>
+              <tr class="empty-row"><td colspan="5"><span class="icon">🏭</span><span data-i18n="empty_data">Belum ada data</span></td></tr>
             </tbody>
           </table>
         </div>
@@ -1112,6 +1560,10 @@
         <div>
           <h2 data-i18n="title_laporan">Laporan &amp; Audit</h2>
           <div class="subtitle" data-i18n="laporan_sub">Log Audit Trail &amp; Kepatuhan SOP</div>
+        </div>
+        <div style="display:flex; gap:6px;">
+          <button class="btn btn-outline btn-sm" onclick="printTab('panel-laporan')">🖨️ Cetak</button>
+          <button class="btn btn-outline btn-sm" onclick="saveAsPDF('panel-laporan')">📄 Save as PDF</button>
         </div>
       </div>
 
@@ -1163,6 +1615,12 @@
           <h2 data-i18n="title_riwayat">Riwayat Perubahan</h2>
           <div class="subtitle" data-i18n="riwayat_sub">Log Audit Trail</div>
         </div>
+        <div style="display:flex; gap:6px;">
+          <button class="btn btn-outline btn-sm" onclick="printTab('panel-riwayat')">🖨️ Cetak</button>
+          <button class="btn btn-outline btn-sm" onclick="saveAsPDF('panel-riwayat')">📄 Save as PDF</button>
+        </div>
+      </div>
+      <div class="panel-head" style="margin-top:-10px;">
         <button class="btn btn-outline btn-sm" onclick="saveDailyHistory()">
           <span>💾</span><span data-i18n="btn_save_daily">Simpan Riwayat Harian</span>
         </button>
@@ -1184,6 +1642,10 @@
           <h2 data-i18n="title_akun">Manajemen Akun &amp; Kata Sandi</h2>
           <div class="subtitle" data-i18n="akun_sub">Hanya dapat diakses oleh Superadmin</div>
         </div>
+        <div style="display:flex; gap:6px;">
+          <button class="btn btn-outline btn-sm" onclick="printTab('panel-akun')">🖨️ Cetak</button>
+          <button class="btn btn-outline btn-sm" onclick="saveAsPDF('panel-akun')">📄 Save as PDF</button>
+        </div>
       </div>
       <div class="table-wrap">
         <div class="table-scroll">
@@ -1196,6 +1658,7 @@
                 <th data-i18n="th_password">Password</th>
                 <th data-i18n="th_kode">Kode</th>
                 <th data-i18n="th_role">Peran</th>
+                <th data-i18n="action">Aksi</th>
               </tr>
             </thead>
             <tbody id="tblAkun"></tbody>
@@ -1212,6 +1675,10 @@
         <div>
           <h2 data-i18n="title_pengaturan">Pengaturan Sistem</h2>
           <div class="subtitle" data-i18n="pengaturan_sub">Preferensi &amp; Informasi Akun</div>
+        </div>
+        <div style="display:flex; gap:6px;">
+          <button class="btn btn-outline btn-sm" onclick="printTab('panel-pengaturan')">🖨️ Cetak</button>
+          <button class="btn btn-outline btn-sm" onclick="saveAsPDF('panel-pengaturan')">📄 Save as PDF</button>
         </div>
       </div>
 
@@ -1263,7 +1730,7 @@
 </div>
 
 <!-- ============================================================ -->
-<!-- MODAL: KAMERA (REVISI: akses kamera perangkat)                -->
+<!-- MODAL: KAMERA                                                 -->
 <!-- ============================================================ -->
 <div id="cameraModal" class="modal-overlay" style="display:none;">
   <div class="modal-box">
@@ -1343,8 +1810,58 @@ const SUPERADMIN_USER = 'zephyr_admin';
 const PURCHASING_DEPT = 'Purchasing';
 
 /* ================================================================
-   DATA: CONTOH DATA LOAM (REVISI)
-   5 data dummy yang akan otomatis di-load jika localStorage kosong
+   DATA: GOOGLE DRIVE LINK MAPPING (SEMUA LINK TERPUSAT)
+   Patch: Setiap link Google Drive terorganisir di satu objek.
+================================================================ */
+const GDRIVE_LINKS = {
+  // Form Material Approval sections
+  'A':        'https://drive.google.com/drive/folders/1RImKs9eRz1BPffKhwUkgTqZuwe-pqy7r?usp=drive_link',
+  'B':        'https://drive.google.com/drive/folders/1YvdhQyCRaTYwCMS0phHkL1LiqlcmJGHV?usp=drive_link',
+  // C - Persetujuan R&D
+  'C1':       'https://drive.google.com/drive/folders/1pUe8jG5KW7Ehmknh5bZvRI1YPVvP6_-4?usp=drive_link',
+  'C2':       'https://drive.google.com/drive/folders/1hRhGpvMlimN-sW76b9I8K5fvtG_Mnb5e?usp=sharing',
+  // D - Persetujuan QA
+  'A1':       'https://drive.google.com/drive/folders/1jtx17HXCCA89GdFcI9UKcDEA_Bi4lyw2?usp=drive_link',
+  'A2':       'https://drive.google.com/drive/folders/1eyJkI5wOBBcd8-dj9phKJfCyRGrbWqOE?usp=drive_link',
+  'A3':       'https://drive.google.com/drive/folders/1MftFwBbwgDQv5g-Muafjv_Yo1wygX4oy?usp=sharing',
+  'A4':       'https://drive.google.com/drive/folders/1I-VoXS3fEg3QmSuM0qS_qQCTbDdJO9lf?usp=drive_link',
+  'A5':       'https://drive.google.com/drive/folders/1jPhKB0yn-eqPTz307MdHRvimRLPrIiDy?usp=drive_link',
+  'A6':       'https://drive.google.com/drive/folders/1dBoPFYFUhpjsFArDoY-wRLEIfrKS4BF3?usp=drive_link',
+  'A7':       'https://drive.google.com/drive/folders/1g3P3KzPkRtZ4cRbwjc-Xv62A0P3WSXnd?usp=drive_link',
+  'B8':       'https://drive.google.com/drive/folders/17EJ0chA9fAbHCdwa4niqgFdZ8YE2Me-D?usp=drive_link',
+  'B9':       'https://drive.google.com/drive/folders/196t9V6LpCvnENfl7b667MMOY6LcUjZxH?usp=drive_link',
+  'B10':      'https://drive.google.com/drive/folders/1yPEopZCDz3nxkMMrb8xgR5eGlgLX8lzP?usp=drive_link',
+  'B11':      'https://drive.google.com/drive/folders/1_6ihX7wWdv7aiuMjZJwv3JUExvNursxA?usp=drive_link',
+  'B12':      'https://drive.google.com/drive/folders/1wdKO-0UJU-LFBkIvW2tStCdgcxbCF0a4?usp=drive_link',
+  'C1_qa':    'https://drive.google.com/drive/folders/1Gz8tiunUnh0MhR8BtNqMj_pIlTA2pYLz?usp=drive_link',
+  'C2_qa':    'https://drive.google.com/drive/folders/1mtY2PCyVWvt6vMB6WR1-qzxxAn2Mxuav?usp=sharing',
+  'C3_qa':    'https://drive.google.com/drive/folders/1DyQp727wxizVIqfYP8pHCS7i-QA3PuHl?usp=drive_link',
+  'D1':       'https://drive.google.com/drive/folders/1rHJNHoEUWRc4Kncnk8NDnugSykM7Av34?usp=drive_link',
+  'D2':       'https://drive.google.com/drive/folders/1iKh1AKpdkvOhwszeB-B4xKqa7l7AhXqu?usp=drive_link',
+  // E - Persetujuan Komite Halal
+  'E':        'https://drive.google.com/drive/folders/1x28yCN1ZnhsV-7mmy_IcPLk4phnCXB3O?usp=drive_link',
+  'E1':       'https://drive.google.com/drive/folders/1xSPoJbFvwAFcKhLiq0Kx8Sy2xqz6-Zyv?usp=drive_link',
+  'E2':       'https://drive.google.com/drive/folders/15WYgVee2FHSejpZQa7cpJAqdjEXU3_e0?usp=drive_link',
+  'E3':       'https://drive.google.com/drive/folders/1jci9MRYfYKPk2d_qyxXq9f0OPu9OeI-y?usp=drive_link',
+  // F - Persetujuan GM Operational
+  'F':        'https://drive.google.com/drive/folders/1lL-N8woEkqfdPX6_86VzP-CLf2dqCVex?usp=drive_link',
+  // Program Kerja
+  'program':  'https://drive.google.com/drive/folders/1AqyDcZQLmP-1Fsnj8g89dFsD64n795pK?usp=drive_link',
+  'audit':    'https://drive.google.com/drive/folders/1Ec37rz0FR2Sum-yrL4bT9Jm9z72Cu3dM?usp=drive_link',
+  'pelatihan':'https://drive.google.com/drive/folders/1wSsaEDuV_rYDgn3BZjVWNgCZu5UGFcNv?usp=drive_link',
+  'review':   'https://drive.google.com/drive/folders/1pibsnFj7CvM4e5LTcKmItpak-Ii8oRSd?usp=drive_link',
+  'sertifikasi':'https://drive.google.com/drive/folders/1p1N9_yezBJvMmEBlV6BNVxEZ7C64Vx4c?usp=sharing',
+  'monitoring':'https://drive.google.com/drive/folders/1ezcGpznPYbe0pcxY6iMgdLm7QT90_Lbs?usp=drive_link',
+  'lainnya':  'https://drive.google.com/drive/folders/1_mCEPErP8INiyfvrWdYCdBl7FQjiWLTF?usp=drive_link',
+  // Kamera, Cloud Storage, Tanda Tangan, Upload
+  'kamera':   'https://drive.google.com/drive/folders/1VQglTbQS0JuLj6J-4ESa0z6nk-BmDmAA?usp=drive_link',
+  'cloud':    'https://drive.google.com/drive/folders/1LiqXOwTEpz-uzXa6RhZHQSXKJ4mH0Zyx?usp=drive_link',
+  'ttd':      'https://drive.google.com/drive/folders/19GXFv3rAM0ofNGE7ANHSGbgK5ZpzS_Qf?usp=drive_link',
+  'upload':   'https://drive.google.com/drive/folders/1c4PTpuHj0fXFADINyfRhkVEYRkBI4rO7?usp=drive_link'
+};
+
+/* ================================================================
+   DATA: CONTOH DATA LOAM (Patch: gdrive_link sudah disesuaikan)
 ================================================================ */
 const SAMPLE_LOAM_DATA = [
   {
@@ -1358,6 +1875,7 @@ const SAMPLE_LOAM_DATA = [
     lembaga: 'LPPOM MUI',
     nomor_sert: 'ID0011000023456789',
     masa_berlaku: '2027-06-15',
+    gdrive_link: GDRIVE_LINKS.cloud,
     created_at: new Date().toISOString(),
     created_by: 'system'
   },
@@ -1372,6 +1890,7 @@ const SAMPLE_LOAM_DATA = [
     lembaga: 'LPPOM MUI',
     nomor_sert: 'ID0022000034567890',
     masa_berlaku: '2026-03-20',
+    gdrive_link: GDRIVE_LINKS.cloud,
     created_at: new Date().toISOString(),
     created_by: 'system'
   },
@@ -1386,6 +1905,7 @@ const SAMPLE_LOAM_DATA = [
     lembaga: 'LPPOM MUI',
     nomor_sert: 'ID0033000045678901',
     masa_berlaku: '2026-01-10',
+    gdrive_link: GDRIVE_LINKS.cloud,
     created_at: new Date().toISOString(),
     created_by: 'system'
   },
@@ -1400,6 +1920,7 @@ const SAMPLE_LOAM_DATA = [
     lembaga: 'LPPOM MUI',
     nomor_sert: 'ID0044000056789012',
     masa_berlaku: '2025-12-05',
+    gdrive_link: GDRIVE_LINKS.cloud,
     created_at: new Date().toISOString(),
     created_by: 'system'
   },
@@ -1414,6 +1935,108 @@ const SAMPLE_LOAM_DATA = [
     lembaga: 'LPPOM MUI',
     nomor_sert: 'ID0055000067890123',
     masa_berlaku: '2026-08-30',
+    gdrive_link: GDRIVE_LINKS.cloud,
+    created_at: new Date().toISOString(),
+    created_by: 'system'
+  }
+];
+
+/* ================================================================
+   DATA: CONTOH PROGRAM KERJA TAHUNAN (FIXED: duplikat dihapus)
+================================================================ */
+const SAMPLE_PROGRAM_DATA = [
+  {
+    id: 'prog_sample_1',
+    nama: 'Audit Supplier Halal Tahunan',
+    departemen: 'Quality Assurance & Management Representative',
+    kategori: 'audit',
+    tahun: '2025',
+    plan_mulai: '2025-01-15',
+    plan_selesai: '2025-03-30',
+    actual_mulai: '2025-01-20',
+    actual_selesai: '2025-04-10',
+    target: 100,
+    realisasi: 95,
+    anggaran: 25000000,
+    status: 'at-risk',
+    keterangan: 'Audit 12 supplier utama',
+    gdrive_link: GDRIVE_LINKS.audit,
+    created_at: new Date().toISOString(),
+    created_by: 'system'
+  },
+  {
+    id: 'prog_sample_2',
+    nama: 'Pelatihan Internal SOP-Z02_C',
+    departemen: 'Human Resources Development & General Affairs',
+    kategori: 'pelatihan',
+    tahun: '2025',
+    plan_mulai: '2025-02-01',
+    plan_selesai: '2025-02-28',
+    actual_mulai: '2025-02-01',
+    actual_selesai: '2025-02-25',
+    target: 100,
+    realisasi: 100,
+    anggaran: 15000000,
+    status: 'completed',
+    keterangan: 'Pelatihan untuk 30 staf QA & Purchasing',
+    gdrive_link: GDRIVE_LINKS.pelatihan,
+    created_at: new Date().toISOString(),
+    created_by: 'system'
+  },
+  {
+    id: 'prog_sample_3',
+    nama: 'Review Berkala LOAM Semester I',
+    departemen: 'Quality Assurance & Management Representative',
+    kategori: 'review',
+    tahun: '2025',
+    plan_mulai: '2025-06-01',
+    plan_selesai: '2025-06-30',
+    actual_mulai: '2025-06-05',
+    actual_selesai: '',
+    target: 100,
+    realisasi: 60,
+    anggaran: 5000000,
+    status: 'on-track',
+    keterangan: 'Review 45 item material',
+    gdrive_link: GDRIVE_LINKS.review,
+    created_at: new Date().toISOString(),
+    created_by: 'system'
+  },
+  {
+    id: 'prog_sample_4',
+    nama: 'Sertifikasi Halal Produk Baru',
+    departemen: 'Research & Development',
+    kategori: 'sertifikasi',
+    tahun: '2025',
+    plan_mulai: '2025-03-01',
+    plan_selesai: '2025-09-30',
+    actual_mulai: '2025-04-01',
+    actual_selesai: '',
+    target: 100,
+    realisasi: 35,
+    anggaran: 75000000,
+    status: 'delayed',
+    keterangan: 'Sertifikasi 3 produk soap baru',
+    gdrive_link: GDRIVE_LINKS.sertifikasi,
+    created_at: new Date().toISOString(),
+    created_by: 'system'
+  },
+  {
+    id: 'prog_sample_5',
+    nama: 'Monitoring Suhu & Kelembaban Gudang',
+    departemen: 'PPIC-Warehouse',
+    kategori: 'monitoring',
+    tahun: '2025',
+    plan_mulai: '2025-01-01',
+    plan_selesai: '2025-12-31',
+    actual_mulai: '2025-01-01',
+    actual_selesai: '',
+    target: 100,
+    realisasi: 85,
+    anggaran: 30000000,
+    status: 'on-track',
+    keterangan: 'Pemantauan harian gudang bahan baku',
+    gdrive_link: GDRIVE_LINKS.monitoring,
     created_at: new Date().toISOString(),
     created_by: 'system'
   }
@@ -1447,7 +2070,9 @@ const STORAGE_KEYS = {
   DISTRIBUTION: 'loam_distribution',
   REVIEW: 'loam_review',
   NOTIFY_LOG: 'notify_log',
-  SAMPLE_INIT: 'loam_sample_initialized'
+  SAMPLE_INIT: 'loam_sample_initialized',
+  PROGRAM_DATA: 'program_kerja_data',
+  PROGRAM_INIT: 'program_kerja_initialized'
 };
 
 /* ================================================================
@@ -1461,10 +2086,12 @@ const I18N = {
     master_sub:'Referensi Material, Supplier, dan Produsen', laporan_sub:'Log Audit Trail & Kepatuhan SOP',
     riwayat_sub:'Log Audit Trail', akun_sub:'Hanya dapat diakses oleh Superadmin',
     pengaturan_sub:'Preferensi & Informasi Akun', monitoring_sub:'Pemantauan dan Pembaharuan LOAM (SOP-Z02_C butir 7.5.5 & 7.6)',
+    program_sub:'Plan vs Actual — Monitoring Realisasi Program Kerja',
     login_username:'Nama Pengguna', login_password:'Kata Sandi', login_btn:'Masuk',
     login_err:'Nama pengguna atau kata sandi salah!', logout:'Keluar', lang:'Bahasa',
     tab_dashboard:'Dasbor', tab_pengajuan:'Form Material Approval', tab_loam:'LOAM',
-    tab_monitoring:'Monitoring LOAM', tab_master:'Master Data', tab_laporan:'Laporan & Audit',
+    tab_monitoring:'Monitoring LOAM', tab_program:'📅 Program Kerja Tahunan',
+    tab_master:'Master Data', tab_laporan:'Laporan & Audit',
     tab_riwayat:'Riwayat', tab_akun:'Manajemen Akun', tab_pengaturan:'Pengaturan',
     kpi_total:'Total Pengajuan', kpi_pending:'Menunggu Persetujuan', kpi_approved:'Disetujui',
     kpi_rejected:'Ditolak', kpi_overdue:'Terlambat (SLA)', kpi_compliance:'Tingkat Kepatuhan',
@@ -1484,6 +2111,7 @@ const I18N = {
     title_pengajuan:'Form Material Approval (FR-Z02-01_C), Tanggal Berlaku: 20 FEB 2025',
     title_loam:'List of Approved Material (LOAM)',
     title_monitoring:'Monitoring Distribusi & Review LOAM',
+    title_program:'📅 Program Kerja Tahunan & Jadwal Pelaksanaan',
     title_master:'Master Data Material & Supplier', title_laporan:'Laporan & Audit',
     title_riwayat:'Riwayat Perubahan', title_akun:'Manajemen Akun & Kata Sandi',
     title_pengaturan:'Pengaturan Sistem',
@@ -1564,7 +2192,60 @@ const I18N = {
     camera_capture:'Ambil Foto',
     camera_retake:'Ambil Ulang',
     camera_error:'Tidak dapat mengakses kamera. Pastikan izin kamera diberikan.',
-    camera_not_supported:'Browser tidak mendukung akses kamera. Menggunakan input file sebagai alternatif.'
+    camera_not_supported:'Browser tidak mendukung akses kamera. Menggunakan input file sebagai alternatif.',
+    /* Program Kerja */
+    prog_total:'Total Program',
+    prog_on_track:'On Track',
+    prog_at_risk:'At Risk',
+    prog_delayed:'Delayed',
+    prog_completed:'Selesai',
+    prog_avg_achievement:'Rata-rata Capaian',
+    prog_add_title:'Tambah Program Kerja',
+    prog_form_hint:'Isi data program kerja tahunan',
+    prog_nama:'Nama Program',
+    prog_departemen:'Departemen Penanggung Jawab',
+    prog_kategori:'Kategori Program',
+    prog_kat_audit:'Audit',
+    prog_kat_pelatihan:'Pelatihan',
+    prog_kat_review:'Review Berkala',
+    prog_kat_sertifikasi:'Sertifikasi',
+    prog_kat_monitoring:'Monitoring',
+    prog_kat_lainnya:'Lainnya',
+    prog_tahun:'Tahun Program',
+    prog_plan_mulai:'Plan Mulai',
+    prog_plan_selesai:'Plan Selesai',
+    prog_actual_mulai:'Actual Mulai',
+    prog_actual_selesai:'Actual Selesai',
+    prog_target:'Target Capaian (%)',
+    prog_realisasi:'Realisasi Capaian (%)',
+    prog_anggaran:'Anggaran (Rp)',
+    prog_status:'Status Program',
+    prog_status_draft:'Draft',
+    prog_status_on_track:'On Track',
+    prog_status_at_risk:'At Risk',
+    prog_status_delayed:'Delayed',
+    prog_status_completed:'Selesai',
+    prog_keterangan:'Keterangan / Catatan',
+    prog_gdrive_link:'Link Google Drive Dokumen Pendukung',
+    prog_plan_jadwal:'Plan (Mulai - Selesai)',
+    prog_actual_jadwal:'Actual (Mulai - Selesai)',
+    prog_progress:'Progress',
+    prog_dept_summary:'Ringkasan per Departemen',
+    prog_total_prog:'Total Program',
+    prog_q_all:'Semua',
+    prog_q1:'Q1 (Jan-Mar)',
+    prog_q2:'Q2 (Apr-Jun)',
+    prog_q3:'Q3 (Jul-Sep)',
+    prog_q4:'Q4 (Okt-Des)',
+    prog_saved:'Program kerja berhasil disimpan',
+    prog_deleted:'Program kerja berhasil dihapus',
+    prog_edit_title:'Edit Program Kerja',
+    prog_no_data:'Belum ada data program kerja',
+    prog_validation:'Kolom %s wajib diisi',
+    prog_date_invalid:'Tanggal selesai harus setelah tanggal mulai',
+    prog_import_success:'%d program berhasil diimpor',
+    prog_export_success:'Data program berhasil diexport',
+    prog_delete_confirm:'Yakin ingin menghapus program "%s"?'
   },
   en: {
     company:'PT Indo Sultan Jaya', app_title:'Material Approval Dashboard',
@@ -1573,10 +2254,12 @@ const I18N = {
     master_sub:'Reference: Material, Supplier, and Manufacturer', laporan_sub:'Audit Trail Log & SOP Compliance',
     riwayat_sub:'Audit Trail Log', akun_sub:'Accessible only by Superadmin',
     pengaturan_sub:'Preferences & Account Information', monitoring_sub:'LOAM Monitoring & Update (SOP-Z02_C clauses 7.5.5 & 7.6)',
+    program_sub:'Plan vs Actual — Work Program Realization Monitoring',
     login_username:'Username', login_password:'Password', login_btn:'Sign In',
     login_err:'Invalid username or password!', logout:'Logout', lang:'Language',
     tab_dashboard:'Dashboard', tab_pengajuan:'Form Material Approval', tab_loam:'LOAM',
-    tab_monitoring:'LOAM Monitoring', tab_master:'Master Data', tab_laporan:'Reports & Audit',
+    tab_monitoring:'LOAM Monitoring', tab_program:'📅 Annual Work Program',
+    tab_master:'Master Data', tab_laporan:'Reports & Audit',
     tab_riwayat:'History', tab_akun:'Account Management', tab_pengaturan:'Settings',
     kpi_total:'Total Requests', kpi_pending:'Pending Approval', kpi_approved:'Approved',
     kpi_rejected:'Rejected', kpi_overdue:'Overdue (SLA)', kpi_compliance:'Compliance Rate',
@@ -1596,6 +2279,7 @@ const I18N = {
     title_pengajuan:'Form Material Approval (FR-Z02-01_C), Effective: 20 FEB 2025',
     title_loam:'List of Approved Material (LOAM)',
     title_monitoring:'LOAM Distribution & Review Monitoring',
+    title_program:'📅 Annual Work Program & Implementation Schedule',
     title_master:'Master Data Material & Supplier', title_laporan:'Reports & Audit',
     title_riwayat:'Change History', title_akun:'Account & Password Management',
     title_pengaturan:'System Settings',
@@ -1623,7 +2307,7 @@ const I18N = {
     form_halal_1:'Positive List', form_halal_2:'MUI Halal Certificate (attached)',
     form_halal_3:'LPPOM MUI Approval Letter (attached)', form_catatan:'Notes',
     form_no_ma:'MA No. (Auto)', form_tgl_berlaku:'Effective Date', form_lokasi:'Location & Date',
-    form_link_cloud:'Cloud Storage Link (Google Drive, etc.)',
+    form_link_cloud:'Link Cloud Storage (Google Drive, etc.)',
     form_upload_kamera:'Upload File / Open Camera',
     master_material:'Material', master_supplier:'Supplier & Manufacturer',
     laporan_compliance:'SOP Compliance', laporan_avg_cycle:'Average Cycle (days)',
@@ -1676,19 +2360,73 @@ const I18N = {
     camera_capture:'Capture',
     camera_retake:'Retake',
     camera_error:'Cannot access camera. Make sure camera permission is granted.',
-    camera_not_supported:'Browser does not support camera access. Using file input as alternative.'
+    camera_not_supported:'Browser does not support camera access. Using file input as alternative.',
+    prog_total:'Total Programs',
+    prog_on_track:'On Track',
+    prog_at_risk:'At Risk',
+    prog_delayed:'Delayed',
+    prog_completed:'Completed',
+    prog_avg_achievement:'Average Achievement',
+    prog_add_title:'Add Work Program',
+    prog_form_hint:'Fill in annual work program data',
+    prog_nama:'Program Name',
+    prog_departemen:'Responsible Department',
+    prog_kategori:'Program Category',
+    prog_kat_audit:'Audit',
+    prog_kat_pelatihan:'Training',
+    prog_kat_review:'Periodic Review',
+    prog_kat_sertifikasi:'Certification',
+    prog_kat_monitoring:'Monitoring',
+    prog_kat_lainnya:'Other',
+    prog_tahun:'Program Year',
+    prog_plan_mulai:'Plan Start',
+    prog_plan_selesai:'Plan End',
+    prog_actual_mulai:'Actual Start',
+    prog_actual_selesai:'Actual End',
+    prog_target:'Target Achievement (%)',
+    prog_realisasi:'Actual Achievement (%)',
+    prog_anggaran:'Budget (Rp)',
+    prog_status:'Program Status',
+    prog_status_draft:'Draft',
+    prog_status_on_track:'On Track',
+    prog_status_at_risk:'At Risk',
+    prog_status_delayed:'Delayed',
+    prog_status_completed:'Completed',
+    prog_keterangan:'Notes / Remarks',
+    prog_gdrive_link:'Google Drive Link for Supporting Documents',
+    prog_plan_jadwal:'Plan (Start - End)',
+    prog_actual_jadwal:'Actual (Start - End)',
+    prog_progress:'Progress',
+    prog_dept_summary:'Summary per Department',
+    prog_total_prog:'Total Programs',
+    prog_q_all:'All',
+    prog_q1:'Q1 (Jan-Mar)',
+    prog_q2:'Q2 (Apr-Jun)',
+    prog_q3:'Q3 (Jul-Sep)',
+    prog_q4:'Q4 (Oct-Dec)',
+    prog_saved:'Work program saved successfully',
+    prog_deleted:'Work program deleted successfully',
+    prog_edit_title:'Edit Work Program',
+    prog_no_data:'No work program data yet',
+    prog_validation:'Field %s is required',
+    prog_date_invalid:'End date must be after start date',
+    prog_import_success:'%d programs imported successfully',
+    prog_export_success:'Program data exported successfully',
+    prog_delete_confirm:'Are you sure you want to delete program "%s"?'
   },
   ur: {
-    company:'PT انڈو سلطان جیا', app_title:'میٹریل اپروول ڈیش بورڈ',
-    app_subtitle:'SOP-Z02_C — میٹریل اپروول', dashboard_sub:'میٹریل اپروول — PT انڈو سلطان جیا',
+    company:'PT Indo Sultan Jaya', app_title:'Material Approval Dashboard',
+    app_subtitle:'SOP-Z02_C — Material Approval', dashboard_sub:'Material Approval — PT Indo Sultan Jaya',
     pengajuan_sub:'SOP-Z02_C کے مطابق', loam_sub:'FR-Z02-02_C — مؤثر: 20 فروری 2025',
     master_sub:'حوالہ: میٹریل، سپلائر، مینوفیکچرر', laporan_sub:'آڈٹ ٹریل لاگ اور SOP تعمیل',
     riwayat_sub:'آڈٹ ٹریل لاگ', akun_sub:'صرف سپر ایڈمن کے ذریعے قابل رسائی',
     pengaturan_sub:'ترجیحات اور اکاؤنٹ کی معلومات', monitoring_sub:'LOAM نگرانی اور تازہ کاری',
+    program_sub:'Plan vs Actual — کام کے پروگرام کی نگرانی',
     login_username:'صارف کا نام', login_password:'پاس ورڈ', login_btn:'سائن ان کریں',
     login_err:'غلط صارف نام یا پاس ورڈ!', logout:'لاگ آؤٹ', lang:'زبان',
     tab_dashboard:'ڈیش بورڈ', tab_pengajuan:'فارم میٹریل اپروول', tab_loam:'LOAM',
-    tab_monitoring:'LOAM نگرانی', tab_master:'ماسٹر ڈیٹا', tab_laporan:'رپورٹس اور آڈٹ',
+    tab_monitoring:'LOAM نگرانی', tab_program:'📅 سالانہ ورک پروگرام',
+    tab_master:'ماسٹر ڈیٹا', tab_laporan:'رپورٹس اور آڈٹ',
     tab_riwayat:'تاریخ', tab_akun:'اکاؤنٹ مینجمنٹ', tab_pengaturan:'ترتیبات',
     kpi_total:'کل درخواستیں', kpi_pending:'زیر التوا منظوری', kpi_approved:'منظور شدہ',
     kpi_rejected:'مسترد شدہ', kpi_overdue:'تاخیر (SLA)', kpi_compliance:'تعمیل کی شرح',
@@ -1708,6 +2446,7 @@ const I18N = {
     title_pengajuan:'فارم میٹریل اپروول (FR-Z02-01_C)، مؤثر: 20 فروری 2025',
     title_loam:'منظور شدہ میٹریل کی فہرست (LOAM)',
     title_monitoring:'LOAM تقسیم اور جائزہ نگرانی',
+    title_program:'📅 سالانہ ورک پروگرام اور عمل درآمد کا شیڈول',
     title_master:'ماسٹر ڈیٹا میٹریل اور سپلائر', title_laporan:'رپورٹس اور آڈٹ',
     title_riwayat:'تبدیلی کی تاریخ', title_akun:'اکاؤنٹ اور پاس ورڈ مینجمنٹ',
     title_pengaturan:'سسٹم کی ترتیبات',
@@ -1787,7 +2526,59 @@ const I18N = {
     camera_capture:'تصویر لیں',
     camera_retake:'دوبارہ لیں',
     camera_error:'کیمرے تک رسائی نہیں۔ اجازت دیں۔',
-    camera_not_supported:'براؤزر کیمرہ سپورٹ نہیں کرتا۔ فائل ان پٹ استعمال کریں۔'
+    camera_not_supported:'براؤزر کیمرہ سپورٹ نہیں کرتا۔ فائل ان پٹ استعمال کریں۔',
+    prog_total:'کل پروگرام',
+    prog_on_track:'On Track',
+    prog_at_risk:'At Risk',
+    prog_delayed:'تاخیر',
+    prog_completed:'مکمل',
+    prog_avg_achievement:'اوسط کامیابی',
+    prog_add_title:'ورک پروگرام شامل کریں',
+    prog_form_hint:'سالانہ ورک پروگرام کا ڈیٹا بھریں',
+    prog_nama:'پروگرام کا نام',
+    prog_departemen:'ذمہ دار شعبہ',
+    prog_kategori:'پروگرام کی قسم',
+    prog_kat_audit:'آڈٹ',
+    prog_kat_pelatihan:'تربیت',
+    prog_kat_review:'باقاعدہ جائزہ',
+    prog_kat_sertifikasi:'سرٹیفیکیشن',
+    prog_kat_monitoring:'نگرانی',
+    prog_kat_lainnya:'دیگر',
+    prog_tahun:'پروگرام کا سال',
+    prog_plan_mulai:'پلان شروع',
+    prog_plan_selesai:'پلان اختتام',
+    prog_actual_mulai:'اصل شروع',
+    prog_actual_selesai:'اصل اختتام',
+    prog_target:'ہدف تکمیل (%)',
+    prog_realisasi:'اصل تکمیل (%)',
+    prog_anggaran:'بجٹ (Rp)',
+    prog_status:'پروگرام کی حالت',
+    prog_status_draft:'مسودہ',
+    prog_status_on_track:'On Track',
+    prog_status_at_risk:'At Risk',
+    prog_status_delayed:'تاخیر',
+    prog_status_completed:'مکمل',
+    prog_keterangan:'نوٹس / ریمارکس',
+    prog_gdrive_link:'معاون دستاویزات کے لیے Google Drive لنک',
+    prog_plan_jadwal:'پلان (شروع - اختتام)',
+    prog_actual_jadwal:'اصل (شروع - اختتام)',
+    prog_progress:'پیش رفت',
+    prog_dept_summary:'فی شعبہ خلاصہ',
+    prog_total_prog:'کل پروگرام',
+    prog_q_all:'تمام',
+    prog_q1:'Q1 (جنوری-مارچ)',
+    prog_q2:'Q2 (اپریل-جون)',
+    prog_q3:'Q3 (جولائی-ستمبر)',
+    prog_q4:'Q4 (اکتوبر-دسمبر)',
+    prog_saved:'ورک پروگرام کامیابی سے محفوظ ہو گیا',
+    prog_deleted:'ورک پروگرام کامیابی سے حذف ہو گیا',
+    prog_edit_title:'ورک پروگرام میں ترمیم کریں',
+    prog_no_data:'ابھی کوئی ورک پروگرام ڈیٹا نہیں',
+    prog_validation:'فیلڈ %s لازمی ہے',
+    prog_date_invalid:'اختتامی تاریخ شروع کی تاریخ کے بعد ہونی چاہیے',
+    prog_import_success:'%d پروگرام کامیابی سے درآمد ہوئے',
+    prog_export_success:'پروگرام ڈیٹا کامیابی سے برآمد ہوا',
+    prog_delete_confirm:'کیا آپ واقعی پروگرام "%s" حذف کرنا چاہتے ہیں؟'
   },
   hi: {
     company:'पीटी इंडो सुल्तान जया', app_title:'सामग्री अनुमोदन डैशबोर्ड',
@@ -1796,10 +2587,12 @@ const I18N = {
     master_sub:'संदर्भ: सामग्री, आपूर्तिकर्ता, निर्माता', laporan_sub:'ऑडिट ट्रेल लॉग और SOP अनुपालन',
     riwayat_sub:'ऑडिट ट्रेल लॉग', akun_sub:'केवल सुपरएडमिन द्वारा सुलभ',
     pengaturan_sub:'प्राथमिकताएं और खाता जानकारी', monitoring_sub:'LOAM निगरानी और अद्यतन',
+    program_sub:'Plan vs Actual — कार्य कार्यक्रम निगरानी',
     login_username:'उपयोगकर्ता नाम', login_password:'पासवर्ड', login_btn:'साइन इन करें',
     login_err:'अमान्य उपयोगकर्ता नाम या पासवर्ड!', logout:'लॉगआउट', lang:'भाषा',
     tab_dashboard:'डैशबोर्ड', tab_pengajuan:'फॉर्म मटेरियल अप्रूवल', tab_loam:'LOAM',
-    tab_monitoring:'LOAM निगरानी', tab_master:'मास्टर डेटा', tab_laporan:'रिपोर्ट और ऑडिट',
+    tab_monitoring:'LOAM निगरानी', tab_program:'📅 वार्षिक कार्य कार्यक्रम',
+    tab_master:'मास्टर डेटा', tab_laporan:'रिपोर्ट और ऑडिट',
     tab_riwayat:'इतिहास', tab_akun:'खाता प्रबंधन', tab_pengaturan:'सेटिंग्स',
     kpi_total:'कुल अनुरोध', kpi_pending:'अनुमोदन लंबित', kpi_approved:'अनुमोदित',
     kpi_rejected:'अस्वीकृत', kpi_overdue:'अतिदेय (SLA)', kpi_compliance:'अनुपालन दर',
@@ -1819,6 +2612,7 @@ const I18N = {
     title_pengajuan:'फॉर्म मटेरियल अप्रूवल (FR-Z02-01_C), प्रभावी: 20 फरवरी 2025',
     title_loam:'स्वीकृत सामग्री की सूची (LOAM)',
     title_monitoring:'LOAM वितरण और समीक्षा निगरानी',
+    title_program:'📅 वार्षिक कार्य कार्यक्रम और कार्यान्वयन अनुसूची',
     title_master:'मास्टर डेटा सामग्री और आपूर्तिकर्ता', title_laporan:'रिपोर्ट और ऑडिट',
     title_riwayat:'परिवर्तन इतिहास', title_akun:'खाता और पासवर्ड प्रबंधन',
     title_pengaturan:'सिस्टम सेटिंग्स',
@@ -1898,7 +2692,59 @@ const I18N = {
     camera_capture:'कैप्चर',
     camera_retake:'फिर से लें',
     camera_error:'कैमरे तक नहीं पहुंच सकते। अनुमति दें।',
-    camera_not_supported:'ब्राउज़र कैमरा सपोर्ट नहीं करता। फ़ाइल इनपुट उपयोग करें।'
+    camera_not_supported:'ब्राउज़र कैमरा सपोर्ट नहीं करता। फ़ाइल इनपुट उपयोग करें।',
+    prog_total:'कुल कार्यक्रम',
+    prog_on_track:'On Track',
+    prog_at_risk:'At Risk',
+    prog_delayed:'विलंबित',
+    prog_completed:'पूर्ण',
+    prog_avg_achievement:'औसत उपलब्धि',
+    prog_add_title:'कार्य कार्यक्रम जोड़ें',
+    prog_form_hint:'वार्षिक कार्य कार्यक्रम डेटा भरें',
+    prog_nama:'कार्यक्रम का नाम',
+    prog_departemen:'जिम्मेदार विभाग',
+    prog_kategori:'कार्यक्रम श्रेणी',
+    prog_kat_audit:'ऑडिट',
+    prog_kat_pelatihan:'प्रशिक्षण',
+    prog_kat_review:'आवधिक समीक्षा',
+    prog_kat_sertifikasi:'प्रमाणन',
+    prog_kat_monitoring:'निगरानी',
+    prog_kat_lainnya:'अन्य',
+    prog_tahun:'कार्यक्रम वर्ष',
+    prog_plan_mulai:'योजना प्रारंभ',
+    prog_plan_selesai:'योजना समाप्ति',
+    prog_actual_mulai:'वास्तविक प्रारंभ',
+    prog_actual_selesai:'वास्तविक समाप्ति',
+    prog_target:'लक्ष्य उपलब्धि (%)',
+    prog_realisasi:'वास्तविक उपलब्धि (%)',
+    prog_anggaran:'बजट (Rp)',
+    prog_status:'कार्यक्रम स्थिति',
+    prog_status_draft:'ड्राफ्ट',
+    prog_status_on_track:'On Track',
+    prog_status_at_risk:'At Risk',
+    prog_status_delayed:'विलंबित',
+    prog_status_completed:'पूर्ण',
+    prog_keterangan:'नोट्स / टिप्पणी',
+    prog_gdrive_link:'सहायक दस्तावेज़ों के लिए Google Drive लिंक',
+    prog_plan_jadwal:'योजना (प्रारंभ - समाप्ति)',
+    prog_actual_jadwal:'वास्तविक (प्रारंभ - समाप्ति)',
+    prog_progress:'प्रगति',
+    prog_dept_summary:'प्रति विभाग सारांश',
+    prog_total_prog:'कुल कार्यक्रम',
+    prog_q_all:'सभी',
+    prog_q1:'Q1 (जनवरी-मार्च)',
+    prog_q2:'Q2 (अप्रैल-जून)',
+    prog_q3:'Q3 (जुलाई-सितंबर)',
+    prog_q4:'Q4 (अक्टूबर-दिसंबर)',
+    prog_saved:'कार्य कार्यक्रम सफलतापूर्वक सहेजा गया',
+    prog_deleted:'कार्य कार्यक्रम सफलतापूर्वक हटाया गया',
+    prog_edit_title:'कार्य कार्यक्रम संपादित करें',
+    prog_no_data:'अभी कोई कार्य कार्यक्रम डेटा नहीं',
+    prog_validation:'फ़ील्ड %s आवश्यक है',
+    prog_date_invalid:'समाप्ति तिथि प्रारंभ तिथि के बाद होनी चाहिए',
+    prog_import_success:'%d कार्यक्रम सफलतापूर्वक आयात किए गए',
+    prog_export_success:'कार्यक्रम डेटा सफलतापूर्वक निर्यात किया गया',
+    prog_delete_confirm:'क्या आप वास्तव में कार्यक्रम "%s" हटाना चाहते हैं?'
   },
   zh: {
     company:'PT Indo Sultan Jaya', app_title:'物料审批仪表板',
@@ -1907,10 +2753,12 @@ const I18N = {
     master_sub:'参考：物料、供应商和制造商', laporan_sub:'审计跟踪日志与 SOP 合规性',
     riwayat_sub:'审计跟踪日志', akun_sub:'仅限超级管理员访问',
     pengaturan_sub:'首选项与账户信息', monitoring_sub:'LOAM 监控和更新',
+    program_sub:'Plan vs Actual — 工作计划实现监控',
     login_username:'用户名', login_password:'密码', login_btn:'登录',
     login_err:'用户名或密码无效！', logout:'登出', lang:'语言',
     tab_dashboard:'仪表板', tab_pengajuan:'物料审批表', tab_loam:'LOAM',
-    tab_monitoring:'LOAM 监控', tab_master:'主数据', tab_laporan:'报告与审计',
+    tab_monitoring:'LOAM 监控', tab_program:'📅 年度工作计划',
+    tab_master:'主数据', tab_laporan:'报告与审计',
     tab_riwayat:'历史记录', tab_akun:'账户管理', tab_pengaturan:'设置',
     kpi_total:'总申请', kpi_pending:'待审批', kpi_approved:'已批准',
     kpi_rejected:'已拒绝', kpi_overdue:'逾期（SLA）', kpi_compliance:'合规率',
@@ -1930,6 +2778,7 @@ const I18N = {
     title_pengajuan:'物料审批表 (FR-Z02-01_C), 生效日期: 2025年2月20日',
     title_loam:'已批准物料清单（LOAM）',
     title_monitoring:'LOAM 分发和审查监控',
+    title_program:'📅 年度工作计划与实施时间表',
     title_master:'主数据物料和供应商', title_laporan:'报告与审计',
     title_riwayat:'变更历史', title_akun:'账户与密码管理',
     title_pengaturan:'系统设置',
@@ -2009,7 +2858,59 @@ const I18N = {
     camera_capture:'拍摄',
     camera_retake:'重拍',
     camera_error:'无法访问相机。请授予相机权限。',
-    camera_not_supported:'浏览器不支持相机访问。使用文件输入作为替代。'
+    camera_not_supported:'浏览器不支持相机访问。使用文件输入作为替代。',
+    prog_total:'总计划',
+    prog_on_track:'On Track',
+    prog_at_risk:'At Risk',
+    prog_delayed:'延迟',
+    prog_completed:'已完成',
+    prog_avg_achievement:'平均达成率',
+    prog_add_title:'添加工作计划',
+    prog_form_hint:'填写年度工作计划数据',
+    prog_nama:'计划名称',
+    prog_departemen:'责任部门',
+    prog_kategori:'计划类别',
+    prog_kat_audit:'审计',
+    prog_kat_pelatihan:'培训',
+    prog_kat_review:'定期审查',
+    prog_kat_sertifikasi:'认证',
+    prog_kat_monitoring:'监控',
+    prog_kat_lainnya:'其他',
+    prog_tahun:'计划年份',
+    prog_plan_mulai:'计划开始',
+    prog_plan_selesai:'计划结束',
+    prog_actual_mulai:'实际开始',
+    prog_actual_selesai:'实际结束',
+    prog_target:'目标达成率 (%)',
+    prog_realisasi:'实际达成率 (%)',
+    prog_anggaran:'预算 (Rp)',
+    prog_status:'计划状态',
+    prog_status_draft:'草稿',
+    prog_status_on_track:'On Track',
+    prog_status_at_risk:'At Risk',
+    prog_status_delayed:'延迟',
+    prog_status_completed:'已完成',
+    prog_keterangan:'备注 / 说明',
+    prog_gdrive_link:'支持文档的 Google Drive 链接',
+    prog_plan_jadwal:'计划（开始 - 结束）',
+    prog_actual_jadwal:'实际（开始 - 结束）',
+    prog_progress:'进度',
+    prog_dept_summary:'各部门摘要',
+    prog_total_prog:'总计划数',
+    prog_q_all:'全部',
+    prog_q1:'Q1 (1月-3月)',
+    prog_q2:'Q2 (4月-6月)',
+    prog_q3:'Q3 (7月-9月)',
+    prog_q4:'Q4 (10月-12月)',
+    prog_saved:'工作计划保存成功',
+    prog_deleted:'工作计划删除成功',
+    prog_edit_title:'编辑工作计划',
+    prog_no_data:'暂无工作计划数据',
+    prog_validation:'字段 %s 是必填项',
+    prog_date_invalid:'结束日期必须晚于开始日期',
+    prog_import_success:'成功导入 %d 个计划',
+    prog_export_success:'计划数据导出成功',
+    prog_delete_confirm:'您确定要删除计划 "%s" 吗？'
   }
 };
 
@@ -2029,6 +2930,13 @@ let cameraStream = null;
 let currentFacingMode = 'environment';
 let currentCameraTargetId = null;
 let capturedPhotoData = null;
+
+/* State untuk edit/hapus LOAM */
+let editingLoamId = null;
+
+/* State untuk Program Kerja */
+let editingProgramId = null;
+let currentQuarterFilter = 'all';
 
 /* ================================================================
    PERMISSION HELPERS
@@ -2058,22 +2966,224 @@ function applyPermissions(){
 }
 
 /* ================================================================
-   INISIALISASI DATA CONTOH LOAM (REVISI)
-   Dipanggil saat pertama kali aplikasi dibuka
+   CETAK & SAVE AS PDF
+================================================================ */
+function printTab(panelId) {
+  try {
+    const panel = document.getElementById(panelId);
+    if (!panel) {
+      showToast('Panel tidak ditemukan', 'error');
+      return;
+    }
+
+    const panelTitle = panel.querySelector('h2')?.textContent || 'Laporan';
+
+    const printWindow = window.open('', '_blank', 'width=1200,height=800');
+    if (!printWindow) {
+      showToast('Popup diblokir. Izinkan popup untuk mencetak.', 'error');
+      return;
+    }
+
+    const styles = document.querySelectorAll('style');
+    let styleContent = '';
+    styles.forEach(s => styleContent += s.innerHTML);
+
+    const clone = panel.cloneNode(true);
+    clone.querySelectorAll('.toolbar, .filter-bar, .btn, .save-bar, .admin-purchasing-only, .superadmin-only, button:not(.print-keep)').forEach(el => {
+      if (!el.classList.contains('print-keep')) el.remove();
+    });
+
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>${panelTitle} — PT Indo Sultan Jaya</title>
+        <style>
+          ${styleContent}
+          body { background: #fff; padding: 20px; font-size: 12px; }
+          .no-print { display: none !important; }
+          .tab-panel { display: block !important; }
+          table.data { font-size: 11px; }
+          table.data th, table.data td { padding: 6px 8px; }
+          @media print {
+            body { padding: 0; }
+            .no-print { display: none !important; }
+          }
+        </style>
+      </head>
+      <body>
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; border-bottom:2px solid #1e40af; padding-bottom:10px;">
+          <div>
+            <h2 style="color:#1e3a8a; font-size:16px; margin:0;">PT Indo Sultan Jaya</h2>
+            <p style="color:#64748b; font-size:11px; margin:2px 0 0;">SOP-Z02_C — Material Approval Dashboard</p>
+          </div>
+          <div style="text-align:right; font-size:10px; color:#64748b;">
+            Dicetak: ${new Date().toLocaleString('id-ID')}<br>
+            Oleh: ${currentUser?.username || '—'} (${currentUser?.dept || '—'})
+          </div>
+        </div>
+        ${clone.outerHTML}
+        <div style="margin-top:24px; padding-top:12px; border-top:1px solid #e2e8f0; font-size:10px; color:#94a3b8; text-align:center;">
+          Dokumen ini dicetak dari sistem Material Approval Dashboard — PT Indo Sultan Jaya
+        </div>
+      </body>
+      </html>
+    `);
+
+    printWindow.document.close();
+    printWindow.focus();
+    setTimeout(() => { printWindow.print(); }, 500);
+    showToast('Membuka dialog cetak...', 'success');
+  } catch (err) {
+    console.error('Error printTab:', err);
+    showToast('Gagal mencetak: ' + err.message, 'error');
+  }
+}
+
+function saveAsPDF(panelId) {
+  try {
+    const panel = document.getElementById(panelId);
+    if (!panel) {
+      showToast('Panel tidak ditemukan', 'error');
+      return;
+    }
+
+    const panelTitle = panel.querySelector('h2')?.textContent || 'Laporan';
+
+    const printWindow = window.open('', '_blank', 'width=1200,height=800');
+    if (!printWindow) {
+      showToast('Popup diblokir. Izinkan popup untuk menyimpan PDF.', 'error');
+      return;
+    }
+
+    const styles = document.querySelectorAll('style');
+    let styleContent = '';
+    styles.forEach(s => styleContent += s.innerHTML);
+
+    const clone = panel.cloneNode(true);
+    clone.querySelectorAll('.toolbar, .filter-bar, .btn, .save-bar, .admin-purchasing-only, .superadmin-only, button:not(.print-keep)').forEach(el => {
+      if (!el.classList.contains('print-keep')) el.remove();
+    });
+
+    printWindow.document.write(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <title>${panelTitle} — PT Indo Sultan Jaya</title>
+        <style>
+          ${styleContent}
+          body { background: #fff; padding: 20px; font-size: 12px; }
+          .no-print { display: none !important; }
+          .tab-panel { display: block !important; }
+          table.data { font-size: 11px; }
+          table.data th, table.data td { padding: 6px 8px; }
+          @media print {
+            body { padding: 0; }
+            .no-print { display: none !important; }
+          }
+        </style>
+      </head>
+      <body>
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; border-bottom:2px solid #1e40af; padding-bottom:10px;">
+          <div>
+            <h2 style="color:#1e3a8a; font-size:16px; margin:0;">PT Indo Sultan Jaya</h2>
+            <p style="color:#64748b; font-size:11px; margin:2px 0 0;">SOP-Z02_C — Material Approval Dashboard</p>
+          </div>
+          <div style="text-align:right; font-size:10px; color:#64748b;">
+            Dicetak: ${new Date().toLocaleString('id-ID')}<br>
+            Oleh: ${currentUser?.username || '—'} (${currentUser?.dept || '—'})
+          </div>
+        </div>
+        ${clone.outerHTML}
+        <div style="margin-top:24px; padding-top:12px; border-top:1px solid #e2e8f0; font-size:10px; color:#94a3b8; text-align:center;">
+          Dokumen ini dicetak dari sistem Material Approval Dashboard — PT Indo Sultan Jaya
+        </div>
+      </body>
+      </html>
+    `);
+
+    printWindow.document.close();
+    printWindow.focus();
+
+    setTimeout(() => {
+      printWindow.print();
+      showToast('Pilih "Save as PDF" pada dialog cetak', 'success');
+    }, 500);
+  } catch (err) {
+    console.error('Error saveAsPDF:', err);
+    showToast('Gagal menyimpan PDF: ' + err.message, 'error');
+  }
+}
+
+/* ================================================================
+   INISIALISASI DATA CONTOH (dengan migration untuk data lama)
+   Patch: Data lama otomatis di-migrasi agar punya gdrive_link
 ================================================================ */
 function initializeSampleLoamData(){
   try {
     const initialized = localStorage.getItem(STORAGE_KEYS.SAMPLE_INIT);
     const existing = JSON.parse(localStorage.getItem(STORAGE_KEYS.LOAM_DATA) || '[]');
 
-    // Hanya inisialisasi jika belum pernah dan data kosong
+    // Jika belum pernah di-init & data kosong → isi dengan sample lengkap
     if(!initialized && existing.length === 0){
       localStorage.setItem(STORAGE_KEYS.LOAM_DATA, JSON.stringify(SAMPLE_LOAM_DATA));
       localStorage.setItem(STORAGE_KEYS.SAMPLE_INIT, 'true');
       console.log('✅ Sample LOAM data initialized: ' + SAMPLE_LOAM_DATA.length + ' items');
+      return;
+    }
+
+    // MIGRATION: pastikan semua data lama punya gdrive_link
+    if(existing.length > 0){
+      let migrated = 0;
+      const defaultLink = GDRIVE_LINKS.cloud || '';
+      existing.forEach(item => {
+        if(!item.gdrive_link){
+          item.gdrive_link = defaultLink;
+          migrated++;
+        }
+      });
+      if(migrated > 0){
+        localStorage.setItem(STORAGE_KEYS.LOAM_DATA, JSON.stringify(existing));
+        console.log(`✅ Migration: ${migrated} item LOAM ditambahkan gdrive_link default`);
+      }
     }
   } catch(err) {
     console.error('Error initializeSampleLoamData:', err);
+  }
+}
+
+/* ================================================================
+   INISIALISASI PROGRAM DATA (dengan migration)
+   Patch: Data program lama otomatis di-migrasi agar punya gdrive_link
+================================================================ */
+function initializeSampleProgramData(){
+  try {
+    const initialized = localStorage.getItem(STORAGE_KEYS.PROGRAM_INIT);
+    const existing = JSON.parse(localStorage.getItem(STORAGE_KEYS.PROGRAM_DATA) || '[]');
+
+    if(!initialized && existing.length === 0){
+      localStorage.setItem(STORAGE_KEYS.PROGRAM_DATA, JSON.stringify(SAMPLE_PROGRAM_DATA));
+      localStorage.setItem(STORAGE_KEYS.PROGRAM_INIT, 'true');
+      console.log('✅ Sample Program data initialized: ' + SAMPLE_PROGRAM_DATA.length + ' items');
+      return;
+    }
+
+    // MIGRATION: pastikan semua program lama punya gdrive_link
+    if(existing.length > 0){
+      let migrated = 0;
+      existing.forEach(item => {
+        if(!item.gdrive_link){
+          item.gdrive_link = GDRIVE_LINKS[item.kategori] || GDRIVE_LINKS.program || '';
+          migrated++;
+        }
+      });
+      if(migrated > 0){
+        localStorage.setItem(STORAGE_KEYS.PROGRAM_DATA, JSON.stringify(existing));
+        console.log(`✅ Migration: ${migrated} program ditambahkan gdrive_link default`);
+      }
+    }
+  } catch(err) {
+    console.error('Error initializeSampleProgramData:', err);
   }
 }
 
@@ -2126,6 +3236,49 @@ function buildFilterBar(containerId){
   const yearOpts = ['2024','2025','2026','2027','2028','2029','2030'].map(y => `<option value="${y}">${y}</option>`).join('');
   const katDisabled = canEdit() ? '' : 'disabled';
 
+  // Custom untuk program
+  if(containerId === 'filterProgram'){
+    const deptOpts = DEPARTMENTS.map(d => `<option value="${d.name}">${d.name}</option>`).join('');
+    c.innerHTML = `
+      <span class="filter-label">${dict.sort_by || 'Filter'}</span>
+      <select class="f-program-tahun">
+        <option value="">${dict.filter_all_tahun || 'Semua Tahun'}</option>
+        ${yearOpts}
+      </select>
+      <select class="f-program-dept">
+        <option value="">${dict.filter_all_dept || 'Semua Departemen'}</option>
+        ${deptOpts}
+      </select>
+      <select class="f-program-kategori">
+        <option value="">${dict.filter_all_kategori || 'Semua Kategori'}</option>
+        <option value="audit">Audit</option>
+        <option value="pelatihan">Pelatihan</option>
+        <option value="review">Review</option>
+        <option value="sertifikasi">Sertifikasi</option>
+        <option value="monitoring">Monitoring</option>
+        <option value="lainnya">Lainnya</option>
+      </select>
+      <select class="f-program-status">
+        <option value="">${dict.filter_all_status || 'Semua Status'}</option>
+        <option value="draft">Draft</option>
+        <option value="on-track">On Track</option>
+        <option value="at-risk">At Risk</option>
+        <option value="delayed">Delayed</option>
+        <option value="completed">Completed</option>
+      </select>
+      <input type="text" class="f-program-search" placeholder="${dict.search_ph || 'Cari...'}">
+      <button class="btn btn-outline btn-sm superadmin-only" onclick="resetProgramFilters()">
+        <span>🔄</span><span>${dict.btn_reset || 'Reset'}</span>
+      </button>
+    `;
+    c.querySelectorAll('select, input').forEach(el => {
+      el.addEventListener('change', () => renderProgramTable());
+      if(el.type === 'text') el.addEventListener('input', () => renderProgramTable());
+    });
+    applyPermissions();
+    return;
+  }
+
   c.innerHTML = `
     <span class="filter-label" data-i18n="sort_by">${dict.sort_by}</span>
     <select class="f-month">
@@ -2171,10 +3324,51 @@ function buildToolbar(containerId){
   if(!c) return;
   const dict = I18N[currentLang];
 
+  if(containerId === 'toolbarProgram'){
+    c.innerHTML = `
+      <button class="btn btn-outline btn-sm" onclick="printTab('panel-program')">
+        <span>🖨️</span><span>${dict.btn_print}</span>
+      </button>
+      <button class="btn btn-outline btn-sm" onclick="saveAsPDF('panel-program')">
+        <span>📄</span><span>Save as PDF</span>
+      </button>
+      <span class="separator"></span>
+      <button class="btn btn-primary btn-sm admin-purchasing-only" onclick="toolbarAction('add','${containerId}')">
+        <span>➕</span><span>${dict.btn_add}</span>
+      </button>
+      <button class="btn btn-success btn-sm admin-purchasing-only" onclick="toolbarAction('save','${containerId}')">
+        <span>💾</span><span>${dict.btn_save}</span>
+      </button>
+      <span class="separator"></span>
+      <button class="btn btn-outline btn-sm admin-purchasing-only" onclick="exportProgramData('excel')">
+        <span>📊</span><span>${dict.btn_excel}</span>
+      </button>
+      <button class="btn btn-outline btn-sm admin-purchasing-only" onclick="exportProgramData('json')">
+        <span>📋</span><span>${dict.btn_json}</span>
+      </button>
+      <button class="btn btn-outline btn-sm admin-purchasing-only" onclick="exportProgramData('csv')">
+        <span>📄</span><span>${dict.btn_csv}</span>
+      </button>
+      <button class="btn btn-outline btn-sm admin-purchasing-only" onclick="importProgramData()">
+        <span>📥</span><span>${dict.btn_import}</span>
+      </button>
+      <span class="separator"></span>
+      <span class="toolbar-info" id="toolbarDateTime_${containerId}"></span>
+    `;
+    updateToolbarDateTime(containerId);
+    setInterval(() => updateToolbarDateTime(containerId), 30000);
+    applyPermissions();
+    return;
+  }
+
   c.innerHTML = `
-    <button class="btn btn-outline btn-sm" onclick="toolbarAction('print','${containerId}')">
+    <button class="btn btn-outline btn-sm" onclick="printTab('panel-${containerId.replace('toolbar','').toLowerCase()}')">
       <span>🖨️</span><span>${dict.btn_print}</span>
     </button>
+    <button class="btn btn-outline btn-sm" onclick="saveAsPDF('panel-${containerId.replace('toolbar','').toLowerCase()}')">
+      <span>📄</span><span>Save as PDF</span>
+    </button>
+    <span class="separator"></span>
     <button class="btn btn-primary btn-sm admin-purchasing-only" onclick="toolbarAction('add','${containerId}')">
       <span>➕</span><span>${dict.btn_add}</span>
     </button>
@@ -2193,13 +3387,6 @@ function buildToolbar(containerId){
     </button>
     <button class="btn btn-outline btn-sm admin-purchasing-only" onclick="toolbarAction('import','${containerId}')">
       <span>📥</span><span>${dict.btn_import}</span>
-    </button>
-    <span class="separator"></span>
-    <button class="btn btn-outline btn-sm admin-purchasing-only" onclick="toolbarAction('edit','${containerId}')">
-      <span>✏️</span><span>${dict.btn_edit}</span>
-    </button>
-    <button class="btn btn-danger btn-sm admin-purchasing-only" onclick="toolbarAction('delete','${containerId}')">
-      <span>🗑️</span><span>${dict.btn_delete}</span>
     </button>
     <span class="separator"></span>
     <span class="toolbar-info" id="toolbarDateTime_${containerId}"></span>
@@ -2225,7 +3412,11 @@ function updateToolbarDateTime(containerId){
 }
 
 function toolbarAction(action, containerId){
-  if(action === 'print'){ window.print(); return; }
+  if(action === 'print'){ 
+    const panelId = 'panel-' + containerId.replace('toolbar','').toLowerCase();
+    printTab(panelId);
+    return; 
+  }
   if(!canEdit()){
     showToast(I18N[currentLang].err_access_denied, 'error');
     return;
@@ -2234,7 +3425,22 @@ function toolbarAction(action, containerId){
     case 'add':
       if(containerId === 'toolbarLoam'){
         const form = document.getElementById('loamAddForm');
-        if(form){ form.style.display = 'block'; form.scrollIntoView({behavior:'smooth'}); }
+        if(form){ 
+          form.style.display = 'block'; 
+          form.scrollIntoView({behavior:'smooth'});
+          editingLoamId = null;
+          const h3 = form.querySelector('h3 .num');
+          if(h3) h3.textContent = '+';
+          form.querySelectorAll('input, select, textarea').forEach(el => {
+            if(el.type === 'checkbox' || el.type === 'radio') el.checked = false;
+            else if(el.type !== 'file') el.value = '';
+          });
+          // Reset gdrive link ke default
+          const gd = document.getElementById('loam_gdrive_link');
+          if(gd) gd.value = GDRIVE_LINKS.cloud || '';
+        }
+      } else if(containerId === 'toolbarProgram'){
+        showProgramAddForm();
       } else {
         showToast('Fitur tambah data siap digunakan', 'success');
       }
@@ -2244,14 +3450,12 @@ function toolbarAction(action, containerId){
     case 'json':  exportData('json');  break;
     case 'csv':   exportData('csv');   break;
     case 'import': triggerImport(); break;
-    case 'edit':   showToast('Pilih baris data untuk diedit', 'success'); break;
-    case 'delete': showToast('Pilih baris data untuk dihapus', 'success'); break;
     default: break;
   }
 }
 
 /* ================================================================
-   EXPORT / IMPORT
+   EXPORT / IMPORT (LOAM)
 ================================================================ */
 function exportData(type){
   if(!canEdit()){
@@ -2259,15 +3463,34 @@ function exportData(type){
     return;
   }
   try{
-    const data = { generated:new Date().toISOString(), items:[] };
+    const loamData = JSON.parse(localStorage.getItem(STORAGE_KEYS.LOAM_DATA) || '[]');
+    let content = '';
+    let filename = 'material-approval';
+    let mime = 'text/plain';
+
     if(type === 'json'){
-      downloadBlob(JSON.stringify(data, null, 2), 'material-approval.json', 'application/json');
+      content = JSON.stringify({ generated: new Date().toISOString(), items: loamData }, null, 2);
+      filename += '.json';
+      mime = 'application/json';
     } else if(type === 'csv'){
-      downloadBlob('No,Nama,Kategori,Supplier,Status,Tanggal\n', 'material-approval.csv', 'text/csv');
+      content = 'No,Nama,Jenis,Produsen,Negara,Kategori,Supplier,Lembaga,Nomor Sertifikat,Masa Berlaku,GDrive Link\n';
+      loamData.forEach((d, i) => {
+        content += `${i+1},"${d.nama || ''}","${d.jenis || ''}","${d.produsen || ''}","${d.negara || ''}","${d.kategori || ''}","${d.supplier || ''}","${d.lembaga || ''}","${d.nomor_sert || ''}","${d.masa_berlaku || ''}","${d.gdrive_link || ''}"\n`;
+      });
+      filename += '.csv';
+      mime = 'text/csv';
     } else if(type === 'excel'){
-      const html = '<table><tr><th>No</th><th>Nama</th><th>Kategori</th><th>Supplier</th><th>Status</th><th>Tanggal</th></tr></table>';
-      downloadBlob(html, 'material-approval.xls', 'application/vnd.ms-excel');
+      let html = '<table><tr><th>No</th><th>Nama</th><th>Jenis</th><th>Produsen</th><th>Negara</th><th>Kategori</th><th>Supplier</th><th>Lembaga</th><th>No. Sertifikat</th><th>Masa Berlaku</th><th>GDrive</th></tr>';
+      loamData.forEach((d, i) => {
+        html += `<tr><td>${i+1}</td><td>${d.nama || ''}</td><td>${d.jenis || ''}</td><td>${d.produsen || ''}</td><td>${d.negara || ''}</td><td>${d.kategori || ''}</td><td>${d.supplier || ''}</td><td>${d.lembaga || ''}</td><td>${d.nomor_sert || ''}</td><td>${d.masa_berlaku || ''}</td><td>${d.gdrive_link || ''}</td></tr>`;
+      });
+      html += '</table>';
+      content = html;
+      filename += '.xls';
+      mime = 'application/vnd.ms-excel';
     }
+
+    downloadBlob(content, filename, mime);
     showToast('Data berhasil diexport', 'success');
   }catch(err){
     console.error(err);
@@ -2292,7 +3515,7 @@ function triggerImport(){
   }
   const input = document.createElement('input');
   input.type = 'file';
-  input.accept = '.json,.csv,.xls,.xlsx';
+  input.accept = '.json';
   input.onchange = e => {
     const file = e.target.files[0];
     if(!file) return;
@@ -2303,8 +3526,18 @@ function triggerImport(){
     const reader = new FileReader();
     reader.onload = ev => {
       try{
-        if(file.name.endsWith('.json')) JSON.parse(ev.target.result);
-        showToast('File berhasil diimpor: ' + file.name, 'success');
+        const imported = JSON.parse(ev.target.result);
+        if(imported.items && Array.isArray(imported.items)){
+          const existing = JSON.parse(localStorage.getItem(STORAGE_KEYS.LOAM_DATA) || '[]');
+          const merged = [...existing, ...imported.items];
+          localStorage.setItem(STORAGE_KEYS.LOAM_DATA, JSON.stringify(merged));
+          renderLoamTable();
+          renderDashboard();
+          renderExpiringTable();
+          showToast(`${imported.items.length} item berhasil diimpor`, 'success');
+        } else {
+          showToast('Format file tidak valid', 'error');
+        }
       }catch(err){
         showToast('File tidak valid: ' + err.message, 'error');
       }
@@ -2316,7 +3549,192 @@ function triggerImport(){
 }
 
 /* ================================================================
-   CHECKLIST RENDERER
+   EXPORT / IMPORT PROGRAM KERJA
+================================================================ */
+function exportProgramData(type){
+  if(!canEdit()){
+    showToast(I18N[currentLang].err_access_denied, 'error');
+    return;
+  }
+  try {
+    const data = JSON.parse(localStorage.getItem(STORAGE_KEYS.PROGRAM_DATA) || '[]');
+    let content = '';
+    let filename = 'program-kerja-tahunan';
+    let mime = 'text/plain';
+
+    if(type === 'json'){
+      content = JSON.stringify({ generated: new Date().toISOString(), items: data }, null, 2);
+      filename += '.json';
+      mime = 'application/json';
+    } else if(type === 'csv'){
+      content = 'No,Nama,Departemen,Kategori,Tahun,Plan Mulai,Plan Selesai,Actual Mulai,Actual Selesai,Target,Realisasi,Anggaran,Status,Keterangan,GDrive Link\n';
+      data.forEach((d, i) => {
+        content += `${i+1},"${d.nama || ''}","${d.departemen || ''}","${d.kategori || ''}","${d.tahun || ''}","${d.plan_mulai || ''}","${d.plan_selesai || ''}","${d.actual_mulai || ''}","${d.actual_selesai || ''}",${d.target || 0},${d.realisasi || 0},${d.anggaran || 0},"${d.status || ''}","${d.keterangan || ''}","${d.gdrive_link || ''}"\n`;
+      });
+      filename += '.csv';
+      mime = 'text/csv';
+    } else if(type === 'excel'){
+      let html = '<table><tr><th>No</th><th>Nama</th><th>Departemen</th><th>Kategori</th><th>Tahun</th><th>Plan Mulai</th><th>Plan Selesai</th><th>Actual Mulai</th><th>Actual Selesai</th><th>Target</th><th>Realisasi</th><th>Anggaran</th><th>Status</th><th>Keterangan</th><th>GDrive</th></tr>';
+      data.forEach((d, i) => {
+        html += `<tr><td>${i+1}</td><td>${d.nama || ''}</td><td>${d.departemen || ''}</td><td>${d.kategori || ''}</td><td>${d.tahun || ''}</td><td>${d.plan_mulai || ''}</td><td>${d.plan_selesai || ''}</td><td>${d.actual_mulai || ''}</td><td>${d.actual_selesai || ''}</td><td>${d.target || 0}</td><td>${d.realisasi || 0}</td><td>${d.anggaran || 0}</td><td>${d.status || ''}</td><td>${d.keterangan || ''}</td><td>${d.gdrive_link || ''}</td></tr>`;
+      });
+      html += '</table>';
+      content = html;
+      filename += '.xls';
+      mime = 'application/vnd.ms-excel';
+    }
+
+    downloadBlob(content, filename, mime);
+    showToast(I18N[currentLang].prog_export_success, 'success');
+  } catch(err) {
+    console.error('Error exportProgramData:', err);
+    showToast('Gagal export program: ' + err.message, 'error');
+  }
+}
+
+function importProgramData(){
+  if(!canEdit()){
+    showToast(I18N[currentLang].err_access_denied, 'error');
+    return;
+  }
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json';
+  input.onchange = e => {
+    const file = e.target.files[0];
+    if(!file) return;
+    if(file.size > 5 * 1024 * 1024){
+      showToast('File terlalu besar (maks 5 MB)', 'error');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = ev => {
+      try {
+        const imported = JSON.parse(ev.target.result);
+        if(imported.items && Array.isArray(imported.items)){
+          const existing = JSON.parse(localStorage.getItem(STORAGE_KEYS.PROGRAM_DATA) || '[]');
+          const merged = [...existing, ...imported.items];
+          localStorage.setItem(STORAGE_KEYS.PROGRAM_DATA, JSON.stringify(merged));
+          renderProgramTable();
+          renderProgramSummary();
+          renderDeptSummary();
+          showToast(I18N[currentLang].prog_import_success.replace('%d', imported.items.length), 'success');
+        } else {
+          showToast('Format file tidak valid', 'error');
+        }
+      } catch(err) {
+        showToast('File tidak valid: ' + err.message, 'error');
+      }
+    };
+    reader.onerror = () => showToast('Gagal membaca file', 'error');
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
+/* ================================================================
+   HELPER: BUKA FOLDER GOOGLE DRIVE
+   Patch baru: fungsi terpusat untuk membuka folder Drive
+================================================================ */
+/**
+ * Membuka folder Google Drive yang sesuai dalam tab baru.
+ * @param {string} type - 'kamera' | 'upload' | 'ttd' | 'cloud' | kode checklist
+ * @param {string} [itemId] - ID checklist item (opsional, untuk logging)
+ */
+function openGDriveFolder(type, itemId){
+  try {
+    const url = GDRIVE_LINKS[type];
+    if(!url){
+      showToast(`Link Google Drive untuk "${type}" belum dikonfigurasi`, 'warning');
+      return;
+    }
+
+    const win = window.open(url, '_blank');
+    if(!win){
+      showToast('Popup diblokir. Izinkan popup untuk membuka Google Drive.', 'error');
+      return;
+    }
+
+    if(currentUser){
+      addHistoryEntry({
+        who: currentUser.username,
+        dept: currentUser.dept,
+        action: 'OPEN_GDRIVE',
+        detail: `Buka folder Drive [${type}]${itemId ? ' dari item ' + itemId : ''}`,
+        time: new Date().toISOString()
+      });
+    }
+
+    showToast(`📂 Membuka folder Google Drive [${type}]...`, 'success');
+  } catch(err) {
+    console.error('Error openGDriveFolder:', err);
+    showToast('Gagal membuka Google Drive: ' + err.message, 'error');
+  }
+}
+
+/**
+ * Menampilkan banner info link Google Drive di dalam modal.
+ * @param {string} modalId - ID elemen modal
+ * @param {string} driveType - tipe folder Drive ('kamera' atau 'ttd')
+ */
+function injectGDriveBanner(modalId, driveType){
+  try {
+    const modal = document.getElementById(modalId);
+    if(!modal) return;
+    const box = modal.querySelector('.modal-box');
+    if(!box) return;
+
+    box.querySelectorAll('.gdrive-modal-banner').forEach(el => el.remove());
+
+    const url = GDRIVE_LINKS[driveType];
+    if(!url) return;
+
+    const banner = document.createElement('div');
+    banner.className = 'gdrive-modal-banner';
+    banner.innerHTML = `
+      <span style="font-size:14px;">📂</span>
+      <span style="flex:1;">File akan disimpan/diarsipkan ke folder Google Drive:</span>
+      <a href="${url}" target="_blank">Buka Folder ↗</a>
+    `;
+
+    const h3 = box.querySelector('h3');
+    if(h3 && h3.nextSibling){
+      box.insertBefore(banner, h3.nextSibling);
+    } else {
+      box.insertBefore(banner, box.firstChild);
+    }
+  } catch(err) {
+    console.error('Error injectGDriveBanner:', err);
+  }
+}
+
+/**
+ * Membuka folder Drive berdasarkan data-gdrive-key pada item checklist.
+ * Dipanggil dari badge "Drive ↗".
+ * @param {string} itemId - ID elemen checklist-item
+ */
+function openDriveFromItem(itemId){
+  try {
+    const el = document.getElementById(itemId);
+    if(!el){
+      showToast('Item tidak ditemukan', 'error');
+      return;
+    }
+    const key = el.getAttribute('data-gdrive-key');
+    if(!key){
+      showToast('Link Drive tidak tersedia untuk item ini', 'warning');
+      return;
+    }
+    openGDriveFolder(key, itemId);
+  } catch(err) {
+    console.error('Error openDriveFromItem:', err);
+    showToast('Gagal membuka folder Drive', 'error');
+  }
+}
+
+/* ================================================================
+   CHECKLIST RENDERER (dengan badge link Drive)
+   Patch: setiap checklist item menampilkan badge "📂 Drive ↗"
 ================================================================ */
 function renderChecklistItem(opts){
   const itemId = 'ci_' + (++checklistItemCounter);
@@ -2331,12 +3749,24 @@ function renderChecklistItem(opts){
   const showCloud = opts.cloud !== false;
   const isReadonly = !canEdit() ? 'disabled' : '';
 
+  const gdriveKey = opts.key || opts.num || '';
+  const gdriveLink = GDRIVE_LINKS[gdriveKey] || '';
+
+  // Badge link Drive di header item (jika tersedia)
+  const headerBadge = gdriveLink
+    ? `<a href="${gdriveLink}" target="_blank" class="gdrive-badge"
+         style="margin-left:auto;"
+         onclick="event.preventDefault(); openDriveFromItem('${itemId}'); return false;"
+         title="Buka folder Google Drive untuk item ini">📂 Drive ↗</a>`
+    : '';
+
   return `
-    <div class="checklist-item" id="${itemId}">
+    <div class="checklist-item" id="${itemId}" data-gdrive-key="${gdriveKey}">
       <div class="ci-head">
         <span class="ci-num">${opts.num}</span>
         <span class="ci-label">${opts.label}</span>
         ${dropdowns}
+        ${headerBadge}
       </div>
       <div class="ci-body">
         <div class="ci-field">
@@ -2364,7 +3794,7 @@ function renderChecklistItem(opts){
         ${showCloud ? `
         <div class="ci-field" id="${itemId}_cloud" style="display:none;">
           <label>${dict.form_link_cloud}</label>
-          <input type="url" placeholder="https://drive.google.com/..." ${isReadonly}>
+          <input type="url" placeholder="https://drive.google.com/..." value="${gdriveLink}" ${isReadonly}>
         </div>` : ''}
         <div class="ci-attach-info" id="${itemId}_info" style="display:none;"></div>
       </div>
@@ -2379,53 +3809,53 @@ function renderFormChecklists(){
     const alasanDet = document.getElementById('alasanLainnyaDetail');
     if(alasanDet){
       alasanDet.innerHTML = renderChecklistItem({
-        num:'B1', label:I18N[currentLang].form_lainnya, upload:true, signature:false
+        num:'B1', label:I18N[currentLang].form_lainnya, upload:true, signature:false, key:'B'
       });
     }
 
     const rdEl = document.getElementById('rdChecklist');
     if(rdEl){
       rdEl.innerHTML = [
-        renderChecklistItem({num:'C1', label:I18N[currentLang].form_spec_check, upload:true, signature:false}),
-        renderChecklistItem({num:'C2', label:I18N[currentLang].form_trial, upload:true, signature:false})
+        renderChecklistItem({num:'C1', label:I18N[currentLang].form_spec_check, upload:true, signature:false, key:'C1'}),
+        renderChecklistItem({num:'C2', label:I18N[currentLang].form_trial, upload:true, signature:false, key:'C2'})
       ].join('');
     }
 
     const qaItems = [
-      {num:'D',  label:'Persetujuan QA — Catatan Umum'},
-      {num:'A1', label:'Spesifikasi Teknis Material', dropdowns:[['Sesuai','Tidak Sesuai']]},
-      {num:'A2', label:'CoA Batch Sampel', dropdowns:[['Lengkap','Tidak Lengkap']]},
-      {num:'A3', label:'MSDS', dropdowns:[['Diterima','Tidak Diterima'],['Sesuai','Tidak Sesuai']]},
-      {num:'A4', label:'Verifikasi Dokumen Halal oleh Komite Halal', dropdowns:[['Sudah Diverifikasi','Belum Terverifikasi']]},
-      {num:'A5', label:'Laporan Hasil Uji QC Internal', dropdowns:[['Passed','Not Passed']]},
-      {num:'A6', label:'Evaluasi Teknis R&D', dropdowns:[['Lolos','Tidak Lolos']]},
-      {num:'A7', label:'Hasil Rapat Evaluasi Material', dropdowns:[['Terdokumentasi','Tidak Terdokumentasi']]},
-      {num:'B8', label:'SOP-Z02_C', dropdowns:[['Telah Diikuti','Berbeda']]},
-      {num:'B9', label:'Kategori Kritis Material', dropdowns:[['Tepat','Tidak Tepat']]},
-      {num:'B10',label:'Tindak Lanjut Material Kritis', dropdowns:[['Ya, Sudah','Tidak, Belum']]},
-      {num:'B11',label:'Tidak ada Deviasi yang belum Selesai', dropdowns:[['Ya','Tidak']]},
-      {num:'B12',label:'Catatan Blacklist', dropdowns:[['Ya Tercatat','Tidak Tercatat']]},
-      {num:'C1', label:'Data Formulir Lengkap & Akurat', dropdowns:[['Ya','Tidak']], upload:false, signature:false, cloud:false},
-      {num:'C2', label:'Lampiran Pendukung Terlampir Rapi', dropdowns:[['Ya','Tidak']], upload:false, signature:false, cloud:false},
-      {num:'C3', label:'Persetujuan R&D Manager telah diperoleh', dropdowns:[['Ya','Tidak']]},
-      {num:'D1', label:'Tidak menyebabkan Kontaminasi Silang', dropdowns:[['Ya','Tidak']]},
-      {num:'D2', label:'Ketersediaan & Stabilitas Supply terjamin', dropdowns:[['Ya','Tidak']]}
+      {num:'D',  label:'Persetujuan QA — Catatan Umum', key:'F'},
+      {num:'A1', label:'Spesifikasi Teknis Material', dropdowns:[['Sesuai','Tidak Sesuai']], key:'A1'},
+      {num:'A2', label:'CoA Batch Sampel', dropdowns:[['Lengkap','Tidak Lengkap']], key:'A2'},
+      {num:'A3', label:'MSDS', dropdowns:[['Diterima','Tidak Diterima'],['Sesuai','Tidak Sesuai']], key:'A3'},
+      {num:'A4', label:'Verifikasi Dokumen Halal oleh Komite Halal', dropdowns:[['Sudah Diverifikasi','Belum Terverifikasi']], key:'A4'},
+      {num:'A5', label:'Laporan Hasil Uji QC Internal', dropdowns:[['Passed','Not Passed']], key:'A5'},
+      {num:'A6', label:'Evaluasi Teknis R&D', dropdowns:[['Lolos','Tidak Lolos']], key:'A6'},
+      {num:'A7', label:'Hasil Rapat Evaluasi Material', dropdowns:[['Terdokumentasi','Tidak Terdokumentasi']], key:'A7'},
+      {num:'B8', label:'SOP-Z02_C', dropdowns:[['Telah Diikuti','Berbeda']], key:'B8'},
+      {num:'B9', label:'Kategori Kritis Material', dropdowns:[['Tepat','Tidak Tepat']], key:'B9'},
+      {num:'B10',label:'Tindak Lanjut Material Kritis', dropdowns:[['Ya, Sudah','Tidak, Belum']], key:'B10'},
+      {num:'B11',label:'Tidak ada Deviasi yang belum Selesai', dropdowns:[['Ya','Tidak']], key:'B11'},
+      {num:'B12',label:'Catatan Blacklist', dropdowns:[['Ya Tercatat','Tidak Tercatat']], key:'B12'},
+      {num:'C1', label:'Data Formulir Lengkap & Akurat', dropdowns:[['Ya','Tidak']], upload:false, signature:false, cloud:false, key:'C1_qa'},
+      {num:'C2', label:'Lampiran Pendukung Terlampir Rapi', dropdowns:[['Ya','Tidak']], upload:false, signature:false, cloud:false, key:'C2_qa'},
+      {num:'C3', label:'Persetujuan R&D Manager telah diperoleh', dropdowns:[['Ya','Tidak']], key:'C3_qa'},
+      {num:'D1', label:'Tidak menyebabkan Kontaminasi Silang', dropdowns:[['Ya','Tidak']], key:'D1'},
+      {num:'D2', label:'Ketersediaan & Stabilitas Supply terjamin', dropdowns:[['Ya','Tidak']], key:'D2'}
     ];
     const qaEl = document.getElementById('qaChecklist');
     if(qaEl) qaEl.innerHTML = qaItems.map(renderChecklistItem).join('');
 
     const halalItems = [
-      {num:'E',  label:'Persetujuan Komite Halal — Catatan Umum'},
-      {num:'E1', label:I18N[currentLang].form_halal_1, dropdowns:[['Ya','Tidak']], upload:true, signature:false},
-      {num:'E2', label:'Sertifikat Halal', dropdowns:[['Terlampir','Tidak Terlampir']], upload:true, signature:false},
-      {num:'E3', label:'Surat Persetujuan LPPOM MUI', dropdowns:[['Terlampir','Tidak Terlampir']], upload:true, signature:false}
+      {num:'E',  label:'Persetujuan Komite Halal — Catatan Umum', key:'E'},
+      {num:'E1', label:I18N[currentLang].form_halal_1, dropdowns:[['Ya','Tidak']], upload:true, signature:false, key:'E1'},
+      {num:'E2', label:'Sertifikat Halal', dropdowns:[['Terlampir','Tidak Terlampir']], upload:true, signature:false, key:'E2'},
+      {num:'E3', label:'Surat Persetujuan LPPOM MUI', dropdowns:[['Terlampir','Tidak Terlampir']], upload:true, signature:false, key:'E3'}
     ];
     const halalEl = document.getElementById('halalChecklist');
     if(halalEl) halalEl.innerHTML = halalItems.map(renderChecklistItem).join('');
 
     const gmEl = document.getElementById('gmChecklist');
     if(gmEl) gmEl.innerHTML = renderChecklistItem({
-      num:'F1', label:'Persetujuan General Manager Operational'
+      num:'F1', label:'Persetujuan General Manager Operational', key:'F'
     });
 
     applyPermissions();
@@ -2435,7 +3865,7 @@ function renderFormChecklists(){
 }
 
 /* ================================================================
-   SIGNATURE
+   SIGNATURE (dengan banner Google Drive)
 ================================================================ */
 let signatureTargetId = null;
 let sigDrawing = false;
@@ -2451,6 +3881,9 @@ function openSignatureModal(itemId){
     const modal = document.getElementById('signatureModal');
     if(!modal) return;
     modal.style.display = 'flex';
+
+    // Sisipkan banner Google Drive untuk TTD
+    injectGDriveBanner('signatureModal', 'ttd');
 
     const canvas = document.getElementById('signatureCanvas');
     if(!canvas) return;
@@ -2535,11 +3968,25 @@ function saveSignature(){
     if(info){
       info.style.display = 'flex';
       info.querySelectorAll('.attach-badge[data-kind="sig"]').forEach(el => el.remove());
+
+      // Badge tanda tangan
       const badge = document.createElement('span');
       badge.className = 'attach-badge ok';
       badge.setAttribute('data-kind', 'sig');
       badge.textContent = '✍ ' + I18N[currentLang].ci_sig_done;
       info.appendChild(badge);
+
+      // Badge link folder Google Drive Tanda Tangan
+      const ttdUrl = GDRIVE_LINKS.ttd;
+      if(ttdUrl){
+        const linkBadge = document.createElement('a');
+        linkBadge.href = ttdUrl;
+        linkBadge.target = '_blank';
+        linkBadge.className = 'attach-badge';
+        linkBadge.style.textDecoration = 'none';
+        linkBadge.textContent = '📂 Folder TTD ↗';
+        info.appendChild(linkBadge);
+      }
     }
 
     addHistoryEntry({
@@ -2558,12 +4005,8 @@ function saveSignature(){
 }
 
 /* ================================================================
-   KAMERA (REVISI: akses kamera perangkat secara langsung)
+   KAMERA (dengan banner Google Drive)
 ================================================================ */
-/**
- * Buka modal kamera dan aktifkan stream kamera
- * @param {string} itemId - ID checklist item target
- */
 async function openCameraModal(itemId){
   if(!canEdit()){
     showToast(I18N[currentLang].err_access_denied, 'error');
@@ -2583,10 +4026,11 @@ async function openCameraModal(itemId){
     preview.style.display = 'none';
     video.style.display = 'block';
 
-    // Cek dukungan getUserMedia
+    // Sisipkan banner Google Drive untuk Kamera
+    injectGDriveBanner('cameraModal', 'kamera');
+
     if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
       showToast(I18N[currentLang].camera_not_supported, 'warning');
-      // Fallback ke input file
       closeCameraModal();
       const input = document.createElement('input');
       input.type = 'file';
@@ -2597,7 +4041,6 @@ async function openCameraModal(itemId){
       return;
     }
 
-    // Request akses kamera
     await startCameraStream();
   } catch(err) {
     console.error('Error openCameraModal:', err);
@@ -2606,12 +4049,8 @@ async function openCameraModal(itemId){
   }
 }
 
-/**
- * Mulai stream kamera dengan facing mode tertentu
- */
 async function startCameraStream(){
   try {
-    // Hentikan stream lama jika ada
     stopCameraStream();
 
     const constraints = {
@@ -2631,7 +4070,6 @@ async function startCameraStream(){
     }
   } catch(err) {
     console.error('Error startCameraStream:', err);
-    // Coba fallback tanpa facingMode
     try {
       cameraStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
       const video = document.getElementById('cameraVideo');
@@ -2646,9 +4084,6 @@ async function startCameraStream(){
   }
 }
 
-/**
- * Hentikan stream kamera
- */
 function stopCameraStream(){
   try {
     if(cameraStream){
@@ -2660,9 +4095,6 @@ function stopCameraStream(){
   }
 }
 
-/**
- * Tutup modal kamera
- */
 function closeCameraModal(){
   try {
     stopCameraStream();
@@ -2675,9 +4107,6 @@ function closeCameraModal(){
   }
 }
 
-/**
- * Ganti kamera depan/belakang
- */
 async function switchCamera(){
   try {
     currentFacingMode = currentFacingMode === 'environment' ? 'user' : 'environment';
@@ -2689,9 +4118,6 @@ async function switchCamera(){
   }
 }
 
-/**
- * Ambil foto dari video stream
- */
 function capturePhoto(){
   try {
     const video = document.getElementById('cameraVideo');
@@ -2719,9 +4145,6 @@ function capturePhoto(){
   }
 }
 
-/**
- * Ambil ulang foto
- */
 function retakePhoto(){
   try {
     capturedPhotoData = null;
@@ -2734,9 +4157,6 @@ function retakePhoto(){
   }
 }
 
-/**
- * Simpan foto ke checklist item
- */
 function savePhoto(){
   try {
     if(!capturedPhotoData){
@@ -2751,10 +4171,24 @@ function savePhoto(){
     const info = document.getElementById(currentCameraTargetId + '_info');
     if(info){
       info.style.display = 'flex';
+
+      // Badge waktu foto
       const badge = document.createElement('span');
       badge.className = 'attach-badge ok';
       badge.textContent = '📷 Foto (' + new Date().toLocaleTimeString('id-ID') + ')';
       info.appendChild(badge);
+
+      // Badge link folder Google Drive Kamera
+      const camUrl = GDRIVE_LINKS.kamera;
+      if(camUrl){
+        const linkBadge = document.createElement('a');
+        linkBadge.href = camUrl;
+        linkBadge.target = '_blank';
+        linkBadge.className = 'attach-badge';
+        linkBadge.style.textDecoration = 'none';
+        linkBadge.textContent = '📂 Folder Kamera ↗';
+        info.appendChild(linkBadge);
+      }
     }
 
     addHistoryEntry({
@@ -2774,7 +4208,7 @@ function savePhoto(){
 }
 
 /* ================================================================
-   UPLOAD
+   UPLOAD (dengan badge link Google Drive)
 ================================================================ */
 function handleCiUpload(input, itemId){
   if(!canEdit()){
@@ -2802,11 +4236,33 @@ function handleCiUpload(input, itemId){
     const info = document.getElementById(itemId + '_info');
     if(info){
       info.style.display = 'flex';
+
       const badge = document.createElement('span');
       badge.className = 'attach-badge';
       badge.textContent = '📎 ' + file.name + ' (' + (file.size/1024).toFixed(1) + ' KB)';
       info.appendChild(badge);
+
+      // Badge link ke folder Google Drive Upload
+      const uploadUrl = GDRIVE_LINKS.upload;
+      if(uploadUrl){
+        const linkBadge = document.createElement('a');
+        linkBadge.href = uploadUrl;
+        linkBadge.target = '_blank';
+        linkBadge.className = 'attach-badge ok';
+        linkBadge.style.textDecoration = 'none';
+        linkBadge.textContent = '📂 Simpan ke Drive ↗';
+        info.appendChild(linkBadge);
+      }
     }
+
+    addHistoryEntry({
+      who: currentUser.username,
+      dept: currentUser.dept,
+      action: 'UPLOAD_FILE',
+      detail: `Upload file "${file.name}" pada item ${itemId}`,
+      time: new Date().toISOString()
+    });
+
     showToast(I18N[currentLang].ci_attach_done + ': ' + file.name, 'success');
   } catch(err) {
     console.error('Error handleCiUpload:', err);
@@ -2861,7 +4317,7 @@ function validateLoamFiles(input){
 }
 
 /* ================================================================
-   SIMPAN LOAM
+   SIMPAN LOAM (dengan fallback gdrive_link)
 ================================================================ */
 function saveLoam(){
   if(!canEdit()){
@@ -2889,41 +4345,158 @@ function saveLoam(){
       }
     }
 
-    const newLoam = {
-      id: 'loam_' + Date.now(),
-      nama: document.getElementById('loam_nama').value.trim(),
-      jenis: document.getElementById('loam_jenis').value.trim(),
-      produsen: document.getElementById('loam_produsen').value.trim(),
-      negara: document.getElementById('loam_negara').value.trim(),
-      kategori: document.getElementById('loam_kategori').value,
-      supplier: document.getElementById('loam_supplier').value.trim(),
-      lembaga: document.getElementById('loam_lembaga').value.trim(),
-      nomor_sert: document.getElementById('loam_nomor_sert').value.trim(),
-      masa_berlaku: document.getElementById('loam_masa_berlaku').value,
-      created_at: new Date().toISOString(),
-      created_by: currentUser.username
-    };
-
     const existing = JSON.parse(localStorage.getItem(STORAGE_KEYS.LOAM_DATA) || '[]');
-    existing.push(newLoam);
-    localStorage.setItem(STORAGE_KEYS.LOAM_DATA, JSON.stringify(existing));
 
-    showToast('Data LOAM berhasil disimpan', 'success');
+    if(editingLoamId){
+      const index = existing.findIndex(d => d.id === editingLoamId);
+      if(index === -1){
+        showToast('Data tidak ditemukan untuk diedit', 'error');
+        return;
+      }
+
+      existing[index] = {
+        ...existing[index],
+        nama: document.getElementById('loam_nama').value.trim(),
+        jenis: document.getElementById('loam_jenis').value.trim(),
+        produsen: document.getElementById('loam_produsen').value.trim(),
+        negara: document.getElementById('loam_negara').value.trim(),
+        kategori: document.getElementById('loam_kategori').value,
+        supplier: document.getElementById('loam_supplier').value.trim(),
+        lembaga: document.getElementById('loam_lembaga').value.trim(),
+        nomor_sert: document.getElementById('loam_nomor_sert').value.trim(),
+        masa_berlaku: document.getElementById('loam_masa_berlaku').value,
+        gdrive_link: document.getElementById('loam_gdrive_link')?.value.trim() || GDRIVE_LINKS.cloud || '',
+        updated_at: new Date().toISOString(),
+        updated_by: currentUser.username
+      };
+
+      localStorage.setItem(STORAGE_KEYS.LOAM_DATA, JSON.stringify(existing));
+      showToast('Data LOAM berhasil diperbarui', 'success');
+      addHistoryEntry({
+        who: currentUser.username,
+        dept: currentUser.dept,
+        action: 'LOAM_EDIT',
+        detail: `Edit material: ${existing[index].nama}`,
+        time: new Date().toISOString()
+      });
+      editingLoamId = null;
+    } else {
+      const newLoam = {
+        id: 'loam_' + Date.now(),
+        nama: document.getElementById('loam_nama').value.trim(),
+        jenis: document.getElementById('loam_jenis').value.trim(),
+        produsen: document.getElementById('loam_produsen').value.trim(),
+        negara: document.getElementById('loam_negara').value.trim(),
+        kategori: document.getElementById('loam_kategori').value,
+        supplier: document.getElementById('loam_supplier').value.trim(),
+        lembaga: document.getElementById('loam_lembaga').value.trim(),
+        nomor_sert: document.getElementById('loam_nomor_sert').value.trim(),
+        masa_berlaku: document.getElementById('loam_masa_berlaku').value,
+        gdrive_link: document.getElementById('loam_gdrive_link')?.value.trim() || GDRIVE_LINKS.cloud || '',
+        created_at: new Date().toISOString(),
+        created_by: currentUser.username
+      };
+
+      existing.push(newLoam);
+      localStorage.setItem(STORAGE_KEYS.LOAM_DATA, JSON.stringify(existing));
+      showToast('Data LOAM berhasil disimpan', 'success');
+      addHistoryEntry({
+        who: currentUser.username,
+        dept: currentUser.dept,
+        action: 'LOAM_ADD',
+        detail: `Tambah material: ${newLoam.nama}`,
+        time: new Date().toISOString()
+      });
+    }
+
+    renderLoamTable();
+    renderExpiringTable();
+    renderDashboard();
+    cancelLoamAdd();
+  } catch(err) {
+    console.error('Error saveLoam:', err);
+    showToast('Gagal menyimpan data LOAM', 'error');
+  }
+}
+
+function editLoam(id){
+  if(!canEdit()){
+    showToast(I18N[currentLang].err_access_denied, 'error');
+    return;
+  }
+  try {
+    const existing = JSON.parse(localStorage.getItem(STORAGE_KEYS.LOAM_DATA) || '[]');
+    const item = existing.find(d => d.id === id);
+    if(!item){
+      showToast('Data tidak ditemukan', 'error');
+      return;
+    }
+
+    editingLoamId = id;
+    const form = document.getElementById('loamAddForm');
+    if(form){
+      form.style.display = 'block';
+      form.scrollIntoView({behavior:'smooth'});
+      const h3 = form.querySelector('h3 .num');
+      if(h3) h3.textContent = '✏️';
+      const title = form.querySelector('h3 span:last-child');
+      if(title) title.textContent = 'Edit Material: ' + item.nama;
+    }
+
+    document.getElementById('loam_nama').value = item.nama || '';
+    document.getElementById('loam_jenis').value = item.jenis || '';
+    document.getElementById('loam_produsen').value = item.produsen || '';
+    document.getElementById('loam_negara').value = item.negara || '';
+    document.getElementById('loam_kategori').value = item.kategori || '';
+    document.getElementById('loam_supplier').value = item.supplier || '';
+    document.getElementById('loam_lembaga').value = item.lembaga || '';
+    document.getElementById('loam_nomor_sert').value = item.nomor_sert || '';
+    document.getElementById('loam_masa_berlaku').value = item.masa_berlaku || '';
+    const gdrive = document.getElementById('loam_gdrive_link');
+    if(gdrive) gdrive.value = item.gdrive_link || GDRIVE_LINKS.cloud || '';
+
+    showToast('Mode edit: ' + item.nama, 'success');
+  } catch(err) {
+    console.error('Error editLoam:', err);
+    showToast('Gagal membuka edit', 'error');
+  }
+}
+
+function deleteLoam(id){
+  if(!canEdit()){
+    showToast(I18N[currentLang].err_access_denied, 'error');
+    return;
+  }
+  try {
+    const existing = JSON.parse(localStorage.getItem(STORAGE_KEYS.LOAM_DATA) || '[]');
+    const item = existing.find(d => d.id === id);
+    if(!item){
+      showToast('Data tidak ditemukan', 'error');
+      return;
+    }
+
+    if(!confirm(`Yakin ingin menghapus "${item.nama}" dari LOAM?`)){
+      return;
+    }
+
+    const filtered = existing.filter(d => d.id !== id);
+    localStorage.setItem(STORAGE_KEYS.LOAM_DATA, JSON.stringify(filtered));
+
     addHistoryEntry({
       who: currentUser.username,
       dept: currentUser.dept,
-      action: 'LOAM_ADD',
-      detail: `Tambah material: ${newLoam.nama}`,
+      action: 'LOAM_DELETE',
+      detail: `Hapus material: ${item.nama}`,
       time: new Date().toISOString()
     });
 
     renderLoamTable();
     renderExpiringTable();
-    renderDashboard(); // Refresh KPI
-    cancelLoamAdd();
+    renderDashboard();
+    showToast('Data LOAM berhasil dihapus', 'success');
   } catch(err) {
-    console.error('Error saveLoam:', err);
-    showToast('Gagal menyimpan data LOAM', 'error');
+    console.error('Error deleteLoam:', err);
+    showToast('Gagal menghapus data', 'error');
   }
 }
 
@@ -2932,11 +4505,21 @@ function cancelLoamAdd(){
     const form = document.getElementById('loamAddForm');
     if(form){
       form.style.display = 'none';
+      const h3 = form.querySelector('h3 .num');
+      if(h3) h3.textContent = '+';
+      const title = form.querySelector('h3 span:last-child');
+      if(title) title.textContent = I18N[currentLang].loam_add_title;
       form.querySelectorAll('input, select, textarea').forEach(el => {
         if(el.type === 'checkbox' || el.type === 'radio') el.checked = false;
-        else el.value = '';
+        else if(el.type !== 'file') el.value = '';
       });
+      // Reset gdrive link ke default
+      const gdriveEl = document.getElementById('loam_gdrive_link');
+      if(gdriveEl) gdriveEl.value = GDRIVE_LINKS.cloud || '';
+      const info = document.getElementById('loam_files_info');
+      if(info) info.textContent = '0 / 13 files';
     }
+    editingLoamId = null;
   } catch(err) {
     console.error('Error cancelLoamAdd:', err);
   }
@@ -2952,25 +4535,43 @@ function renderLoamTable(){
     const data = JSON.parse(localStorage.getItem(STORAGE_KEYS.LOAM_DATA) || '[]');
 
     if(data.length === 0){
-      tbody.innerHTML = `<tr class="empty-row"><td colspan="11"><span class="icon">📚</span><span>${I18N[currentLang].empty_data}</span></td></tr>`;
+      tbody.innerHTML = `<tr class="empty-row"><td colspan="12"><span class="icon">📚</span><span>${I18N[currentLang].empty_data}</span></td></tr>`;
       return;
     }
 
-    tbody.innerHTML = data.map((d, i) => `
-      <tr>
-        <td>${i + 1}</td>
-        <td>${d.nama || '-'}</td>
-        <td>${d.jenis || '-'}</td>
-        <td>${d.produsen || '-'}</td>
-        <td>${d.negara || '-'}</td>
-        <td>${d.kategori || '-'}</td>
-        <td>${d.supplier || '-'}</td>
-        <td>${d.lembaga || '-'}</td>
-        <td>${d.nomor_sert || '-'}</td>
-        <td>${d.masa_berlaku || '-'}</td>
-        <td><span class="attach-badge">📎 Dokumen</span></td>
-      </tr>
-    `).join('');
+    tbody.innerHTML = data.map((d, i) => {
+      const gdriveLink = d.gdrive_link 
+        ? `<a href="${d.gdrive_link}" target="_blank" class="attach-badge" style="text-decoration:none;">🔗 Drive</a>` 
+        : '<span style="color:var(--muted);font-size:10px;">—</span>';
+      return `
+        <tr>
+          <td>${i + 1}</td>
+          <td>${d.nama || '-'}</td>
+          <td>${d.jenis || '-'}</td>
+          <td>${d.produsen || '-'}</td>
+          <td>${d.negara || '-'}</td>
+          <td>${d.kategori || '-'}</td>
+          <td>${d.supplier || '-'}</td>
+          <td>${d.lembaga || '-'}</td>
+          <td>${d.nomor_sert || '-'}</td>
+          <td>${d.masa_berlaku || '-'}</td>
+          <td>
+            <span class="attach-badge">📎 Dokumen</span>
+            ${gdriveLink}
+          </td>
+          <td>
+            <div style="display:flex; gap:4px;">
+              <button class="btn btn-outline btn-sm admin-purchasing-only" onclick="editLoam('${d.id}')" 
+                      title="Ubah" style="padding:4px 8px; font-size:11px;">✏️</button>
+              <button class="btn btn-danger btn-sm admin-purchasing-only" onclick="deleteLoam('${d.id}')" 
+                      title="Hapus" style="padding:4px 8px; font-size:11px;">🗑️</button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    applyPermissions();
   } catch(err) {
     console.error('Error renderLoamTable:', err);
   }
@@ -3209,7 +4810,7 @@ function resetReview(){
 }
 
 /* ================================================================
-   DOKUMEN AKAN/TELAH KEDALUWARSA (Auto-populate dari LOAM)
+   DOKUMEN AKAN/TELAH KEDALUWARSA
 ================================================================ */
 function renderExpiringTable(){
   try {
@@ -3453,6 +5054,534 @@ function incrementMACounter(){
 }
 
 /* ================================================================
+   PROGRAM KERJA TAHUNAN
+================================================================ */
+function showProgramAddForm(){
+  if(!canEdit()){
+    showToast(I18N[currentLang].err_access_denied, 'error');
+    return;
+  }
+  const form = document.getElementById('programAddForm');
+  if(!form) return;
+  form.style.display = 'block';
+  form.scrollIntoView({behavior:'smooth'});
+
+  editingProgramId = null;
+  const icon = document.getElementById('programFormIcon');
+  const title = document.getElementById('programFormTitle');
+  if(icon) icon.textContent = '+';
+  if(title) title.textContent = I18N[currentLang].prog_add_title;
+
+  form.querySelectorAll('input, select, textarea').forEach(el => {
+    if(el.type === 'checkbox' || el.type === 'radio') el.checked = false;
+    else if(el.tagName !== 'SELECT') el.value = '';
+  });
+
+  const tahunEl = document.getElementById('prog_tahun');
+  if(tahunEl) tahunEl.value = new Date().getFullYear().toString();
+
+  const deptEl = document.getElementById('prog_departemen');
+  if(deptEl && deptEl.options.length <= 1){
+    DEPARTMENTS.forEach(d => {
+      const opt = document.createElement('option');
+      opt.value = d.name;
+      opt.textContent = d.name;
+      deptEl.appendChild(opt);
+    });
+  }
+
+  // Set default gdrive link program
+  const gdriveEl = document.getElementById('prog_gdrive_link');
+  if(gdriveEl) gdriveEl.value = GDRIVE_LINKS.program || '';
+}
+
+function cancelProgramAdd(){
+  try {
+    const form = document.getElementById('programAddForm');
+    if(form){
+      form.style.display = 'none';
+      const icon = document.getElementById('programFormIcon');
+      const title = document.getElementById('programFormTitle');
+      if(icon) icon.textContent = '+';
+      if(title) title.textContent = I18N[currentLang].prog_add_title;
+      form.querySelectorAll('input, select, textarea').forEach(el => {
+        if(el.type === 'checkbox' || el.type === 'radio') el.checked = false;
+        else if(el.tagName !== 'SELECT') el.value = '';
+      });
+    }
+    editingProgramId = null;
+  } catch(err) {
+    console.error('Error cancelProgramAdd:', err);
+  }
+}
+
+function saveProgram(){
+  if(!canEdit()){
+    showToast(I18N[currentLang].err_access_denied, 'error');
+    return;
+  }
+  try {
+    const requiredFields = [
+      { id: 'prog_nama', label: 'Nama Program' },
+      { id: 'prog_departemen', label: 'Departemen' },
+      { id: 'prog_kategori', label: 'Kategori' },
+      { id: 'prog_tahun', label: 'Tahun' },
+      { id: 'prog_plan_mulai', label: 'Plan Mulai' },
+      { id: 'prog_plan_selesai', label: 'Plan Selesai' },
+      { id: 'prog_status', label: 'Status' }
+    ];
+
+    for(const f of requiredFields){
+      const el = document.getElementById(f.id);
+      if(!el || !el.value.trim()){
+        showToast(I18N[currentLang].prog_validation.replace('%s', f.label), 'error');
+        if(el) el.focus();
+        return;
+      }
+    }
+
+    const planMulai = document.getElementById('prog_plan_mulai').value;
+    const planSelesai = document.getElementById('prog_plan_selesai').value;
+    if(planMulai && planSelesai && new Date(planSelesai) < new Date(planMulai)){
+      showToast(I18N[currentLang].prog_date_invalid, 'error');
+      return;
+    }
+
+    const actualMulai = document.getElementById('prog_actual_mulai').value;
+    const actualSelesai = document.getElementById('prog_actual_selesai').value;
+    if(actualMulai && actualSelesai && new Date(actualSelesai) < new Date(actualMulai)){
+      showToast(I18N[currentLang].prog_date_invalid, 'error');
+      return;
+    }
+
+    const existing = JSON.parse(localStorage.getItem(STORAGE_KEYS.PROGRAM_DATA) || '[]');
+
+    const kategori = document.getElementById('prog_kategori').value;
+
+    const programData = {
+      nama: document.getElementById('prog_nama').value.trim(),
+      departemen: document.getElementById('prog_departemen').value,
+      kategori: kategori,
+      tahun: document.getElementById('prog_tahun').value,
+      plan_mulai: planMulai,
+      plan_selesai: planSelesai,
+      actual_mulai: actualMulai || '',
+      actual_selesai: actualSelesai || '',
+      target: parseInt(document.getElementById('prog_target').value) || 100,
+      realisasi: parseInt(document.getElementById('prog_realisasi').value) || 0,
+      anggaran: parseInt(document.getElementById('prog_anggaran').value) || 0,
+      status: document.getElementById('prog_status').value,
+      keterangan: document.getElementById('prog_keterangan').value.trim(),
+      gdrive_link: document.getElementById('prog_gdrive_link').value.trim() || GDRIVE_LINKS[kategori] || GDRIVE_LINKS.program || ''
+    };
+
+    if(editingProgramId){
+      const index = existing.findIndex(d => d.id === editingProgramId);
+      if(index === -1){
+        showToast('Data program tidak ditemukan', 'error');
+        return;
+      }
+      existing[index] = {
+        ...existing[index],
+        ...programData,
+        updated_at: new Date().toISOString(),
+        updated_by: currentUser.username
+      };
+      localStorage.setItem(STORAGE_KEYS.PROGRAM_DATA, JSON.stringify(existing));
+      showToast(I18N[currentLang].prog_saved, 'success');
+      addHistoryEntry({
+        who: currentUser.username,
+        dept: currentUser.dept,
+        action: 'PROGRAM_EDIT',
+        detail: `Edit program: ${programData.nama}`,
+        time: new Date().toISOString()
+      });
+      editingProgramId = null;
+    } else {
+      const newProgram = {
+        id: 'prog_' + Date.now(),
+        ...programData,
+        created_at: new Date().toISOString(),
+        created_by: currentUser.username
+      };
+      existing.push(newProgram);
+      localStorage.setItem(STORAGE_KEYS.PROGRAM_DATA, JSON.stringify(existing));
+      showToast(I18N[currentLang].prog_saved, 'success');
+      addHistoryEntry({
+        who: currentUser.username,
+        dept: currentUser.dept,
+        action: 'PROGRAM_ADD',
+        detail: `Tambah program: ${newProgram.nama}`,
+        time: new Date().toISOString()
+      });
+    }
+
+    renderProgramTable();
+    renderProgramSummary();
+    renderDeptSummary();
+    cancelProgramAdd();
+  } catch(err) {
+    console.error('Error saveProgram:', err);
+    showToast('Gagal menyimpan program: ' + err.message, 'error');
+  }
+}
+
+function editProgram(id){
+  if(!canEdit()){
+    showToast(I18N[currentLang].err_access_denied, 'error');
+    return;
+  }
+  try {
+    const existing = JSON.parse(localStorage.getItem(STORAGE_KEYS.PROGRAM_DATA) || '[]');
+    const item = existing.find(d => d.id === id);
+    if(!item){
+      showToast('Data program tidak ditemukan', 'error');
+      return;
+    }
+
+    editingProgramId = id;
+    const form = document.getElementById('programAddForm');
+    if(form){
+      form.style.display = 'block';
+      form.scrollIntoView({behavior:'smooth'});
+      const icon = document.getElementById('programFormIcon');
+      const title = document.getElementById('programFormTitle');
+      if(icon) icon.textContent = '✏️';
+      if(title) title.textContent = I18N[currentLang].prog_edit_title + ': ' + item.nama;
+    }
+
+    const deptEl = document.getElementById('prog_departemen');
+    if(deptEl && deptEl.options.length <= 1){
+      DEPARTMENTS.forEach(d => {
+        const opt = document.createElement('option');
+        opt.value = d.name;
+        opt.textContent = d.name;
+        deptEl.appendChild(opt);
+      });
+    }
+
+    document.getElementById('prog_nama').value = item.nama || '';
+    document.getElementById('prog_departemen').value = item.departemen || '';
+    document.getElementById('prog_kategori').value = item.kategori || '';
+    document.getElementById('prog_tahun').value = item.tahun || '';
+    document.getElementById('prog_plan_mulai').value = item.plan_mulai || '';
+    document.getElementById('prog_plan_selesai').value = item.plan_selesai || '';
+    document.getElementById('prog_actual_mulai').value = item.actual_mulai || '';
+    document.getElementById('prog_actual_selesai').value = item.actual_selesai || '';
+    document.getElementById('prog_target').value = item.target || 100;
+    document.getElementById('prog_realisasi').value = item.realisasi || 0;
+    document.getElementById('prog_anggaran').value = item.anggaran || 0;
+    document.getElementById('prog_status').value = item.status || 'draft';
+    document.getElementById('prog_keterangan').value = item.keterangan || '';
+    document.getElementById('prog_gdrive_link').value = item.gdrive_link || GDRIVE_LINKS[item.kategori] || GDRIVE_LINKS.program || '';
+
+    showToast('Mode edit: ' + item.nama, 'success');
+  } catch(err) {
+    console.error('Error editProgram:', err);
+    showToast('Gagal membuka edit program', 'error');
+  }
+}
+
+function deleteProgram(id){
+  if(!canEdit()){
+    showToast(I18N[currentLang].err_access_denied, 'error');
+    return;
+  }
+  try {
+    const existing = JSON.parse(localStorage.getItem(STORAGE_KEYS.PROGRAM_DATA) || '[]');
+    const item = existing.find(d => d.id === id);
+    if(!item){
+      showToast('Data program tidak ditemukan', 'error');
+      return;
+    }
+
+    const confirmMsg = I18N[currentLang].prog_delete_confirm.replace('%s', item.nama);
+    if(!confirm(confirmMsg)){
+      return;
+    }
+
+    const filtered = existing.filter(d => d.id !== id);
+    localStorage.setItem(STORAGE_KEYS.PROGRAM_DATA, JSON.stringify(filtered));
+
+    addHistoryEntry({
+      who: currentUser.username,
+      dept: currentUser.dept,
+      action: 'PROGRAM_DELETE',
+      detail: `Hapus program: ${item.nama}`,
+      time: new Date().toISOString()
+    });
+
+    renderProgramTable();
+    renderProgramSummary();
+    renderDeptSummary();
+    showToast(I18N[currentLang].prog_deleted, 'success');
+  } catch(err) {
+    console.error('Error deleteProgram:', err);
+    showToast('Gagal menghapus program', 'error');
+  }
+}
+
+/* ================================================================
+   RENDER PROGRAM TABLE
+================================================================ */
+function renderProgramTable(){
+  try {
+    const tbody = document.getElementById('tblProgramBody');
+    if(!tbody) return;
+
+    let data = JSON.parse(localStorage.getItem(STORAGE_KEYS.PROGRAM_DATA) || '[]');
+
+    if(currentQuarterFilter !== 'all'){
+      const q = currentQuarterFilter;
+      data = data.filter(d => {
+        if(!d.plan_mulai) return false;
+        const month = new Date(d.plan_mulai).getMonth() + 1;
+        if(q === 'q1') return month >= 1 && month <= 3;
+        if(q === 'q2') return month >= 4 && month <= 6;
+        if(q === 'q3') return month >= 7 && month <= 9;
+        if(q === 'q4') return month >= 10 && month <= 12;
+        return true;
+      });
+    }
+
+    const filterTahun = document.querySelector('#filterProgram .f-program-tahun')?.value || '';
+    const filterDept = document.querySelector('#filterProgram .f-program-dept')?.value || '';
+    const filterKategori = document.querySelector('#filterProgram .f-program-kategori')?.value || '';
+    const filterStatus = document.querySelector('#filterProgram .f-program-status')?.value || '';
+    const filterSearch = document.querySelector('#filterProgram .f-program-search')?.value.toLowerCase() || '';
+
+    if(filterTahun) data = data.filter(d => d.tahun === filterTahun);
+    if(filterDept) data = data.filter(d => d.departemen === filterDept);
+    if(filterKategori) data = data.filter(d => d.kategori === filterKategori);
+    if(filterStatus) data = data.filter(d => d.status === filterStatus);
+    if(filterSearch) {
+      data = data.filter(d => 
+        (d.nama || '').toLowerCase().includes(filterSearch) ||
+        (d.departemen || '').toLowerCase().includes(filterSearch) ||
+        (d.keterangan || '').toLowerCase().includes(filterSearch)
+      );
+    }
+
+    if(data.length === 0){
+      tbody.innerHTML = `<tr class="empty-row"><td colspan="9"><span class="icon">📅</span><span>${I18N[currentLang].prog_no_data || I18N[currentLang].empty_data}</span></td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = data.map((d, i) => {
+      const target = d.target || 100;
+      const realisasi = d.realisasi || 0;
+      const progressPct = target > 0 ? Math.min(100, Math.round((realisasi / target) * 100)) : 0;
+
+      const fmtDate = (dateStr) => {
+        if(!dateStr) return '—';
+        try {
+          const dt = new Date(dateStr);
+          return `${String(dt.getDate()).padStart(2,'0')}/${String(dt.getMonth()+1).padStart(2,'0')}/${dt.getFullYear()}`;
+        } catch(e) { return dateStr; }
+      };
+
+      const statusMap = {
+        'draft': { label: 'Draft', class: 'draft' },
+        'on-track': { label: 'On Track', class: 'on-track' },
+        'at-risk': { label: 'At Risk', class: 'at-risk' },
+        'delayed': { label: 'Delayed', class: 'delayed' },
+        'completed': { label: 'Selesai', class: 'completed' }
+      };
+      const st = statusMap[d.status] || statusMap['draft'];
+
+      let barClass = 'plan';
+      if(progressPct >= 100) barClass = 'actual';
+      else if(progressPct >= 70) barClass = 'actual';
+      else if(progressPct >= 40) barClass = 'actual warn';
+      else barClass = 'actual late';
+
+      const katLabels = {
+        'audit': 'Audit',
+        'pelatihan': 'Pelatihan',
+        'review': 'Review',
+        'sertifikasi': 'Sertifikasi',
+        'monitoring': 'Monitoring',
+        'lainnya': 'Lainnya'
+      };
+
+      return `
+        <tr>
+          <td>${i + 1}</td>
+          <td>
+            <strong>${d.nama || '-'}</strong>
+            ${d.keterangan ? `<div style="font-size:11px; color:var(--muted); margin-top:2px;">${d.keterangan}</div>` : ''}
+            ${d.gdrive_link ? `<a href="${d.gdrive_link}" target="_blank" style="font-size:10px; color:var(--primary);">🔗 Drive</a>` : ''}
+          </td>
+          <td style="font-size:12px;">${d.departemen || '-'}</td>
+          <td><span class="badge" style="background:#f1f5f9; color:#475569;">${katLabels[d.kategori] || d.kategori || '-'}</span></td>
+          <td style="font-size:11px;">${fmtDate(d.plan_mulai)}<br>s/d ${fmtDate(d.plan_selesai)}</td>
+          <td style="font-size:11px;">
+            ${d.actual_mulai ? fmtDate(d.actual_mulai) : '—'}<br>
+            s/d ${d.actual_selesai ? fmtDate(d.actual_selesai) : '—'}
+          </td>
+          <td>
+            <div style="display:flex; flex-direction:column; gap:4px; min-width:120px;">
+              <div style="display:flex; justify-content:space-between; font-size:10px; color:var(--muted);">
+                <span>${realisasi}% / ${target}%</span>
+                <span>${progressPct}%</span>
+              </div>
+              <div class="timeline-bar-bg" style="height:10px;">
+                <div class="timeline-bar-fill ${barClass}" style="width:${progressPct}%;"></div>
+              </div>
+            </div>
+          </td>
+          <td><span class="badge ${st.class}">${st.label}</span></td>
+          <td>
+            <div style="display:flex; gap:4px;">
+              <button class="btn btn-outline btn-sm admin-purchasing-only" onclick="editProgram('${d.id}')" 
+                      title="Ubah" style="padding:4px 8px; font-size:11px;">✏️</button>
+              <button class="btn btn-danger btn-sm admin-purchasing-only" onclick="deleteProgram('${d.id}')" 
+                      title="Hapus" style="padding:4px 8px; font-size:11px;">🗑️</button>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    applyPermissions();
+  } catch(err) {
+    console.error('Error renderProgramTable:', err);
+    const tbody = document.getElementById('tblProgramBody');
+    if(tbody){
+      tbody.innerHTML = `<tr class="empty-row"><td colspan="9"><span class="icon">⚠️</span><span>Gagal memuat data</span></td></tr>`;
+    }
+  }
+}
+
+/* ================================================================
+   RENDER PROGRAM SUMMARY
+================================================================ */
+function renderProgramSummary(){
+  try {
+    const data = JSON.parse(localStorage.getItem(STORAGE_KEYS.PROGRAM_DATA) || '[]');
+
+    const total = data.length;
+    const onTrack = data.filter(d => d.status === 'on-track').length;
+    const atRisk = data.filter(d => d.status === 'at-risk').length;
+    const delayed = data.filter(d => d.status === 'delayed').length;
+    const completed = data.filter(d => d.status === 'completed').length;
+
+    let avgAchievement = 0;
+    if(total > 0){
+      const sum = data.reduce((acc, d) => {
+        const target = d.target || 100;
+        const realisasi = d.realisasi || 0;
+        return acc + (target > 0 ? Math.min(100, (realisasi / target) * 100) : 0);
+      }, 0);
+      avgAchievement = Math.round(sum / total);
+    }
+
+    const setVal = (id, val) => {
+      const el = document.getElementById(id);
+      if(el) el.textContent = val;
+    };
+
+    setVal('progTotal', total);
+    setVal('progOnTrack', onTrack);
+    setVal('progAtRisk', atRisk);
+    setVal('progDelayed', delayed);
+    setVal('progCompleted', completed);
+    setVal('progAvgAchievement', avgAchievement + '%');
+  } catch(err) {
+    console.error('Error renderProgramSummary:', err);
+  }
+}
+
+/* ================================================================
+   RENDER DEPT SUMMARY
+================================================================ */
+function renderDeptSummary(){
+  try {
+    const tbody = document.getElementById('tblDeptSummary');
+    if(!tbody) return;
+
+    const data = JSON.parse(localStorage.getItem(STORAGE_KEYS.PROGRAM_DATA) || '[]');
+
+    const grouped = {};
+    data.forEach(d => {
+      const dept = d.departemen || 'Tidak Diketahui';
+      if(!grouped[dept]){
+        grouped[dept] = { total: 0, onTrack: 0, delayed: 0, achievementSum: 0, count: 0 };
+      }
+      grouped[dept].total++;
+      if(d.status === 'on-track') grouped[dept].onTrack++;
+      if(d.status === 'delayed') grouped[dept].delayed++;
+      const target = d.target || 100;
+      const realisasi = d.realisasi || 0;
+      grouped[dept].achievementSum += (target > 0 ? Math.min(100, (realisasi / target) * 100) : 0);
+      grouped[dept].count++;
+    });
+
+    const entries = Object.entries(grouped);
+    if(entries.length === 0){
+      tbody.innerHTML = `<tr class="empty-row"><td colspan="6"><span class="icon">🏢</span><span>${I18N[currentLang].empty_data}</span></td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = entries.map(([dept, stats], i) => {
+      const avg = stats.count > 0 ? Math.round(stats.achievementSum / stats.count) : 0;
+      return `
+        <tr>
+          <td>${i + 1}</td>
+          <td><strong>${dept}</strong></td>
+          <td style="text-align:center;">${stats.total}</td>
+          <td style="text-align:center;">${stats.onTrack}</td>
+          <td style="text-align:center;">${stats.delayed}</td>
+          <td>
+            <div style="display:flex; align-items:center; gap:6px;">
+              <div class="timeline-bar-bg" style="flex:1; height:8px;">
+                <div class="timeline-bar-fill ${avg >= 70 ? 'actual' : avg >= 40 ? 'actual warn' : 'actual late'}" style="width:${avg}%;"></div>
+              </div>
+              <span style="font-size:11px; font-weight:600; min-width:36px;">${avg}%</span>
+            </div>
+          </td>
+        </tr>
+      `;
+    }).join('');
+  } catch(err) {
+    console.error('Error renderDeptSummary:', err);
+  }
+}
+
+/* ================================================================
+   QUARTER FILTER
+================================================================ */
+document.getElementById('quarterTabs')?.addEventListener('click', e => {
+  const btn = e.target.closest('button[data-quarter]');
+  if(!btn) return;
+
+  document.querySelectorAll('#quarterTabs button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  currentQuarterFilter = btn.getAttribute('data-quarter');
+  renderProgramTable();
+});
+
+/* ================================================================
+   RESET PROGRAM FILTERS
+================================================================ */
+function resetProgramFilters(){
+  if(!isSuperAdmin){
+    showToast('Reset hanya untuk Superadmin', 'error');
+    return;
+  }
+  const c = document.getElementById('filterProgram');
+  if(!c) return;
+  c.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
+  c.querySelectorAll('input[type=text]').forEach(i => i.value = '');
+  currentQuarterFilter = 'all';
+  document.querySelectorAll('#quarterTabs button').forEach(b => b.classList.remove('active'));
+  document.querySelector('#quarterTabs button[data-quarter="all"]')?.classList.add('active');
+  renderProgramTable();
+  showToast('Filter program direset', 'success');
+}
+
+/* ================================================================
    LOGIN / LOGOUT
 ================================================================ */
 function doLogin(){
@@ -3519,6 +5648,10 @@ function doLogin(){
 
 function enterApp(){
   try {
+    // Pastikan migration data lama berjalan setiap login
+    initializeSampleLoamData();
+    initializeSampleProgramData();
+
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('appScreen').style.display = 'block';
 
@@ -3582,6 +5715,7 @@ function enterApp(){
     buildFilterBar('filterLoam');       buildToolbar('toolbarLoam');
     buildFilterBar('filterMaster');     buildToolbar('toolbarMaster');
     buildFilterBar('filterLaporan');    buildToolbar('toolbarLaporan');
+    buildFilterBar('filterProgram');    buildToolbar('toolbarProgram');
 
     renderFormChecklists();
     renderDistribution();
@@ -3591,6 +5725,9 @@ function enterApp(){
     if(isSuperAdmin) buildAccountTable();
     applyPermissions();
     renderDashboard();
+    renderProgramTable();
+    renderProgramSummary();
+    renderDeptSummary();
   } catch(err) {
     console.error('Error enterApp:', err);
     showToast('Terjadi kesalahan saat memuat aplikasi', 'error');
@@ -3635,18 +5772,21 @@ document.getElementById('mainTabs').addEventListener('click', e => {
   if(tabId === 'dashboard'){
     renderDashboard();
   }
+  if(tabId === 'program'){
+    renderProgramTable();
+    renderProgramSummary();
+    renderDeptSummary();
+  }
 });
 
 /* ================================================================
-   DASHBOARD RENDER (REVISI: KPI dari data LOAM)
+   DASHBOARD RENDER
 ================================================================ */
 function renderDashboard(){
   try {
-    // REVISI: Ambil data dari localStorage LOAM, bukan dummy
     const loamData = JSON.parse(localStorage.getItem(STORAGE_KEYS.LOAM_DATA) || '[]');
 
     const total = loamData.length;
-    // Semua data LOAM dianggap "Disetujui" karena sudah masuk daftar approved
     const approved = total;
     const pending = 0;
     const rejected = 0;
@@ -3666,7 +5806,6 @@ function renderDashboard(){
     const elCompliance = document.getElementById('kpiCompliance');
     if(elCompliance) elCompliance.textContent = compliance + '%';
 
-    // Summary cards
     const uniqueBahan = new Set(loamData.map(d => d.jenis).filter(Boolean)).size;
     const uniqueSupplier = new Set(loamData.map(d => d.supplier).filter(Boolean)).size;
     const uniqueProdusen = new Set(loamData.map(d => d.produsen).filter(Boolean)).size;
@@ -3681,7 +5820,6 @@ function renderDashboard(){
     const elNeg = document.getElementById('kpiPerNegara');
     if(elNeg) elNeg.textContent = uniqueNegara;
 
-    // Render tabel dashboard dari data LOAM
     const tbody = document.getElementById('tblDashboard');
     if(tbody){
       if(loamData.length === 0){
@@ -3730,11 +5868,90 @@ function buildAccountTable(){
         <td><span class="pwd">${u.password}</span></td>
         <td><strong>${u.code}</strong></td>
         <td>${roleBadge}</td>
+        <td>
+          <div style="display:flex; gap:4px;">
+            <button class="btn btn-outline btn-sm superadmin-only" onclick="editAccount('${u.username}')" 
+                    title="Ubah" style="padding:4px 8px; font-size:11px;">✏️</button>
+            <button class="btn btn-danger btn-sm superadmin-only" onclick="deleteAccount('${u.username}')" 
+                    title="Hapus" style="padding:4px 8px; font-size:11px;">🗑️</button>
+          </div>
+        </td>
       `;
       tbody.appendChild(tr);
     });
+    applyPermissions();
   } catch(err) {
     console.error('Error buildAccountTable:', err);
+  }
+}
+
+function editAccount(username){
+  if(!isSuperAdmin){
+    showToast('Hanya Superadmin yang dapat mengedit akun', 'error');
+    return;
+  }
+  try {
+    const user = USERS.find(u => u.username === username);
+    if(!user){
+      showToast('Akun tidak ditemukan', 'error');
+      return;
+    }
+    const newDept = prompt('Edit Departemen:', user.dept);
+    if(newDept === null) return;
+    const newPass = prompt('Edit Password:', user.password);
+    if(newPass === null) return;
+    const newCode = prompt('Edit Kode:', user.code);
+    if(newCode === null) return;
+
+    user.dept = newDept.trim() || user.dept;
+    user.password = newPass.trim() || user.password;
+    user.code = newCode.trim() || user.code;
+
+    buildAccountTable();
+    showToast('Akun berhasil diperbarui', 'success');
+    addHistoryEntry({
+      who: currentUser.username,
+      dept: currentUser.dept,
+      action: 'ACCOUNT_EDIT',
+      detail: `Edit akun: ${username}`,
+      time: new Date().toISOString()
+    });
+  } catch(err) {
+    console.error('Error editAccount:', err);
+    showToast('Gagal mengedit akun', 'error');
+  }
+}
+
+function deleteAccount(username){
+  if(!isSuperAdmin){
+    showToast('Hanya Superadmin yang dapat menghapus akun', 'error');
+    return;
+  }
+  try {
+    if(username === SUPERADMIN_USER){
+      showToast('Akun Superadmin tidak dapat dihapus', 'error');
+      return;
+    }
+    const index = USERS.findIndex(u => u.username === username);
+    if(index === -1){
+      showToast('Akun tidak ditemukan', 'error');
+      return;
+    }
+    if(!confirm(`Yakin ingin menghapus akun "${username}"?`)) return;
+    
+    USERS.splice(index, 1);
+    buildAccountTable();
+    showToast('Akun berhasil dihapus', 'success');
+    addHistoryEntry({
+      who: currentUser.username,
+      dept: currentUser.dept,
+      action: 'ACCOUNT_DELETE',
+      detail: `Hapus akun: ${username}`,
+      time: new Date().toISOString()
+    });
+  } catch(err) {
+    console.error('Error deleteAccount:', err);
+    showToast('Gagal menghapus akun', 'error');
   }
 }
 
@@ -3866,10 +6083,12 @@ function autoSaveDraft(){
       f_nama_produsen: document.getElementById('f_nama_produsen')?.value || '',
       f_negara_produsen: document.getElementById('f_negara_produsen')?.value || '',
       f_kategori: document.getElementById('f_kategori')?.value || '',
+      f_gdrive_link: document.getElementById('f_gdrive_link')?.value || '',
       loam_nama: document.getElementById('loam_nama')?.value || '',
       loam_jenis: document.getElementById('loam_jenis')?.value || '',
       loam_produsen: document.getElementById('loam_produsen')?.value || '',
       loam_negara: document.getElementById('loam_negara')?.value || '',
+      loam_gdrive_link: document.getElementById('loam_gdrive_link')?.value || '',
       savedAt: new Date().toISOString()
     };
     localStorage.setItem('draft_form_' + currentUser.username, JSON.stringify(draft));
@@ -3892,18 +6111,32 @@ function loadDraftForm(){
     if(draft.f_nama_produsen) document.getElementById('f_nama_produsen').value = draft.f_nama_produsen;
     if(draft.f_negara_produsen) document.getElementById('f_negara_produsen').value = draft.f_negara_produsen;
     if(draft.f_kategori) document.getElementById('f_kategori').value = draft.f_kategori;
+    if(draft.f_gdrive_link) document.getElementById('f_gdrive_link').value = draft.f_gdrive_link;
   } catch(err) {
     console.error('Error loadDraftForm:', err);
   }
 }
 
 /* ================================================================
+   EVENT DELEGATION: Klik badge "Drive ↗" → buka folder
+   Patch baru: delegasi event untuk badge Drive
+================================================================ */
+document.addEventListener('click', function(e){
+  const badge = e.target.closest('.gdrive-badge');
+  if(badge){
+    e.preventDefault();
+    const item = badge.closest('.checklist-item');
+    if(item) openDriveFromItem(item.id);
+  }
+});
+
+/* ================================================================
    INIT
 ================================================================ */
 (function init(){
   try {
-    // Inisialisasi data contoh LOAM terlebih dahulu
     initializeSampleLoamData();
+    initializeSampleProgramData();
 
     const savedLang = localStorage.getItem('lang') || 'id';
     setLanguage(savedLang);
@@ -3938,6 +6171,7 @@ function loadDraftForm(){
         buildFilterBar('filterLoam');       buildToolbar('toolbarLoam');
         buildFilterBar('filterMaster');     buildToolbar('toolbarMaster');
         buildFilterBar('filterLaporan');    buildToolbar('toolbarLaporan');
+        buildFilterBar('filterProgram');    buildToolbar('toolbarProgram');
         renderFormChecklists();
         renderDistribution();
         renderReview();
@@ -3945,6 +6179,9 @@ function loadDraftForm(){
         renderLoamTable();
         if(isSuperAdmin) buildAccountTable();
         renderDashboard();
+        renderProgramTable();
+        renderProgramSummary();
+        renderDeptSummary();
       }
     };
 
