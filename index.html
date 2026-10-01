@@ -1,0 +1,3969 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Material Approval Dashboard — PT Indo Sultan Jaya</title>
+<style>
+  /* ============ BASE & VARIABLES ============ */
+  * { margin:0; padding:0; box-sizing:border-box; }
+  :root{
+    --primary:#1e40af; --primary-dark:#1e3a8a; --primary-light:#3b82f6;
+    --accent:#f59e0b; --bg:#f1f5f9; --card:#ffffff;
+    --text:#0f172a; --muted:#64748b; --border:#e2e8f0;
+    --success:#10b981; --warning:#f59e0b; --danger:#ef4444;
+    --shadow:0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.04);
+  }
+  body{
+    font-family:'Segoe UI', system-ui, -apple-system, 'Noto Sans', sans-serif;
+    background:var(--bg); color:var(--text); min-height:100vh; font-size:14px;
+  }
+  body.rtl { direction: rtl; }
+  button{ cursor:pointer; font-family:inherit; }
+  input,select,textarea{ font-family:inherit; font-size:14px; }
+  button:disabled, input:disabled, select:disabled, textarea:disabled{
+    opacity:.55; cursor:not-allowed !important;
+  }
+  .hidden-tab{ display:none !important; }
+
+  /* ============ LOGIN ============ */
+  #loginScreen{
+    display:flex; align-items:center; justify-content:center;
+    min-height:100vh;
+    background:linear-gradient(135deg,#1e3a8a 0%,#1e40af 50%,#3b82f6 100%);
+    padding:20px;
+  }
+  .login-card{
+    background:#fff; border-radius:16px; padding:36px 32px;
+    width:100%; max-width:400px; box-shadow:0 20px 60px rgba(0,0,0,.3);
+    text-align:center;
+  }
+  .login-card .crown{ font-size:52px; margin-bottom:8px; }
+  .login-card h1{ font-size:20px; color:var(--primary-dark); margin-bottom:4px; }
+  .login-card .sub{ font-size:12px; color:var(--muted); margin-bottom:24px; }
+  .login-card .sop-badge{
+    display:inline-block; background:#eff6ff; color:var(--primary);
+    padding:4px 12px; border-radius:20px; font-size:11px;
+    margin-bottom:24px; font-weight:600; border:1px solid #dbeafe;
+  }
+  .form-group{ text-align:left; margin-bottom:16px; }
+  .form-group label{ display:block; font-size:12px; font-weight:600;
+    color:var(--text); margin-bottom:6px; }
+  .form-group input{
+    width:100%; padding:11px 14px; border:1px solid var(--border);
+    border-radius:8px; font-size:14px; transition:.15s; background:#f8fafc;
+  }
+  .form-group input:focus{
+    outline:none; border-color:var(--primary-light);
+    background:#fff; box-shadow:0 0 0 3px rgba(59,130,246,.12);
+  }
+  .btn-login{
+    width:100%; padding:12px; background:var(--primary);
+    color:#fff; border:none; border-radius:8px; font-size:14px;
+    font-weight:600; margin-top:8px; transition:.15s;
+  }
+  .btn-login:hover{ background:var(--primary-dark); }
+  .login-err{
+    background:#fef2f2; color:var(--danger); padding:10px;
+    border-radius:8px; font-size:12px; margin-top:12px;
+    display:none; border:1px solid #fecaca;
+  }
+  .lang-login{ margin-top:16px; }
+  .lang-login select{
+    padding:6px 10px; border-radius:6px; border:1px solid var(--border);
+    font-size:12px; background:#f8fafc;
+  }
+
+  /* ============ APP HEADER ============ */
+  #appScreen{ display:none; min-height:100vh; padding-bottom:80px; }
+  header.topbar{
+    background:linear-gradient(135deg,#1e3a8a,#1e40af);
+    color:#fff; padding:12px 24px;
+    display:flex; align-items:center; justify-content:space-between;
+    flex-wrap:wrap; gap:12px; box-shadow:var(--shadow); position:sticky;
+    top:0; z-index:100;
+  }
+  .brand{ display:flex; align-items:center; gap:12px; }
+  .brand .crown{ font-size:26px; }
+  .brand .title{ font-size:15px; font-weight:600; line-height:1.2; }
+  .brand .title small{ display:block; font-size:10px;
+    font-weight:400; opacity:.85; margin-top:2px; }
+  .user-zone{ display:flex; align-items:center; gap:10px; flex-wrap:wrap; }
+  .user-pill{
+    background:rgba(255,255,255,.14); padding:6px 12px;
+    border-radius:20px; font-size:12px; display:flex;
+    align-items:center; gap:6px;
+  }
+  .user-pill .code{
+    background:var(--accent); color:#fff; font-weight:700;
+    padding:1px 7px; border-radius:10px; font-size:10px;
+  }
+  .lang-box select{
+    padding:6px 10px; border-radius:6px; border:none;
+    background:rgba(255,255,255,.14); color:#fff; font-size:12px;
+  }
+  .lang-box select option{ color:#0f172a; }
+  .btn-logout{
+    background:rgba(239,68,68,.85); color:#fff; border:none;
+    padding:7px 14px; border-radius:6px; font-size:12px;
+    font-weight:600; transition:.15s;
+  }
+  .btn-logout:hover{ background:#dc2626; }
+
+  /* ============ TABS ============ */
+  nav.tabs{
+    background:#fff; border-bottom:1px solid var(--border);
+    padding:0 24px; display:flex; gap:4px; overflow-x:auto;
+    position:sticky; top:62px; z-index:99;
+  }
+  nav.tabs button{
+    background:transparent; border:none; padding:13px 16px;
+    font-size:13px; color:var(--muted); font-weight:600;
+    border-bottom:3px solid transparent; transition:.15s;
+    white-space:nowrap;
+  }
+  nav.tabs button:hover{ color:var(--primary); }
+  nav.tabs button.active{ color:var(--primary); border-bottom-color:var(--primary); }
+
+  /* ============ CONTENT ============ */
+  main.content{ padding:24px; max-width:1500px; margin:0 auto; }
+  .tab-panel{ display:none; animation:fadeIn .25s ease; }
+  .tab-panel.active{ display:block; }
+  @keyframes fadeIn{ from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:none;} }
+
+  .panel-head{
+    display:flex; align-items:center; justify-content:space-between;
+    flex-wrap:wrap; gap:12px; margin-bottom:20px;
+  }
+  .panel-head h2{ font-size:18px; color:var(--primary-dark); }
+  .panel-head .subtitle{ font-size:12px; color:var(--muted); margin-top:2px; }
+
+  .notice{
+    padding:10px 14px; border-radius:8px; font-size:12px;
+    margin-bottom:16px; display:flex; align-items:center; gap:8px;
+  }
+  .notice.info{ background:#eff6ff; color:#1e40af; border:1px solid #dbeafe; }
+  .notice.warn{ background:#fffbeb; color:#92400e; border:1px solid #fde68a; }
+  .notice.success{ background:#ecfdf5; color:#047857; border:1px solid #a7f3d0; }
+
+  /* ============ KPI ============ */
+  .kpi-grid{
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr));
+    gap:14px; margin-bottom:20px;
+  }
+  .kpi-card{
+    background:var(--card); border-radius:12px; padding:16px;
+    border-left:4px solid var(--primary); box-shadow:var(--shadow); transition:.15s;
+  }
+  .kpi-card:hover{ transform:translateY(-2px); }
+  .kpi-card .lbl{ font-size:11px; color:var(--muted);
+    text-transform:uppercase; letter-spacing:.4px; font-weight:600; }
+  .kpi-card .val{ font-size:26px; font-weight:700; margin-top:6px; }
+  .kpi-card.success{ border-left-color:var(--success); }
+  .kpi-card.warning{ border-left-color:var(--warning); }
+  .kpi-card.danger{ border-left-color:var(--danger); }
+
+  /* ============ FILTER BAR ============ */
+  .filter-bar{
+    background:var(--card); border-radius:12px; padding:12px 16px;
+    display:flex; flex-wrap:wrap; gap:8px; align-items:center;
+    margin-bottom:12px; box-shadow:var(--shadow);
+  }
+  .filter-bar select, .filter-bar input{
+    padding:7px 10px; border:1px solid var(--border);
+    border-radius:8px; font-size:12px; background:#f8fafc;
+    min-width:130px;
+  }
+  .filter-bar input[type=text]{ flex:1; min-width:180px; }
+  .filter-bar select:focus, .filter-bar input:focus{
+    outline:none; border-color:var(--primary-light); background:#fff;
+  }
+  .filter-bar .filter-label{
+    font-size:11px; color:var(--muted); font-weight:700;
+    text-transform:uppercase; padding-right:4px;
+  }
+
+  /* ============ TOOLBAR ============ */
+  .toolbar{
+    background:var(--card); border-radius:12px; padding:10px 14px;
+    display:flex; flex-wrap:wrap; gap:6px; align-items:center;
+    margin-bottom:14px; box-shadow:var(--shadow);
+  }
+  .toolbar .separator{
+    width:1px; height:24px; background:var(--border); margin:0 4px;
+  }
+  .toolbar .toolbar-info{
+    font-size:11px; color:var(--muted); margin-left:auto;
+    padding-left:8px;
+  }
+
+  /* ============ TABLE ============ */
+  .table-wrap{
+    background:var(--card); border-radius:12px; overflow:hidden;
+    box-shadow:var(--shadow); margin-bottom:20px;
+  }
+  .table-scroll{ overflow-x:auto; }
+  table.data{ width:100%; border-collapse:collapse; font-size:13px; }
+  table.data thead{ background:#f8fafc; border-bottom:2px solid var(--border); }
+  table.data th{
+    text-align:left; padding:11px 12px; font-size:11px;
+    text-transform:uppercase; letter-spacing:.4px;
+    color:var(--muted); font-weight:700; white-space:nowrap;
+  }
+  table.data td{
+    padding:11px 12px; border-bottom:1px solid var(--border);
+    color:var(--text); vertical-align:top;
+  }
+  table.data tbody tr:hover{ background:#f8fafc; }
+  .empty-row td{
+    text-align:center; padding:40px 12px; color:var(--muted);
+    font-style:italic; font-size:13px;
+  }
+  .empty-row td .icon{
+    display:block; font-size:32px; margin-bottom:8px; opacity:.4;
+  }
+
+  /* ============ FORM SECTION ============ */
+  .form-section{
+    background:var(--card); border-radius:12px; padding:18px 20px;
+    margin-bottom:14px; box-shadow:var(--shadow);
+    border:1px solid transparent; transition:.15s;
+  }
+  .form-section:hover{ border-color:#dbeafe; }
+  .form-section h3{
+    font-size:13.5px; color:var(--primary-dark);
+    padding-bottom:10px; margin-bottom:14px;
+    border-bottom:1px dashed var(--border);
+    display:flex; align-items:center; gap:10px;
+    letter-spacing:.2px;
+  }
+  .form-section h3 .num{
+    background:linear-gradient(135deg,var(--primary),var(--primary-light));
+    color:#fff; width:24px; height:24px;
+    border-radius:8px; display:inline-flex; align-items:center;
+    justify-content:center; font-size:11px; font-weight:700;
+    box-shadow:0 2px 6px rgba(30,64,175,.25);
+  }
+  .form-section h3 .hint{
+    margin-left:auto; font-size:10.5px; color:var(--muted);
+    font-weight:500; text-transform:uppercase; letter-spacing:.4px;
+  }
+  .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .grid-3{ display:grid; grid-template-columns:repeat(3, 1fr); gap:12px; }
+  @media(max-width:900px){ .grid-3{ grid-template-columns:1fr 1fr; } }
+  @media(max-width:700px){ .grid-2, .grid-3{ grid-template-columns:1fr; } }
+
+  .field label{
+    display:block; font-size:11px; font-weight:600;
+    margin-bottom:5px; color:var(--muted);
+    text-transform:uppercase; letter-spacing:.3px;
+  }
+  .field input, .field select, .field textarea{
+    width:100%; padding:9px 12px; border:1px solid var(--border);
+    border-radius:8px; font-size:13px; background:#f8fafc;
+    transition:.15s;
+  }
+  .field input:focus, .field select:focus, .field textarea:focus{
+    outline:none; border-color:var(--primary-light); background:#fff;
+    box-shadow:0 0 0 3px rgba(59,130,246,.10);
+  }
+  .checkbox-row{ display:flex; flex-wrap:wrap; gap:10px; }
+  .checkbox-row label{
+    display:flex; align-items:center; gap:6px; font-size:12.5px;
+    cursor:pointer; padding:7px 12px; border-radius:20px;
+    border:1px solid var(--border); background:#f8fafc;
+    transition:.15s;
+  }
+  .checkbox-row label:hover{ background:#eff6ff; border-color:#dbeafe; }
+  .checkbox-row input[type=checkbox]{
+    width:auto; accent-color:var(--primary);
+  }
+
+  /* ============ HEADER FORM MA ============ */
+  .form-ma-header{
+    background:linear-gradient(135deg,#eff6ff,#fff);
+    border-left:4px solid var(--primary) !important;
+    padding:14px 18px !important;
+  }
+  .form-ma-header .grid-3{ gap:10px; }
+  .form-ma-header .field input{
+    background:#fff; font-size:12.5px; padding:7px 11px;
+  }
+
+  /* ============ CHECKLIST ITEM ============ */
+  .checklist-item{
+    border:1px solid var(--border); border-radius:10px;
+    padding:12px 14px; margin-bottom:10px; background:#fff;
+    transition:.15s;
+  }
+  .checklist-item:hover{ border-color:#bfdbfe; box-shadow:0 2px 8px rgba(30,64,175,.06); }
+  .ci-head{
+    display:flex; align-items:center; gap:10px;
+    flex-wrap:wrap; margin-bottom:10px;
+  }
+  .ci-num{
+    background:#eff6ff; color:var(--primary); font-weight:700;
+    min-width:30px; height:24px; padding:0 8px;
+    border-radius:6px;
+    display:inline-flex; align-items:center; justify-content:center;
+    font-size:11px; flex-shrink:0; letter-spacing:.3px;
+  }
+  .ci-label{ font-weight:600; font-size:12.5px; flex:1; min-width:180px; color:var(--text); }
+  .ci-head select.ci-select{
+    padding:5px 9px; border:1px solid var(--border);
+    border-radius:6px; font-size:11.5px; background:#fff;
+    min-width:120px; color:var(--text);
+  }
+  .ci-head select.ci-select:focus{
+    outline:none; border-color:var(--primary-light);
+  }
+  .ci-body{ display:grid; gap:8px; grid-template-columns:1fr; }
+  .ci-field label{
+    display:block; font-size:10.5px; color:var(--muted);
+    font-weight:700; margin-bottom:4px; text-transform:uppercase;
+    letter-spacing:.4px;
+  }
+  .ci-field textarea, .ci-field input[type=url]{
+    width:100%; padding:7px 11px; border:1px solid var(--border);
+    border-radius:7px; font-size:12px; background:#f8fafc;
+    transition:.15s;
+  }
+  .ci-field textarea:focus, .ci-field input:focus{
+    outline:none; border-color:var(--primary-light); background:#fff;
+    box-shadow:0 0 0 3px rgba(59,130,246,.10);
+  }
+
+  /* Icon-only action buttons */
+  .ci-actions{ display:flex; flex-wrap:wrap; gap:6px; align-items:center; }
+  .ci-icon-btn{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:34px; height:34px; border-radius:9px;
+    border:1px solid var(--border); background:#fff;
+    color:var(--primary); font-size:15px;
+    transition:.15s; cursor:pointer; position:relative;
+    padding:0; line-height:1;
+  }
+  .ci-icon-btn:hover:not(:disabled){
+    background:#eff6ff; border-color:#93c5fd;
+    transform:translateY(-1px);
+    box-shadow:0 2px 6px rgba(30,64,175,.15);
+  }
+  .ci-icon-btn:active:not(:disabled){ transform:translateY(0); }
+  .ci-icon-btn input[type=file]{ display:none; }
+  .ci-icon-btn::after{
+    content: attr(data-tooltip);
+    position:absolute; bottom:-30px; left:50%;
+    transform:translateX(-50%);
+    background:#0f172a; color:#fff; font-size:10px;
+    padding:3px 8px; border-radius:5px; white-space:nowrap;
+    opacity:0; pointer-events:none; transition:.15s;
+    z-index:5;
+  }
+  .ci-icon-btn:hover::after{ opacity:1; }
+
+  .ci-attach-info{
+    margin-top:2px; font-size:11px; color:var(--muted);
+    display:flex; flex-wrap:wrap; gap:6px; align-items:center;
+  }
+  .attach-badge{
+    display:inline-flex; align-items:center; gap:5px;
+    background:#eff6ff; color:#1e40af;
+    padding:3px 9px; border-radius:12px;
+    font-size:10.5px; font-weight:600;
+    border:1px solid #dbeafe;
+  }
+  .attach-badge.ok{ background:#ecfdf5; color:#047857; border-color:#a7f3d0; }
+
+  /* ============ BUTTONS ============ */
+  .btn{
+    padding:8px 14px; border-radius:8px; border:none;
+    font-size:12px; font-weight:600; transition:.15s;
+    display:inline-flex; align-items:center; gap:6px;
+  }
+  .btn-primary{ background:var(--primary); color:#fff; }
+  .btn-primary:hover{ background:var(--primary-dark); }
+  .btn-success{ background:var(--success); color:#fff; }
+  .btn-success:hover{ background:#059669; }
+  .btn-warning{ background:var(--warning); color:#fff; }
+  .btn-outline{ background:#fff; color:var(--primary); border:1px solid var(--border); }
+  .btn-outline:hover{ background:#f1f5f9; }
+  .btn-danger{ background:#fff; color:var(--danger); border:1px solid #fecaca; }
+  .btn-danger:hover{ background:#fef2f2; }
+  .btn-sm{ padding:6px 10px; font-size:11.5px; }
+  .btn-wa{ background:#25D366; color:#fff; }
+  .btn-wa:hover{ background:#1da851; }
+  .btn-email{ background:#0078D4; color:#fff; }
+  .btn-email:hover{ background:#005a9e; }
+
+  /* ============ MODAL ============ */
+  .modal-overlay{
+    position:fixed; inset:0; background:rgba(15,23,42,.55);
+    display:flex; align-items:center; justify-content:center;
+    z-index:1000; padding:20px; animation:fadeIn .2s ease;
+    backdrop-filter: blur(4px);
+  }
+  .modal-box{
+    background:#fff; border-radius:14px; padding:22px;
+    width:100%; max-width:560px; box-shadow:0 20px 60px rgba(0,0,0,.35);
+  }
+  .modal-box h3{
+    font-size:15px; color:var(--primary-dark);
+    margin-bottom:6px; display:flex; align-items:center; gap:8px;
+  }
+  .modal-box .modal-sub{
+    font-size:11.5px; color:var(--muted); margin-bottom:14px;
+  }
+  #signatureCanvas{
+    width:100%; height:200px;
+    border:2px dashed #cbd5e1; border-radius:10px;
+    background:#f8fafc; cursor:crosshair; touch-action:none;
+    display:block;
+  }
+  .modal-actions{
+    display:flex; justify-content:flex-end; gap:8px; margin-top:14px;
+  }
+
+  /* ============ KAMERA MODAL ============ */
+  #cameraVideo{
+    width:100%; max-height:400px; border-radius:10px;
+    background:#000; display:block;
+  }
+  #cameraCanvas{ display:none; }
+  .camera-actions{
+    display:flex; flex-wrap:wrap; gap:8px; justify-content:center;
+    margin-top:14px;
+  }
+
+  /* ============ SAVE BAR ============ */
+  .save-bar{
+    position:fixed; bottom:0; left:0; right:0;
+    background:rgba(30,64,175,.97); color:#fff;
+    padding:12px 24px; display:none;
+    justify-content:space-between; align-items:center;
+    box-shadow:0 -4px 12px rgba(0,0,0,.15); z-index:200;
+  }
+  .save-bar.show{ display:flex; }
+  .save-bar .info{ font-size:13px; display:flex; align-items:center; gap:8px; }
+  .btn-save-auto{
+    background:var(--accent); color:#fff; border:none;
+    padding:10px 22px; border-radius:8px; font-size:14px;
+    font-weight:700; display:flex; align-items:center; gap:8px; transition:.15s;
+  }
+  .btn-save-auto:hover{ background:#d97706; }
+  .btn-save-auto.saved{ background:var(--success); }
+
+  /* ============ TOAST ============ */
+  #toast{
+    position:fixed; bottom:80px; right:24px;
+    background:#0f172a; color:#fff; padding:12px 20px;
+    border-radius:8px; font-size:13px; z-index:999;
+    opacity:0; transform:translateY(10px);
+    transition:.25s; pointer-events:none;
+    box-shadow:0 8px 24px rgba(0,0,0,.25);
+  }
+  #toast.show{ opacity:1; transform:none; }
+  #toast.success{ background:var(--success); }
+  #toast.error{ background:var(--danger); }
+  #toast.warning{ background:var(--warning); }
+
+  /* ============ HISTORY & ACCOUNT ============ */
+  .history-item{
+    background:var(--card); border-radius:10px; padding:14px 18px;
+    margin-bottom:10px; box-shadow:var(--shadow);
+    border-left:3px solid var(--primary);
+  }
+  .history-item .meta{
+    font-size:11px; color:var(--muted); margin-bottom:6px;
+    display:flex; flex-wrap:wrap; gap:10px;
+  }
+  .history-item .meta .who{ font-weight:700; color:var(--primary); }
+  .history-item .body{ font-size:13px; }
+
+  .badge{
+    display:inline-block; padding:2px 8px; border-radius:10px;
+    font-size:10px; font-weight:700; text-transform:uppercase;
+  }
+  .badge.admin{ background:#fef3c7; color:#92400e; }
+  .badge.user{ background:#dbeafe; color:#1e40af; }
+  .badge.purchasing{ background:#fce7f3; color:#9d174d; }
+  .badge.sent{ background:#ecfdf5; color:#047857; }
+  .badge.pending{ background:#fffbeb; color:#92400e; }
+  .badge.read{ background:#eff6ff; color:#1e40af; }
+  .badge.rejected{ background:#fef2f2; color:#b91c1c; }
+  .pwd{ font-family:monospace; background:#f1f5f9;
+    padding:3px 8px; border-radius:6px; font-size:12px; }
+
+  /* ============ SETTINGS ============ */
+  .settings-card{
+    background:var(--card); border-radius:12px; padding:20px;
+    box-shadow:var(--shadow); margin-bottom:16px;
+  }
+  .settings-card h3{ font-size:14px; margin-bottom:14px; color:var(--primary-dark); }
+  .settings-card .row{
+    display:flex; justify-content:space-between; align-items:center;
+    padding:10px 0; border-bottom:1px solid var(--border); font-size:13px;
+  }
+  .settings-card .row:last-child{ border-bottom:none; }
+  .settings-card .row .lbl{ color:var(--muted); }
+  .settings-card .row .val{ font-weight:600; }
+
+  /* ============ DISTRIBUTION GRID ============ */
+  .dist-grid{
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(220px, 1fr));
+    gap:12px;
+  }
+  .dist-card{
+    background:#f8fafc; border-radius:10px; padding:14px;
+    border-left:3px solid var(--primary);
+    transition:.15s;
+  }
+  .dist-card:hover{ box-shadow:0 2px 8px rgba(30,64,175,.08); }
+  .dist-card .name{ font-weight:700; font-size:13px; margin-bottom:8px; }
+  .dist-card .status{ font-size:11px; color:var(--muted); margin-bottom:8px; }
+  .dist-card.sent{ border-left-color:var(--success); }
+  .dist-card.pending{ border-left-color:var(--warning); }
+  .dist-card.read{ border-left-color:var(--primary-light); }
+  .dist-card.rejected{ border-left-color:var(--danger); }
+  .dist-card select{
+    width:100%; padding:6px 9px; border:1px solid var(--border);
+    border-radius:7px; font-size:11.5px; background:#fff;
+    transition:.15s;
+  }
+  .dist-card select:focus{
+    outline:none; border-color:var(--primary-light);
+    box-shadow:0 0 0 3px rgba(59,130,246,.10);
+  }
+
+  /* ============ REVIEW PROGRESS BAR ============ */
+  .review-progress{
+    height:8px; background:#e2e8f0; border-radius:6px;
+    overflow:hidden; margin-top:6px;
+  }
+  .review-progress .bar{
+    height:100%; background:linear-gradient(90deg,var(--success),var(--primary-light));
+    transition:width .4s ease;
+  }
+  .review-progress .bar.warning{
+    background:linear-gradient(90deg,var(--warning),var(--accent));
+  }
+  .review-progress .bar.danger{
+    background:linear-gradient(90deg,var(--danger),#f87171);
+  }
+
+  /* ============ RESPONSIVE ============ */
+  @media(max-width:640px){
+    nav.tabs{ top:56px; padding:0 12px; }
+    main.content{ padding:14px; }
+    header.topbar{ padding:10px 14px; }
+    .brand .title{ font-size:13px; }
+    .kpi-card .val{ font-size:20px; }
+    .filter-bar select, .filter-bar input{ min-width:110px; font-size:11px; }
+    .ci-icon-btn{ width:32px; height:32px; font-size:14px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============================================================ -->
+<!-- LOGIN SCREEN                                                  -->
+<!-- ============================================================ -->
+<div id="loginScreen">
+  <div class="login-card">
+    <div class="crown">👑</div>
+    <h1 data-i18n="company">PT Indo Sultan Jaya</h1>
+    <p class="sub" data-i18n="app_title">Material Approval Dashboard</p>
+    <div class="sop-badge">SOP-Z02_C — 20 FEB 2025</div>
+
+    <div class="form-group">
+      <label data-i18n="login_username">Nama Pengguna</label>
+      <input id="username" type="text" autocomplete="username">
+    </div>
+    <div class="form-group">
+      <label data-i18n="login_password">Kata Sandi</label>
+      <input id="password" type="password" autocomplete="current-password">
+    </div>
+    <button class="btn-login" onclick="doLogin()" data-i18n="login_btn">Masuk</button>
+    <div class="login-err" id="loginError"></div>
+
+    <div class="lang-login">
+      <select id="loginLang" onchange="setLanguage(this.value)">
+        <option value="id">🇮🇩 Indonesia</option>
+        <option value="en">🇬🇧 English</option>
+        <option value="ur">🇵🇰 اردو</option>
+        <option value="hi">🇮🇳 हिन्दी</option>
+        <option value="zh">🇨🇳 中文</option>
+      </select>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- APP SCREEN                                                    -->
+<!-- ============================================================ -->
+<div id="appScreen">
+
+  <header class="topbar">
+    <div class="brand">
+      <div class="crown">👑</div>
+      <div class="title">
+        <span data-i18n="company">PT Indo Sultan Jaya</span>
+        <small data-i18n="app_subtitle">SOP-Z02_C — Material Approval</small>
+      </div>
+    </div>
+    <div class="user-zone">
+      <div class="user-pill">
+        <span id="userNameDisplay">—</span>
+        <span class="code" id="userCodeDisplay">—</span>
+      </div>
+      <div class="lang-box">
+        <select id="appLang" onchange="setLanguage(this.value)">
+          <option value="id">🇮🇩 Indonesia</option>
+          <option value="en">🇬🇧 English</option>
+          <option value="ur">🇵🇰 اردو</option>
+          <option value="hi">🇮🇳 हिन्दी</option>
+          <option value="zh">🇨🇳 中文</option>
+        </select>
+      </div>
+      <button class="btn-logout" onclick="logout()" data-i18n="logout">Keluar</button>
+    </div>
+  </header>
+
+  <nav class="tabs" id="mainTabs">
+    <button data-tab="dashboard"  class="active" data-i18n="tab_dashboard">Dasbor</button>
+    <button data-tab="pengajuan"  data-i18n="tab_pengajuan">Form Material Approval</button>
+    <button data-tab="loam"       data-i18n="tab_loam">LOAM</button>
+    <button data-tab="monitoring" data-i18n="tab_monitoring">Monitoring LOAM</button>
+    <button data-tab="master"     data-i18n="tab_master">Master Data</button>
+    <button data-tab="laporan"    data-i18n="tab_laporan">Laporan &amp; Audit</button>
+    <button data-tab="riwayat"    data-i18n="tab_riwayat" id="tabRiwayat">Riwayat</button>
+    <button data-tab="akun"       data-i18n="tab_akun"    id="tabAkun">Manajemen Akun</button>
+    <button data-tab="pengaturan" data-i18n="tab_pengaturan" id="tabPengaturan">Pengaturan</button>
+  </nav>
+
+  <main class="content">
+
+    <!-- ============================================================ -->
+    <!-- TAB: DASHBOARD (REVISI: KPI dari data LOAM)                   -->
+    <!-- ============================================================ -->
+    <section class="tab-panel active" id="panel-dashboard">
+      <div class="panel-head">
+        <div>
+          <h2 data-i18n="title_dashboard">Ringkasan Kepatuhan SOP-Z02_C</h2>
+          <div class="subtitle" data-i18n="dashboard_sub">Material Approval — PT Indo Sultan Jaya</div>
+        </div>
+      </div>
+      <div class="notice info" id="roleNotice"></div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><div class="lbl" data-i18n="kpi_total">Total Pengajuan</div><div class="val" id="kpiTotal">0</div></div>
+        <div class="kpi-card warning"><div class="lbl" data-i18n="kpi_pending">Menunggu Persetujuan</div><div class="val" id="kpiPending">0</div></div>
+        <div class="kpi-card success"><div class="lbl" data-i18n="kpi_approved">Disetujui</div><div class="val" id="kpiApproved">0</div></div>
+        <div class="kpi-card danger"><div class="lbl" data-i18n="kpi_rejected">Ditolak</div><div class="val" id="kpiRejected">0</div></div>
+        <div class="kpi-card danger"><div class="lbl" data-i18n="kpi_overdue">Terlambat (SLA)</div><div class="val" id="kpiOverdue">0</div></div>
+        <div class="kpi-card"><div class="lbl" data-i18n="kpi_compliance">Tingkat Kepatuhan</div><div class="val" id="kpiCompliance">0%</div></div>
+      </div>
+
+      <div class="kpi-grid" id="summaryGrid">
+        <div class="kpi-card"><div class="lbl" data-i18n="kpi_per_bahan">Total Item Per Bahan</div><div class="val" id="kpiPerBahan">0</div></div>
+        <div class="kpi-card"><div class="lbl" data-i18n="kpi_per_supplier">Total Per Supplier</div><div class="val" id="kpiPerSupplier">0</div></div>
+        <div class="kpi-card"><div class="lbl" data-i18n="kpi_per_produsen">Total Per Produsen</div><div class="val" id="kpiPerProdusen">0</div></div>
+        <div class="kpi-card"><div class="lbl" data-i18n="kpi_per_negara">Total Per Negara Produsen</div><div class="val" id="kpiPerNegara">0</div></div>
+      </div>
+
+      <div class="form-section">
+        <h3><span class="num">📈</span><span data-i18n="trend_title">Tren Per Item Bahan</span>
+          <select style="margin-left:auto;padding:5px 10px;border:1px solid var(--border);border-radius:6px;font-size:12px;" id="trendPeriod">
+            <option value="today" data-i18n="period_today">Hari Ini</option>
+            <option value="7d" data-i18n="period_7d">7 Hari Terakhir</option>
+            <option value="30d" data-i18n="period_30d">30 Hari Terakhir</option>
+            <option value="year" data-i18n="period_year">Tahun</option>
+          </select>
+        </h3>
+        <div style="height:180px;background:#f8fafc;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--muted);font-style:italic;font-size:12px;" data-i18n="empty_data">Belum ada data</div>
+      </div>
+
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table class="data">
+            <thead>
+              <tr>
+                <th data-i18n="th_no">No</th>
+                <th data-i18n="th_nama_material">Nama Material</th>
+                <th data-i18n="th_kategori">Kategori</th>
+                <th data-i18n="th_supplier">Supplier</th>
+                <th data-i18n="th_status">Status</th>
+                <th data-i18n="th_tanggal">Tanggal</th>
+              </tr>
+            </thead>
+            <tbody id="tblDashboard">
+              <tr class="empty-row"><td colspan="6"><span class="icon">📋</span><span data-i18n="empty_data">Belum ada data</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- TAB: FORM MATERIAL APPROVAL                                   -->
+    <!-- ============================================================ -->
+    <section class="tab-panel" id="panel-pengajuan">
+      <div class="panel-head">
+        <div>
+          <h2 data-i18n="title_pengajuan">Form Material Approval (FR-Z02-01_C), Tanggal Berlaku: 20 FEB 2025</h2>
+          <div class="subtitle" data-i18n="pengajuan_sub">Sesuai SOP-Z02_C Material Approval</div>
+        </div>
+      </div>
+
+      <div class="form-section form-ma-header">
+        <div class="grid-3">
+          <div class="field">
+            <label data-i18n="form_no_ma">No. MA (Otomatis)</label>
+            <input type="text" id="f_no_ma" readonly placeholder="001/MA/2025" style="font-weight:700;color:var(--primary);">
+          </div>
+          <div class="field">
+            <label data-i18n="form_tgl_berlaku">Tanggal Berlaku</label>
+            <input type="text" readonly value="20 FEB 2025">
+          </div>
+          <div class="field">
+            <label data-i18n="form_lokasi">Lokasi &amp; Tanggal</label>
+            <input type="text" id="f_lokasi_tgl" readonly>
+          </div>
+        </div>
+      </div>
+
+      <div class="filter-bar" id="filterPengajuan"></div>
+      <div class="toolbar" id="toolbarPengajuan"></div>
+
+      <div class="form-section">
+        <h3><span class="num">A</span><span data-i18n="form_section_a">Informasi Material / Supplier</span></h3>
+        <div class="grid-3">
+          <div class="field"><label data-i18n="form_nama_material">Nama Material</label><input type="text" id="f_nama_material"></div>
+          <div class="field"><label data-i18n="form_kode_material">Kode Material</label><input type="text" id="f_kode_material"></div>
+          <div class="field"><label data-i18n="form_nama_supplier">Nama Supplier</label><input type="text" id="f_nama_supplier"></div>
+          <div class="field"><label data-i18n="form_nama_produsen">Nama Produsen</label><input type="text" id="f_nama_produsen"></div>
+          <div class="field"><label data-i18n="form_negara_produsen">Negara Produsen</label><input type="text" id="f_negara_produsen"></div>
+          <div class="field">
+            <label data-i18n="form_kategori">Kategori Kritisitas</label>
+            <select id="f_kategori">
+              <option value="">—</option>
+              <option data-i18n="form_sangat_kritis">Sangat Kritis</option>
+              <option data-i18n="form_kritis">Kritis</option>
+              <option data-i18n="form_tidak_kritis">Tidak Kritis</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3><span class="num">B</span><span data-i18n="form_section_b">Alasan Persetujuan Material atau Supplier</span></h3>
+        <div class="checkbox-row">
+          <label><input type="checkbox"><span data-i18n="form_bahan_baru">Bahan Baru</span></label>
+          <label><input type="checkbox"><span data-i18n="form_supplier_baru">Supplier Baru</span></label>
+          <label><input type="checkbox"><span data-i18n="form_produsen_baru">Produsen Baru</span></label>
+          <label><input type="checkbox"><span data-i18n="form_negara_baru">Negara Baru</span></label>
+          <label><input type="checkbox"><span data-i18n="form_lainnya">Alasan Lainnya</span></label>
+        </div>
+        <div id="alasanLainnyaDetail" style="margin-top:12px;"></div>
+      </div>
+
+      <div class="form-section">
+        <h3><span class="num">C</span><span data-i18n="form_section_c">Persetujuan R&amp;D</span></h3>
+        <div id="rdChecklist"></div>
+      </div>
+
+      <div class="form-section">
+        <h3><span class="num">D</span><span data-i18n="form_section_d">Persetujuan Quality Assurance</span></h3>
+        <div id="qaChecklist"></div>
+      </div>
+
+      <div class="form-section">
+        <h3><span class="num">E</span><span data-i18n="form_section_e">Persetujuan Komite Halal</span></h3>
+        <div id="halalChecklist"></div>
+      </div>
+
+      <div class="form-section">
+        <h3><span class="num">F</span><span data-i18n="form_section_f">Persetujuan General Manager Operational</span></h3>
+        <div id="gmChecklist"></div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- TAB: LOAM (REVISI: Contoh data dummy otomatis)                -->
+    <!-- ============================================================ -->
+    <section class="tab-panel" id="panel-loam">
+      <div class="panel-head">
+        <div>
+          <h2 data-i18n="title_loam">List of Approved Material (LOAM)</h2>
+          <div class="subtitle" data-i18n="loam_sub">FR-Z02-02_C — Tgl. Berlaku: 20 FEB 2025</div>
+        </div>
+      </div>
+
+      <div class="filter-bar" id="filterLoam"></div>
+      <div class="toolbar" id="toolbarLoam"></div>
+
+      <div id="loamAddForm" class="form-section" style="display:none;">
+        <h3><span class="num">+</span><span data-i18n="loam_add_title">Tambah Material ke LOAM</span></h3>
+        <div class="grid-3">
+          <div class="field"><label data-i18n="th_nama">Nama</label><input type="text" id="loam_nama"></div>
+          <div class="field"><label data-i18n="th_jenis">Jenis Bahan</label><input type="text" id="loam_jenis"></div>
+          <div class="field"><label data-i18n="th_produsen">Produsen</label><input type="text" id="loam_produsen"></div>
+          <div class="field"><label data-i18n="th_negara">Negara</label><input type="text" id="loam_negara"></div>
+          <div class="field">
+            <label data-i18n="th_kategori">Kategori</label>
+            <select id="loam_kategori">
+              <option value="">—</option>
+              <option data-i18n="form_sangat_kritis">Sangat Kritis</option>
+              <option data-i18n="form_kritis">Kritis</option>
+              <option data-i18n="form_tidak_kritis">Tidak Kritis</option>
+            </select>
+          </div>
+          <div class="field"><label data-i18n="th_supplier">Supplier</label><input type="text" id="loam_supplier"></div>
+          <div class="field"><label data-i18n="th_lembaga">Lembaga Penerbit</label><input type="text" id="loam_lembaga"></div>
+          <div class="field"><label data-i18n="th_nomor_sert">No. Sertifikat Halal</label><input type="text" id="loam_nomor_sert"></div>
+          <div class="field"><label data-i18n="th_masa_berlaku">Masa Berlaku</label><input type="date" id="loam_masa_berlaku"></div>
+        </div>
+
+        <div class="checklist-item" style="margin-top:12px;">
+          <div class="ci-head">
+            <span class="ci-num">📎</span>
+            <span class="ci-label" data-i18n="loam_dok_terkait">Dokumen Terkait</span>
+          </div>
+          <div class="ci-body">
+            <div class="ci-field">
+              <label data-i18n="form_catatan">Catatan/Keterangan</label>
+              <textarea rows="2"></textarea>
+            </div>
+            <div class="ci-field">
+              <label>Upload File (Max 13 files, Max 3 MB / file)</label>
+              <input type="file" id="loam_files" multiple accept="image/*,application/pdf"
+                     onchange="validateLoamFiles(this)">
+              <div style="font-size:11px;color:var(--muted);margin-top:4px;" id="loam_files_info">0 / 13 files</div>
+            </div>
+            <div class="ci-field">
+              <label>📷 Kamera</label>
+              <input type="file" id="loam_camera" accept="image/*" capture="environment"
+                     onchange="validateLoamFiles(this)">
+            </div>
+            <div class="ci-field">
+              <label>Link Cloud Storage (Google Drive, dll.)</label>
+              <input type="url" placeholder="https://drive.google.com/...">
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-top:14px; display:flex; gap:8px;">
+          <button class="btn btn-success" onclick="saveLoam()" data-i18n="btn_save">Simpan</button>
+          <button class="btn btn-outline" onclick="cancelLoamAdd()" data-i18n="btn_cancel">Batal</button>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table class="data">
+            <thead>
+              <tr>
+                <th data-i18n="th_no">No</th>
+                <th data-i18n="th_nama">Nama</th>
+                <th data-i18n="th_jenis">Jenis Bahan</th>
+                <th data-i18n="th_produsen">Produsen</th>
+                <th data-i18n="th_negara">Negara</th>
+                <th data-i18n="th_kategori">Kategori</th>
+                <th data-i18n="th_supplier">Supplier</th>
+                <th data-i18n="th_lembaga">Lembaga Penerbit</th>
+                <th data-i18n="th_nomor_sert">No. Sertifikat Halal</th>
+                <th data-i18n="th_masa_berlaku">Masa Berlaku</th>
+                <th data-i18n="th_dokumen">Dokumen Pendukung</th>
+              </tr>
+            </thead>
+            <tbody id="tblLoam">
+              <tr class="empty-row"><td colspan="11"><span class="icon">📚</span><span data-i18n="empty_data">Belum ada data</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- TAB: MONITORING LOAM                                          -->
+    <!-- ============================================================ -->
+    <section class="tab-panel" id="panel-monitoring">
+      <div class="panel-head">
+        <div>
+          <h2 data-i18n="title_monitoring">Monitoring Distribusi &amp; Review LOAM</h2>
+          <div class="subtitle" data-i18n="monitoring_sub">Pemantauan dan Pembaharuan LOAM (SOP-Z02_C butir 7.5.5 &amp; 7.6)</div>
+        </div>
+      </div>
+
+      <div class="notice info">
+        <span>ℹ️</span>
+        <span data-i18n="monitoring_note">LOAM versi terbaru didistribusikan oleh QA kepada Departemen: Research &amp; Development, Purchasing, Quality Control, Produksi, PPIC &amp; Warehouse, dan Komite Halal.</span>
+      </div>
+
+      <div class="form-section">
+        <h3><span class="num">📤</span><span data-i18n="monitoring_dist">Distribusi LOAM</span>
+          <span class="hint" data-i18n="dist_status_label">Status per Departemen</span>
+        </h3>
+        <div class="dist-grid" id="distGrid"></div>
+        <div style="margin-top:14px; display:flex; gap:8px;">
+          <button class="btn btn-success btn-sm admin-purchasing-only" onclick="saveDistribution()">
+            <span>💾</span><span data-i18n="btn_save">Simpan Distribusi</span>
+          </button>
+          <button class="btn btn-outline btn-sm" onclick="renderDistribution()">
+            <span>🔄</span><span data-i18n="btn_reset">Reset</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3><span class="num">📅</span><span data-i18n="monitoring_review">Review Berkala (Min. 6 Bulan Sekali)</span></h3>
+        <div class="grid-3">
+          <div class="field">
+            <label data-i18n="monitoring_last_review">Review Terakhir</label>
+            <input type="text" readonly value="—" id="lastReview">
+          </div>
+          <div class="field">
+            <label data-i18n="monitoring_next_review">Review Berikutnya</label>
+            <input type="text" readonly value="—" id="nextReview">
+          </div>
+          <div class="field">
+            <label data-i18n="monitoring_status">Status</label>
+            <input type="text" readonly value="—" id="reviewStatus">
+          </div>
+        </div>
+
+        <div style="margin-top:12px;">
+          <div style="display:flex; justify-content:space-between; font-size:11px; color:var(--muted); margin-bottom:4px;">
+            <span data-i18n="review_progress">Umur Review</span>
+            <span id="reviewAgeLabel">—</span>
+          </div>
+          <div class="review-progress">
+            <div class="bar" id="reviewProgressBar" style="width:0%;"></div>
+          </div>
+        </div>
+
+        <div class="grid-2" style="margin-top:14px;">
+          <div class="field">
+            <label data-i18n="review_status_label">Status Review</label>
+            <select id="reviewStatusSelect">
+              <option value="valid" data-i18n="review_valid">Valid — Sesuai Jadwal</option>
+              <option value="segera" data-i18n="review_soon">Segera Review (≤ 30 hari)</option>
+              <option value="terlambat" data-i18n="review_late">Terlambat Review</option>
+              <option value="proses" data-i18n="review_proses">Sedang Dalam Proses Review</option>
+            </select>
+          </div>
+          <div class="field">
+            <label data-i18n="review_pic_label">Penanggung Jawab Review</label>
+            <input type="text" id="reviewPIC" placeholder="Nama penanggung jawab..." value="QA & Komite Halal">
+          </div>
+        </div>
+
+        <div class="field" style="margin-top:12px;">
+          <label data-i18n="review_notes_label">Catatan/Keterangan Review</label>
+          <textarea id="reviewNotes" rows="3" placeholder="Catatan hasil review berkala..."></textarea>
+        </div>
+
+        <div style="margin-top:14px; display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="btn btn-success btn-sm admin-purchasing-only" onclick="saveReview()">
+            <span>💾</span><span data-i18n="btn_save">Simpan Review</span>
+          </button>
+          <button class="btn btn-outline btn-sm" onclick="resetReview()">
+            <span>🔄</span><span data-i18n="btn_reset">Reset Review</span>
+          </button>
+        </div>
+
+        <div class="notice warn" style="margin-top:12px;">
+          <span>⚠️</span>
+          <span data-i18n="monitoring_responsibility">Departemen QA bersama Komite Halal bertanggung jawab melakukan review berkala terhadap keabsahan dokumen dalam LOAM, minimal setiap 6 (enam) bulan sekali.</span>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3><span class="num">⏳</span><span data-i18n="monitoring_expiring">Dokumen Akan / Telah Kedaluwarsa</span>
+          <span class="hint" data-i18n="auto_from_loam">Otomatis dari data LOAM</span>
+        </h3>
+        <div class="notice warn">
+          <span>⚠️</span>
+          <span data-i18n="monitoring_expiring_note">Material dengan dokumen pendukung yang telah atau akan kedaluwarsa harus segera ditindaklanjuti oleh Purchasing bersama QA dan Komite Halal untuk memperbarui dokumen sebelum material tersebut digunakan kembali.</span>
+        </div>
+        <div class="table-wrap">
+          <div class="table-scroll">
+            <table class="data">
+              <thead>
+                <tr>
+                  <th data-i18n="th_no">No</th>
+                  <th data-i18n="th_nama">Nama Material</th>
+                  <th data-i18n="th_supplier">Supplier</th>
+                  <th data-i18n="th_masa_berlaku">Masa Berlaku</th>
+                  <th data-i18n="days_left">Sisa Hari</th>
+                  <th data-i18n="th_status">Status</th>
+                  <th data-i18n="action">Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="tblExpiring">
+                <tr class="empty-row"><td colspan="7"><span class="icon">⏳</span><span data-i18n="empty_data">Belum ada data</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3><span class="num">📌</span><span data-i18n="monitoring_purchasing">Tanggung Jawab Purchasing</span></h3>
+        <div class="notice info">
+          <span>ℹ️</span>
+          <span data-i18n="monitoring_purchasing_note">Purchasing wajib memberitahukan QA dan Komite Halal jika terdapat informasi perubahan dari supplier terkait sertifikat halal atau spesifikasi material.</span>
+        </div>
+
+        <div class="grid-2" style="margin-top:12px;">
+          <div class="field">
+            <label data-i18n="notify_subject">Subjek / Topik Perubahan</label>
+            <input type="text" id="notifySubject" placeholder="Contoh: Perubahan Sertifikat Halal Supplier X">
+          </div>
+          <div class="field">
+            <label data-i18n="notify_supplier">Nama Supplier</label>
+            <input type="text" id="notifySupplier" placeholder="Nama supplier...">
+          </div>
+        </div>
+        <div class="field" style="margin-top:12px;">
+          <label data-i18n="notify_message">Detail Perubahan</label>
+          <textarea id="notifyMessage" rows="3" placeholder="Jelaskan detail perubahan yang perlu diketahui QA & Komite Halal..."></textarea>
+        </div>
+
+        <div style="margin-top:14px; display:flex; gap:8px; flex-wrap:wrap;">
+          <button class="btn btn-wa admin-purchasing-only" onclick="notifyViaWhatsApp()">
+            <span>📱</span><span data-i18n="notify_wa">Kirim via WhatsApp</span>
+          </button>
+          <button class="btn btn-email admin-purchasing-only" onclick="notifyViaEmail()">
+            <span>✉️</span><span data-i18n="notify_email">Kirim via Email (Outlook)</span>
+          </button>
+          <button class="btn btn-outline admin-purchasing-only" onclick="notifyViaBoth()">
+            <span>📨</span><span data-i18n="notify_both">Kirim Keduanya</span>
+          </button>
+        </div>
+
+        <div class="notice info" style="margin-top:12px; font-size:11.5px;">
+          <span>📞</span>
+          <span>
+            <strong>WhatsApp:</strong> +62 815-1942-0553 &nbsp;|&nbsp;
+            <strong>Email:</strong> qa@indosultan.co.id (Outlook)
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- TAB: MASTER DATA                                              -->
+    <!-- ============================================================ -->
+    <section class="tab-panel" id="panel-master">
+      <div class="panel-head">
+        <div>
+          <h2 data-i18n="title_master">Master Data Material &amp; Supplier</h2>
+          <div class="subtitle" data-i18n="master_sub">Referensi Material, Supplier, dan Produsen</div>
+        </div>
+      </div>
+
+      <div class="filter-bar" id="filterMaster"></div>
+      <div class="toolbar" id="toolbarMaster"></div>
+
+      <div class="form-section">
+        <h3><span class="num">1</span><span data-i18n="master_material">Material</span></h3>
+        <div class="table-scroll">
+          <table class="data">
+            <thead>
+              <tr>
+                <th data-i18n="th_no">No</th>
+                <th data-i18n="th_kode">Kode</th>
+                <th data-i18n="th_nama">Nama</th>
+                <th data-i18n="th_jenis">Jenis Bahan</th>
+                <th data-i18n="th_kategori">Kategori</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="empty-row"><td colspan="5"><span class="icon">📦</span><span data-i18n="empty_data">Belum ada data</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="form-section">
+        <h3><span class="num">2</span><span data-i18n="master_supplier">Supplier &amp; Produsen</span></h3>
+        <div class="table-scroll">
+          <table class="data">
+            <thead>
+              <tr>
+                <th data-i18n="th_no">No</th>
+                <th data-i18n="th_nama">Nama</th>
+                <th data-i18n="th_negara">Negara</th>
+                <th data-i18n="th_status">Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="empty-row"><td colspan="4"><span class="icon">🏭</span><span data-i18n="empty_data">Belum ada data</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- TAB: LAPORAN & AUDIT                                          -->
+    <!-- ============================================================ -->
+    <section class="tab-panel" id="panel-laporan">
+      <div class="panel-head">
+        <div>
+          <h2 data-i18n="title_laporan">Laporan &amp; Audit</h2>
+          <div class="subtitle" data-i18n="laporan_sub">Log Audit Trail &amp; Kepatuhan SOP</div>
+        </div>
+      </div>
+
+      <div class="filter-bar" id="filterLaporan"></div>
+      <div class="toolbar" id="toolbarLaporan"></div>
+
+      <div class="kpi-grid">
+        <div class="kpi-card success"><div class="lbl" data-i18n="laporan_compliance">Kepatuhan SOP</div><div class="val">0%</div></div>
+        <div class="kpi-card warning"><div class="lbl" data-i18n="laporan_avg_cycle">Rata-rata Siklus (hari)</div><div class="val">0</div></div>
+        <div class="kpi-card danger"><div class="lbl" data-i18n="laporan_deviasi">Deviasi</div><div class="val">0</div></div>
+      </div>
+
+      <div class="form-section">
+        <h3><span class="num">📊</span><span data-i18n="laporan_ringkasan">Ringkasan</span></h3>
+        <div class="kpi-grid">
+          <div class="kpi-card"><div class="lbl" data-i18n="kpi_per_bahan">Per Bahan</div><div class="val">0</div></div>
+          <div class="kpi-card"><div class="lbl" data-i18n="kpi_per_supplier">Per Supplier</div><div class="val">0</div></div>
+          <div class="kpi-card"><div class="lbl" data-i18n="kpi_per_produsen">Per Produsen</div><div class="val">0</div></div>
+          <div class="kpi-card"><div class="lbl" data-i18n="kpi_per_negara">Per Negara Produsen</div><div class="val">0</div></div>
+        </div>
+      </div>
+
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table class="data">
+            <thead>
+              <tr>
+                <th data-i18n="th_no">No</th>
+                <th data-i18n="th_waktu">Waktu</th>
+                <th data-i18n="th_user">Pengguna</th>
+                <th data-i18n="th_aksi">Aksi</th>
+                <th data-i18n="th_detail">Detail</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="empty-row"><td colspan="5"><span class="icon">📄</span><span data-i18n="empty_data">Belum ada data</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- TAB: RIWAYAT                                                  -->
+    <!-- ============================================================ -->
+    <section class="tab-panel" id="panel-riwayat">
+      <div class="panel-head">
+        <div>
+          <h2 data-i18n="title_riwayat">Riwayat Perubahan</h2>
+          <div class="subtitle" data-i18n="riwayat_sub">Log Audit Trail</div>
+        </div>
+        <button class="btn btn-outline btn-sm" onclick="saveDailyHistory()">
+          <span>💾</span><span data-i18n="btn_save_daily">Simpan Riwayat Harian</span>
+        </button>
+      </div>
+      <div id="historyList">
+        <div class="empty-row" style="text-align:center; padding:40px; color:#64748b;">
+          <span class="icon" style="display:block; font-size:32px; opacity:.4;">🕒</span>
+          <span data-i18n="empty_data">Belum ada data</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- TAB: MANAJEMEN AKUN                                           -->
+    <!-- ============================================================ -->
+    <section class="tab-panel" id="panel-akun">
+      <div class="panel-head">
+        <div>
+          <h2 data-i18n="title_akun">Manajemen Akun &amp; Kata Sandi</h2>
+          <div class="subtitle" data-i18n="akun_sub">Hanya dapat diakses oleh Superadmin</div>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <div class="table-scroll">
+          <table class="data">
+            <thead>
+              <tr>
+                <th data-i18n="th_no">No</th>
+                <th data-i18n="th_departemen">Departemen</th>
+                <th data-i18n="th_username">Username</th>
+                <th data-i18n="th_password">Password</th>
+                <th data-i18n="th_kode">Kode</th>
+                <th data-i18n="th_role">Peran</th>
+              </tr>
+            </thead>
+            <tbody id="tblAkun"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============================================================ -->
+    <!-- TAB: PENGATURAN                                               -->
+    <!-- ============================================================ -->
+    <section class="tab-panel" id="panel-pengaturan">
+      <div class="panel-head">
+        <div>
+          <h2 data-i18n="title_pengaturan">Pengaturan Sistem</h2>
+          <div class="subtitle" data-i18n="pengaturan_sub">Preferensi &amp; Informasi Akun</div>
+        </div>
+      </div>
+
+      <div class="settings-card">
+        <h3 data-i18n="settings_account">Informasi Akun</h3>
+        <div class="row"><span class="lbl" data-i18n="settings_dept">Departemen</span><span class="val" id="setDept">—</span></div>
+        <div class="row"><span class="lbl" data-i18n="settings_user">Username</span><span class="val" id="setUser">—</span></div>
+        <div class="row"><span class="lbl" data-i18n="settings_code">Kode Departemen</span><span class="val" id="setCode">—</span></div>
+        <div class="row"><span class="lbl" data-i18n="settings_role">Peran</span><span class="val" id="setRole">—</span></div>
+        <div class="row"><span class="lbl" data-i18n="settings_lang">Bahasa</span><span class="val" id="setLang">—</span></div>
+      </div>
+
+      <div class="settings-card">
+        <h3 data-i18n="settings_sop">Informasi SOP</h3>
+        <div class="row"><span class="lbl" data-i18n="settings_sop_no">Nomor SOP</span><span class="val">SOP-Z02_C</span></div>
+        <div class="row"><span class="lbl" data-i18n="settings_sop_date">Tanggal Berlaku</span><span class="val">20 FEB 2025</span></div>
+        <div class="row"><span class="lbl" data-i18n="settings_sop_valid">Masa Berlaku</span><span class="val">20 FEB 2030</span></div>
+      </div>
+    </section>
+
+  </main>
+
+  <div class="save-bar" id="saveBar">
+    <div class="info">
+      <span>💾</span>
+      <span data-i18n="savebar_info">Mode editor — perubahan akan tersimpan otomatis ke sistem.</span>
+    </div>
+    <button class="btn-save-auto" id="btnSaveAuto" onclick="saveAll()">
+      <span>💾</span>
+      <span data-i18n="btn_save">Simpan</span>
+    </button>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- MODAL: TANDA TANGAN DIGITAL                                   -->
+<!-- ============================================================ -->
+<div id="signatureModal" class="modal-overlay" style="display:none;">
+  <div class="modal-box">
+    <h3>✍ <span data-i18n="btn_signature">Tanda Tangan Digital</span></h3>
+    <div class="modal-sub" id="sigSubtitle">Tanda tangan pada perangkat Anda menggunakan mouse atau layar sentuh.</div>
+    <canvas id="signatureCanvas" width="500" height="200"></canvas>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="clearSignature()">🗑 <span data-i18n="btn_clear">Hapus</span></button>
+      <button class="btn btn-outline" onclick="closeSignatureModal()" data-i18n="btn_cancel">Batal</button>
+      <button class="btn btn-success" onclick="saveSignature()" data-i18n="btn_save">Simpan</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================================ -->
+<!-- MODAL: KAMERA (REVISI: akses kamera perangkat)                -->
+<!-- ============================================================ -->
+<div id="cameraModal" class="modal-overlay" style="display:none;">
+  <div class="modal-box">
+    <h3>📷 <span data-i18n="camera_title">Ambil Foto dari Kamera</span></h3>
+    <div class="modal-sub" data-i18n="camera_hint">Posisikan objek di depan kamera, lalu klik "Ambil Foto".</div>
+    <video id="cameraVideo" autoplay playsinline></video>
+    <canvas id="cameraCanvas"></canvas>
+    <div class="camera-actions">
+      <button class="btn btn-outline" onclick="switchCamera()">🔄 <span data-i18n="camera_switch">Ganti Kamera</span></button>
+      <button class="btn btn-success" onclick="capturePhoto()">📸 <span data-i18n="camera_capture">Ambil Foto</span></button>
+      <button class="btn btn-outline" onclick="closeCameraModal()" data-i18n="btn_cancel">Batal</button>
+    </div>
+    <div id="cameraPreview" style="margin-top:12px; display:none;">
+      <img id="cameraPreviewImg" style="width:100%; border-radius:10px; border:2px solid var(--border);">
+      <div class="camera-actions">
+        <button class="btn btn-outline" onclick="retakePhoto()">🔁 <span data-i18n="camera_retake">Ambil Ulang</span></button>
+        <button class="btn btn-success" onclick="savePhoto()">💾 <span data-i18n="btn_save">Simpan</span></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* ================================================================
+   DATA: DEPARTMENTS
+================================================================ */
+const DEPARTMENTS = [
+  { name:'Sales & Marketing Oil',                         code:'A' },
+  { name:'Sales & Marketing Soap',                        code:'A' },
+  { name:'Purchasing',                                    code:'B' },
+  { name:'PPIC-Warehouse',                                code:'C' },
+  { name:'Soap Bar Production',                           code:'D' },
+  { name:'Engineering',                                   code:'E' },
+  { name:'Finance, Accounting & Tax',                     code:'F' },
+  { name:'Soap Noodles Production',                       code:'G' },
+  { name:'Human Resources Development & General Affairs', code:'H' },
+  { name:'Cooking Oil Packing',                           code:'I' },
+  { name:'Margarine & Shortening',                        code:'j' },
+  { name:'Project',                                       code:'K' },
+  { name:'Business Development',                          code:'L' },
+  { name:'Refinery & Fractionation of Palm Oil',          code:'P' },
+  { name:'Quality Control',                               code:'Q' },
+  { name:'Research & Development',                        code:'R' },
+  { name:'Safety, Health and Environment',                code:'S' },
+  { name:'Export & Import',                               code:'X' },
+  { name:'Quality Assurance & Management Representative', code:'Z' }
+];
+
+/* ================================================================
+   DATA: USERS
+================================================================ */
+const USERS = [
+  { dept:'Sales & Marketing Oil',                         username:'amber_oilsales',       password:'Deal#Glide4A',     code:'A' },
+  { dept:'Sales & Marketing Soap',                        username:'aurora_soaps',         password:'Shine*Suds2A',     code:'A' },
+  { dept:'Purchasing',                                    username:'bazaar_buyer',         password:'Vendor&Pay9B',     code:'B' },
+  { dept:'PPIC-Warehouse',                                username:'cobalt_stock',         password:'Rack!Zone3C',      code:'C' },
+  { dept:'Soap Bar Production',                           username:'dovetail_bar',         password:'Sudsy@Bee5D',      code:'D' },
+  { dept:'Engineering',                                   username:'emerald_wrench',       password:'Gear&Lube82E',     code:'E' },
+  { dept:'Finance, Accounting & Tax',                     username:'fiscal_ledger',        password:'Audit#Bal6F',      code:'F' },
+  { dept:'Soap Noodles Production',                       username:'gnocchi_soap',         password:'Bubble^7WaveG',    code:'G' },
+  { dept:'HR Dev & General Affairs',                      username:'harbor_people',        password:'Talenta#86H',      code:'H' },
+  { dept:'Cooking Oil Packing',                           username:'ivory_bottle',         password:'Pouch$Seal8I',     code:'I' },
+  { dept:'Margarine & Shortening',                        username:'jasmine_blend',        password:'Creamy@Spread3J',  code:'J' },
+  { dept:'Project',                                       username:'keystone_pm',          password:'Scope#Plan5Kp',    code:'K' },
+  { dept:'Business Development',                          username:'vanguard_growth',      password:'Pitch@Scale7Kv',   code:'L' },
+  { dept:'Refinery & Fractionation',                      username:'petro_refine',         password:'Crude%Flow7P',     code:'P' },
+  { dept:'Quality Control',                               username:'qube_spectra',         password:'LabRat$99Qx',      code:'Q' },
+  { dept:'Research & Development',                        username:'rocket_lab',           password:'Innov8$DreamR',    code:'R' },
+  { dept:'Safety, Health & Environment',                  username:'sentinel_safety',      password:'Helmet@Safe1S',    code:'S' },
+  { dept:'Export & Import',                               username:'eastbound_logistics',  password:'Customs!Ship5E',   code:'X' },
+  { dept:'QA & MR (superadmin)',                          username:'zephyr_admin',         password:'Tiger#2026!Z',     code:'Z' }
+];
+
+const SUPERADMIN_USER = 'zephyr_admin';
+const PURCHASING_DEPT = 'Purchasing';
+
+/* ================================================================
+   DATA: CONTOH DATA LOAM (REVISI)
+   5 data dummy yang akan otomatis di-load jika localStorage kosong
+================================================================ */
+const SAMPLE_LOAM_DATA = [
+  {
+    id: 'loam_sample_1',
+    nama: 'Minyak Kelapa Sawit RBD',
+    jenis: 'Minyak Nabati',
+    produsen: 'PT Sawit Nusantara',
+    negara: 'Indonesia',
+    kategori: 'kritis',
+    supplier: 'PT Sawit Jaya Abadi',
+    lembaga: 'LPPOM MUI',
+    nomor_sert: 'ID0011000023456789',
+    masa_berlaku: '2027-06-15',
+    created_at: new Date().toISOString(),
+    created_by: 'system'
+  },
+  {
+    id: 'loam_sample_2',
+    nama: 'Sodium Hidroksida (NaOH)',
+    jenis: 'Bahan Kimia',
+    produsen: 'PT Kimia Utama',
+    negara: 'Indonesia',
+    kategori: 'sangat_kritis',
+    supplier: 'PT Kimia Utama',
+    lembaga: 'LPPOM MUI',
+    nomor_sert: 'ID0022000034567890',
+    masa_berlaku: '2026-03-20',
+    created_at: new Date().toISOString(),
+    created_by: 'system'
+  },
+  {
+    id: 'loam_sample_3',
+    nama: 'Pewarna Makanan Kuning',
+    jenis: 'Aditif',
+    produsen: 'Roha Dyechem',
+    negara: 'India',
+    kategori: 'tidak_kritis',
+    supplier: 'PT Warna Alami',
+    lembaga: 'LPPOM MUI',
+    nomor_sert: 'ID0033000045678901',
+    masa_berlaku: '2026-01-10',
+    created_at: new Date().toISOString(),
+    created_by: 'system'
+  },
+  {
+    id: 'loam_sample_4',
+    nama: 'Parfum Soap Lavender',
+    jenis: 'Fragrance',
+    produsen: 'Givaudan',
+    negara: 'Swiss',
+    kategori: 'kritis',
+    supplier: 'PT Aroma Indah',
+    lembaga: 'LPPOM MUI',
+    nomor_sert: 'ID0044000056789012',
+    masa_berlaku: '2025-12-05',
+    created_at: new Date().toISOString(),
+    created_by: 'system'
+  },
+  {
+    id: 'loam_sample_5',
+    nama: 'Gliserin USP Grade',
+    jenis: 'Bahan Kimia',
+    produsen: 'Wilmar International',
+    negara: 'Singapura',
+    kategori: 'sangat_kritis',
+    supplier: 'PT Gliserin Nusantara',
+    lembaga: 'LPPOM MUI',
+    nomor_sert: 'ID0055000067890123',
+    masa_berlaku: '2026-08-30',
+    created_at: new Date().toISOString(),
+    created_by: 'system'
+  }
+];
+
+/* ================================================================
+   KONFIGURASI DISTRIBUSI LOAM
+================================================================ */
+const LOAM_DISTRIBUTION = [
+  { name: 'Research & Development', status: 'pending' },
+  { name: 'Purchasing',             status: 'pending' },
+  { name: 'Quality Control',        status: 'pending' },
+  { name: 'Produksi',               status: 'pending' },
+  { name: 'PPIC & Warehouse',       status: 'pending' },
+  { name: 'Komite Halal',           status: 'pending' }
+];
+
+/* ================================================================
+   KONFIGURASI NOTIFIKASI
+================================================================ */
+const NOTIFY_CONFIG = {
+  whatsappNumber: '6281519420553',
+  emailAddress: 'qa@indosultan.co.id'
+};
+
+/* ================================================================
+   STORAGE KEYS
+================================================================ */
+const STORAGE_KEYS = {
+  LOAM_DATA: 'loam_data',
+  DISTRIBUTION: 'loam_distribution',
+  REVIEW: 'loam_review',
+  NOTIFY_LOG: 'notify_log',
+  SAMPLE_INIT: 'loam_sample_initialized'
+};
+
+/* ================================================================
+   TRANSLATIONS (LENGKAP 5 BAHASA)
+================================================================ */
+const I18N = {
+  id: {
+    company:'PT Indo Sultan Jaya', app_title:'Dashboard Material Approval',
+    app_subtitle:'SOP-Z02_C — Material Approval', dashboard_sub:'Material Approval — PT Indo Sultan Jaya',
+    pengajuan_sub:'Sesuai SOP-Z02_C Material Approval', loam_sub:'FR-Z02-02_C — Tgl. Berlaku: 20 FEB 2025',
+    master_sub:'Referensi Material, Supplier, dan Produsen', laporan_sub:'Log Audit Trail & Kepatuhan SOP',
+    riwayat_sub:'Log Audit Trail', akun_sub:'Hanya dapat diakses oleh Superadmin',
+    pengaturan_sub:'Preferensi & Informasi Akun', monitoring_sub:'Pemantauan dan Pembaharuan LOAM (SOP-Z02_C butir 7.5.5 & 7.6)',
+    login_username:'Nama Pengguna', login_password:'Kata Sandi', login_btn:'Masuk',
+    login_err:'Nama pengguna atau kata sandi salah!', logout:'Keluar', lang:'Bahasa',
+    tab_dashboard:'Dasbor', tab_pengajuan:'Form Material Approval', tab_loam:'LOAM',
+    tab_monitoring:'Monitoring LOAM', tab_master:'Master Data', tab_laporan:'Laporan & Audit',
+    tab_riwayat:'Riwayat', tab_akun:'Manajemen Akun', tab_pengaturan:'Pengaturan',
+    kpi_total:'Total Pengajuan', kpi_pending:'Menunggu Persetujuan', kpi_approved:'Disetujui',
+    kpi_rejected:'Ditolak', kpi_overdue:'Terlambat (SLA)', kpi_compliance:'Tingkat Kepatuhan',
+    kpi_per_bahan:'Total Item Per Bahan', kpi_per_supplier:'Total Per Supplier',
+    kpi_per_produsen:'Total Per Produsen', kpi_per_negara:'Total Per Negara Produsen',
+    btn_save:'Simpan', btn_add:'Tambah', btn_edit:'Ubah', btn_delete:'Hapus',
+    btn_submit:'Kirim', btn_cancel:'Batal', btn_export:'Ekspor', btn_search:'Cari',
+    btn_print:'Cetak', btn_import:'Impor', btn_excel:'Excel', btn_json:'JSON', btn_csv:'CSV',
+    btn_upload:'Upload', btn_camera:'Kamera', btn_signature:'Tanda Tangan Digital',
+    btn_save_daily:'Simpan Riwayat Harian', btn_reset:'Reset', btn_clear:'Hapus',
+    search_ph:'Cari...', filter_all_kategori:'Semua Kategori', filter_all_supplier:'Semua Supplier',
+    filter_all_dept:'Semua Departemen', filter_all_status:'Semua Status', filter_all_level:'Semua Level',
+    filter_all_jenis:'Semua Jenis', filter_all_bulan:'Semua Bulan', filter_all_tahun:'Semua Tahun',
+    sort_by:'Sort by', order_az:'A-Z', order_oldest:'Terlama', order_newest:'Terbaru',
+    period_today:'Hari Ini', period_7d:'7 Hari Terakhir', period_30d:'30 Hari Terakhir', period_year:'Tahun',
+    title_dashboard:'Ringkasan Kepatuhan SOP-Z02_C',
+    title_pengajuan:'Form Material Approval (FR-Z02-01_C), Tanggal Berlaku: 20 FEB 2025',
+    title_loam:'List of Approved Material (LOAM)',
+    title_monitoring:'Monitoring Distribusi & Review LOAM',
+    title_master:'Master Data Material & Supplier', title_laporan:'Laporan & Audit',
+    title_riwayat:'Riwayat Perubahan', title_akun:'Manajemen Akun & Kata Sandi',
+    title_pengaturan:'Pengaturan Sistem',
+    th_no:'No', th_nama:'Nama', th_nama_material:'Nama Material', th_jenis:'Jenis Bahan',
+    th_produsen:'Produsen', th_negara:'Negara', th_kategori:'Kategori', th_supplier:'Supplier',
+    th_lembaga:'Lembaga Penerbit', th_nomor_sert:'No. Sertifikat Halal', th_masa_berlaku:'Masa Berlaku',
+    th_dokumen:'Dokumen Pendukung', th_status:'Status', th_aksi:'Aksi', th_tanggal:'Tanggal',
+    th_kode:'Kode', th_departemen:'Departemen', th_username:'Username', th_password:'Password',
+    th_role:'Peran', th_waktu:'Waktu', th_user:'Pengguna', th_detail:'Detail',
+    empty_data:'Belum ada data',
+    view_only_notice:'Anda hanya dapat melihat data departemen Anda (mode pelihat).',
+    admin_notice:'Mode Superadmin — Anda dapat mengelola seluruh data.',
+    editor_notice:'Mode Editor (Purchasing) — Anda dapat mengelola data sesuai SOP.',
+    saved:'Data berhasil disimpan', savebar_info:'Mode editor — perubahan akan tersimpan otomatis ke sistem.',
+    form_section_a:'Informasi Material / Supplier', form_section_b:'Alasan Persetujuan Material atau Supplier',
+    form_section_c:'Persetujuan R&D', form_section_d:'Persetujuan Quality Assurance',
+    form_section_e:'Persetujuan Komite Halal', form_section_f:'Persetujuan General Manager Operational',
+    form_nama_material:'Nama Material', form_kode_material:'Kode Material',
+    form_nama_supplier:'Nama Supplier', form_nama_produsen:'Nama Produsen',
+    form_negara_produsen:'Negara Produsen', form_kategori:'Kategori Kritisitas',
+    form_sangat_kritis:'Sangat Kritis', form_kritis:'Kritis', form_tidak_kritis:'Tidak Kritis',
+    form_bahan_baru:'Bahan Baru', form_supplier_baru:'Supplier Baru', form_produsen_baru:'Produsen Baru',
+    form_negara_baru:'Negara Baru', form_lainnya:'Alasan Lainnya',
+    form_spec_check:'Pemeriksaan Spesifikasi Bahan', form_trial:'Dilakukan Trial',
+    form_halal_1:'Positive List', form_halal_2:'Sertifikat Halal MUI (Terlampir)',
+    form_halal_3:'Surat Persetujuan LPPOM MUI (Terlampir)', form_catatan:'Catatan/Keterangan',
+    form_no_ma:'No. MA (Otomatis)', form_tgl_berlaku:'Tanggal Berlaku', form_lokasi:'Lokasi & Tanggal',
+    form_link_cloud:'Link Cloud Storage (Google Drive, dll.)',
+    form_upload_kamera:'Upload File / Buka Kamera',
+    master_material:'Material', master_supplier:'Supplier & Produsen',
+    laporan_compliance:'Kepatuhan SOP', laporan_avg_cycle:'Rata-rata Siklus (hari)',
+    laporan_deviasi:'Deviasi', laporan_ringkasan:'Ringkasan',
+    settings_account:'Informasi Akun', settings_sop:'Informasi SOP', settings_dept:'Departemen',
+    settings_user:'Username', settings_code:'Kode Departemen', settings_role:'Peran',
+    settings_lang:'Bahasa', settings_sop_no:'Nomor SOP', settings_sop_date:'Tanggal Berlaku',
+    settings_sop_valid:'Masa Berlaku', role_superadmin:'Superadmin', role_user:'User (Pelihat)',
+    role_purchasing:'Purchasing (Editor)', language_name:'Indonesia',
+    trend_title:'Tren Per Item Bahan', loam_add_title:'Tambah Material ke LOAM',
+    loam_dok_terkait:'Dokumen Terkait',
+    monitoring_dist:'Distribusi LOAM', monitoring_review:'Review Berkala (Min. 6 Bulan Sekali)',
+    monitoring_last_review:'Review Terakhir', monitoring_next_review:'Review Berikutnya',
+    monitoring_status:'Status', monitoring_expiring:'Dokumen Akan / Telah Kedaluwarsa',
+    monitoring_purchasing:'Tanggung Jawab Purchasing',
+    monitoring_notify:'Beri Tahu QA & Komite Halal',
+    monitoring_note:'LOAM versi terbaru didistribusikan oleh QA kepada Departemen: Research & Development, Purchasing, Quality Control, Produksi, PPIC & Warehouse, dan Komite Halal.',
+    monitoring_responsibility:'Departemen QA bersama Komite Halal bertanggung jawab melakukan review berkala terhadap keabsahan dokumen dalam LOAM, minimal setiap 6 (enam) bulan sekali.',
+    monitoring_expiring_note:'Material dengan dokumen pendukung yang telah atau akan kedaluwarsa harus segera ditindaklanjuti oleh Purchasing bersama QA dan Komite Halal untuk memperbarui dokumen sebelum material tersebut digunakan kembali.',
+    monitoring_purchasing_note:'Purchasing wajib memberitahukan QA dan Komite Halal jika terdapat informasi perubahan dari supplier terkait sertifikat halal atau spesifikasi material.',
+    status_sent:'Terkirim', status_pending:'Pending', status_expired:'Kedaluwarsa', status_valid:'Valid',
+    status_read:'Dibaca', status_rejected:'Ditolak', status_soon:'Segera Review', status_late:'Terlambat',
+    ci_note:'Catatan / Keterangan', ci_actions:'Bukti & Aksi',
+    ci_sig_done:'Tanda tangan tersimpan', ci_attach_done:'Lampiran',
+    sig_hint:'Tanda tangan pada perangkat Anda menggunakan mouse atau layar sentuh.',
+    err_no_signature:'Tanda tangan masih kosong', err_access_denied:'Akses ditolak',
+    err_file_too_large:'Ukuran file terlalu besar (maks 3 MB)',
+    dist_status_label:'Status per Departemen',
+    review_notes_label:'Catatan/Keterangan Review',
+    review_pic_label:'Penanggung Jawab Review',
+    review_status_label:'Status Review',
+    review_progress:'Umur Review',
+    review_valid:'Valid — Sesuai Jadwal',
+    review_soon:'Segera Review (≤ 30 hari)',
+    review_late:'Terlambat Review',
+    review_proses:'Sedang Dalam Proses Review',
+    notify_subject:'Subjek / Topik Perubahan',
+    notify_supplier:'Nama Supplier',
+    notify_message:'Detail Perubahan',
+    notify_wa:'Kirim via WhatsApp',
+    notify_email:'Kirim via Email (Outlook)',
+    notify_both:'Kirim Keduanya',
+    days_left:'Sisa Hari',
+    action:'Aksi',
+    auto_from_loam:'Otomatis dari data LOAM',
+    no_contact:'Kontak tujuan belum dikonfigurasi',
+    camera_title:'Ambil Foto dari Kamera',
+    camera_hint:'Posisikan objek di depan kamera, lalu klik "Ambil Foto".',
+    camera_switch:'Ganti Kamera',
+    camera_capture:'Ambil Foto',
+    camera_retake:'Ambil Ulang',
+    camera_error:'Tidak dapat mengakses kamera. Pastikan izin kamera diberikan.',
+    camera_not_supported:'Browser tidak mendukung akses kamera. Menggunakan input file sebagai alternatif.'
+  },
+  en: {
+    company:'PT Indo Sultan Jaya', app_title:'Material Approval Dashboard',
+    app_subtitle:'SOP-Z02_C — Material Approval', dashboard_sub:'Material Approval — PT Indo Sultan Jaya',
+    pengajuan_sub:'According to SOP-Z02_C Material Approval', loam_sub:'FR-Z02-02_C — Effective: 20 FEB 2025',
+    master_sub:'Reference: Material, Supplier, and Manufacturer', laporan_sub:'Audit Trail Log & SOP Compliance',
+    riwayat_sub:'Audit Trail Log', akun_sub:'Accessible only by Superadmin',
+    pengaturan_sub:'Preferences & Account Information', monitoring_sub:'LOAM Monitoring & Update (SOP-Z02_C clauses 7.5.5 & 7.6)',
+    login_username:'Username', login_password:'Password', login_btn:'Sign In',
+    login_err:'Invalid username or password!', logout:'Logout', lang:'Language',
+    tab_dashboard:'Dashboard', tab_pengajuan:'Form Material Approval', tab_loam:'LOAM',
+    tab_monitoring:'LOAM Monitoring', tab_master:'Master Data', tab_laporan:'Reports & Audit',
+    tab_riwayat:'History', tab_akun:'Account Management', tab_pengaturan:'Settings',
+    kpi_total:'Total Requests', kpi_pending:'Pending Approval', kpi_approved:'Approved',
+    kpi_rejected:'Rejected', kpi_overdue:'Overdue (SLA)', kpi_compliance:'Compliance Rate',
+    kpi_per_bahan:'Total Per Material', kpi_per_supplier:'Total Per Supplier',
+    kpi_per_produsen:'Total Per Manufacturer', kpi_per_negara:'Total Per Country',
+    btn_save:'Save', btn_add:'Add', btn_edit:'Edit', btn_delete:'Delete',
+    btn_submit:'Submit', btn_cancel:'Cancel', btn_export:'Export', btn_search:'Search',
+    btn_print:'Print', btn_import:'Import', btn_excel:'Excel', btn_json:'JSON', btn_csv:'CSV',
+    btn_upload:'Upload', btn_camera:'Camera', btn_signature:'Digital Signature',
+    btn_save_daily:'Save Daily History', btn_reset:'Reset', btn_clear:'Clear',
+    search_ph:'Search...', filter_all_kategori:'All Categories', filter_all_supplier:'All Suppliers',
+    filter_all_dept:'All Departments', filter_all_status:'All Status', filter_all_level:'All Levels',
+    filter_all_jenis:'All Types', filter_all_bulan:'All Months', filter_all_tahun:'All Years',
+    sort_by:'Sort by', order_az:'A-Z', order_oldest:'Oldest', order_newest:'Newest',
+    period_today:'Today', period_7d:'Last 7 Days', period_30d:'Last 30 Days', period_year:'Year',
+    title_dashboard:'SOP-Z02_C Compliance Summary',
+    title_pengajuan:'Form Material Approval (FR-Z02-01_C), Effective: 20 FEB 2025',
+    title_loam:'List of Approved Material (LOAM)',
+    title_monitoring:'LOAM Distribution & Review Monitoring',
+    title_master:'Master Data Material & Supplier', title_laporan:'Reports & Audit',
+    title_riwayat:'Change History', title_akun:'Account & Password Management',
+    title_pengaturan:'System Settings',
+    th_no:'No', th_nama:'Name', th_nama_material:'Material Name', th_jenis:'Material Type',
+    th_produsen:'Manufacturer', th_negara:'Country', th_kategori:'Category', th_supplier:'Supplier',
+    th_lembaga:'Issuing Body', th_nomor_sert:'Halal Cert. No.', th_masa_berlaku:'Validity',
+    th_dokumen:'Supporting Docs', th_status:'Status', th_aksi:'Action', th_tanggal:'Date',
+    th_kode:'Code', th_departemen:'Department', th_username:'Username', th_password:'Password',
+    th_role:'Role', th_waktu:'Time', th_user:'User', th_detail:'Detail',
+    empty_data:'No data yet',
+    view_only_notice:'You can only view your department data (viewer mode).',
+    admin_notice:'Superadmin mode — you can manage all data.',
+    editor_notice:'Editor mode (Purchasing) — you can manage data per SOP.',
+    saved:'Data saved successfully', savebar_info:'Editor mode — changes are automatically saved.',
+    form_section_a:'Material / Supplier Information', form_section_b:'Reason for Material or Supplier Approval',
+    form_section_c:'R&D Approval', form_section_d:'Quality Assurance Approval',
+    form_section_e:'Halal Committee Approval', form_section_f:'General Manager Operational Approval',
+    form_nama_material:'Material Name', form_kode_material:'Material Code',
+    form_nama_supplier:'Supplier Name', form_nama_produsen:'Manufacturer Name',
+    form_negara_produsen:'Manufacturer Country', form_kategori:'Criticality Category',
+    form_sangat_kritis:'Very Critical', form_kritis:'Critical', form_tidak_kritis:'Not Critical',
+    form_bahan_baru:'New Material', form_supplier_baru:'New Supplier', form_produsen_baru:'New Manufacturer',
+    form_negara_baru:'New Country', form_lainnya:'Other Reason',
+    form_spec_check:'Specification Check', form_trial:'Trial Conducted',
+    form_halal_1:'Positive List', form_halal_2:'MUI Halal Certificate (attached)',
+    form_halal_3:'LPPOM MUI Approval Letter (attached)', form_catatan:'Notes',
+    form_no_ma:'MA No. (Auto)', form_tgl_berlaku:'Effective Date', form_lokasi:'Location & Date',
+    form_link_cloud:'Cloud Storage Link (Google Drive, etc.)',
+    form_upload_kamera:'Upload File / Open Camera',
+    master_material:'Material', master_supplier:'Supplier & Manufacturer',
+    laporan_compliance:'SOP Compliance', laporan_avg_cycle:'Average Cycle (days)',
+    laporan_deviasi:'Deviation', laporan_ringkasan:'Summary',
+    settings_account:'Account Information', settings_sop:'SOP Information', settings_dept:'Department',
+    settings_user:'Username', settings_code:'Department Code', settings_role:'Role',
+    settings_lang:'Language', settings_sop_no:'SOP Number', settings_sop_date:'Effective Date',
+    settings_sop_valid:'Validity Period', role_superadmin:'Superadmin', role_user:'User (Viewer)',
+    role_purchasing:'Purchasing (Editor)', language_name:'English',
+    trend_title:'Trend Per Material', loam_add_title:'Add Material to LOAM',
+    loam_dok_terkait:'Related Documents',
+    monitoring_dist:'LOAM Distribution', monitoring_review:'Periodic Review (Min. Every 6 Months)',
+    monitoring_last_review:'Last Review', monitoring_next_review:'Next Review',
+    monitoring_status:'Status', monitoring_expiring:'Expiring / Expired Documents',
+    monitoring_purchasing:'Purchasing Responsibilities',
+    monitoring_notify:'Notify QA & Halal Committee',
+    monitoring_note:'The latest LOAM version is distributed by QA to: R&D, Purchasing, QC, Production, PPIC & Warehouse, Halal Committee.',
+    monitoring_responsibility:'QA together with Halal Committee is responsible for periodic review of document validity in LOAM, at least every 6 months.',
+    monitoring_expiring_note:'Materials with expired/expiring documents must be followed up by Purchasing with QA and Halal Committee.',
+    monitoring_purchasing_note:'Purchasing must notify QA and Halal Committee if there is any supplier change info.',
+    status_sent:'Sent', status_pending:'Pending', status_expired:'Expired', status_valid:'Valid',
+    status_read:'Read', status_rejected:'Rejected', status_soon:'Review Soon', status_late:'Late',
+    ci_note:'Notes / Remarks', ci_actions:'Evidence & Actions',
+    ci_sig_done:'Signature saved', ci_attach_done:'Attachment',
+    sig_hint:'Sign on your device using mouse or touchscreen.',
+    err_no_signature:'Signature is empty', err_access_denied:'Access denied',
+    err_file_too_large:'File too large (max 3 MB)',
+    dist_status_label:'Status per Department',
+    review_notes_label:'Review Notes',
+    review_pic_label:'Person in Charge',
+    review_status_label:'Review Status',
+    review_progress:'Review Age',
+    review_valid:'Valid — On Schedule',
+    review_soon:'Review Soon (≤ 30 days)',
+    review_late:'Late Review',
+    review_proses:'In Review Process',
+    notify_subject:'Change Subject',
+    notify_supplier:'Supplier Name',
+    notify_message:'Change Details',
+    notify_wa:'Send via WhatsApp',
+    notify_email:'Send via Email (Outlook)',
+    notify_both:'Send Both',
+    days_left:'Days Left',
+    action:'Action',
+    auto_from_loam:'Auto from LOAM data',
+    no_contact:'Contact not configured',
+    camera_title:'Take Photo from Camera',
+    camera_hint:'Position the object in front of the camera, then click "Capture".',
+    camera_switch:'Switch Camera',
+    camera_capture:'Capture',
+    camera_retake:'Retake',
+    camera_error:'Cannot access camera. Make sure camera permission is granted.',
+    camera_not_supported:'Browser does not support camera access. Using file input as alternative.'
+  },
+  ur: {
+    company:'PT انڈو سلطان جیا', app_title:'میٹریل اپروول ڈیش بورڈ',
+    app_subtitle:'SOP-Z02_C — میٹریل اپروول', dashboard_sub:'میٹریل اپروول — PT انڈو سلطان جیا',
+    pengajuan_sub:'SOP-Z02_C کے مطابق', loam_sub:'FR-Z02-02_C — مؤثر: 20 فروری 2025',
+    master_sub:'حوالہ: میٹریل، سپلائر، مینوفیکچرر', laporan_sub:'آڈٹ ٹریل لاگ اور SOP تعمیل',
+    riwayat_sub:'آڈٹ ٹریل لاگ', akun_sub:'صرف سپر ایڈمن کے ذریعے قابل رسائی',
+    pengaturan_sub:'ترجیحات اور اکاؤنٹ کی معلومات', monitoring_sub:'LOAM نگرانی اور تازہ کاری',
+    login_username:'صارف کا نام', login_password:'پاس ورڈ', login_btn:'سائن ان کریں',
+    login_err:'غلط صارف نام یا پاس ورڈ!', logout:'لاگ آؤٹ', lang:'زبان',
+    tab_dashboard:'ڈیش بورڈ', tab_pengajuan:'فارم میٹریل اپروول', tab_loam:'LOAM',
+    tab_monitoring:'LOAM نگرانی', tab_master:'ماسٹر ڈیٹا', tab_laporan:'رپورٹس اور آڈٹ',
+    tab_riwayat:'تاریخ', tab_akun:'اکاؤنٹ مینجمنٹ', tab_pengaturan:'ترتیبات',
+    kpi_total:'کل درخواستیں', kpi_pending:'زیر التوا منظوری', kpi_approved:'منظور شدہ',
+    kpi_rejected:'مسترد شدہ', kpi_overdue:'تاخیر (SLA)', kpi_compliance:'تعمیل کی شرح',
+    kpi_per_bahan:'کل فی میٹریل', kpi_per_supplier:'کل فی سپلائر',
+    kpi_per_produsen:'کل فی مینوفیکچرر', kpi_per_negara:'کل فی ملک',
+    btn_save:'محفوظ کریں', btn_add:'شامل کریں', btn_edit:'ترمیم کریں', btn_delete:'حذف کریں',
+    btn_submit:'جمع کریں', btn_cancel:'منسوخ کریں', btn_export:'برآمد کریں', btn_search:'تلاش کریں',
+    btn_print:'پرنٹ کریں', btn_import:'درآمد کریں', btn_excel:'ایکسل', btn_json:'JSON', btn_csv:'CSV',
+    btn_upload:'اپ لوڈ', btn_camera:'کیمرہ', btn_signature:'ڈیجیٹل دستخط',
+    btn_save_daily:'روزانہ تاریخ محفوظ کریں', btn_reset:'ری سیٹ کریں', btn_clear:'صاف کریں',
+    search_ph:'تلاش...', filter_all_kategori:'تمام اقسام', filter_all_supplier:'تمام سپلائرز',
+    filter_all_dept:'تمام شعبے', filter_all_status:'تمام حالتیں', filter_all_level:'تمام سطحیں',
+    filter_all_jenis:'تمام اقسام', filter_all_bulan:'تمام مہینے', filter_all_tahun:'تمام سال',
+    sort_by:'ترتیب دیں', order_az:'A-Z', order_oldest:'پرانا', order_newest:'نیا',
+    period_today:'آج', period_7d:'آخری 7 دن', period_30d:'آخری 30 دن', period_year:'سال',
+    title_dashboard:'SOP-Z02_C تعمیل کا خلاصہ',
+    title_pengajuan:'فارم میٹریل اپروول (FR-Z02-01_C)، مؤثر: 20 فروری 2025',
+    title_loam:'منظور شدہ میٹریل کی فہرست (LOAM)',
+    title_monitoring:'LOAM تقسیم اور جائزہ نگرانی',
+    title_master:'ماسٹر ڈیٹا میٹریل اور سپلائر', title_laporan:'رپورٹس اور آڈٹ',
+    title_riwayat:'تبدیلی کی تاریخ', title_akun:'اکاؤنٹ اور پاس ورڈ مینجمنٹ',
+    title_pengaturan:'سسٹم کی ترتیبات',
+    th_no:'نمبر', th_nama:'نام', th_nama_material:'میٹریل کا نام', th_jenis:'میٹریل کی قسم',
+    th_produsen:'مینوفیکچرر', th_negara:'ملک', th_kategori:'قسم', th_supplier:'سپلائر',
+    th_lembaga:'جاری کرنے والا ادارہ', th_nomor_sert:'حلال سرٹیفکیٹ نمبر', th_masa_berlaku:'درستگی',
+    th_dokumen:'معاون دستاویزات', th_status:'حالت', th_aksi:'عمل', th_tanggal:'تاریخ',
+    th_kode:'کوڈ', th_departemen:'شعبہ', th_username:'صارف نام', th_password:'پاس ورڈ',
+    th_role:'کردار', th_waktu:'وقت', th_user:'صارف', th_detail:'تفصیل',
+    empty_data:'ابھی کوئی ڈیٹا نہیں',
+    view_only_notice:'آپ صرف اپنے شعبے کا ڈیٹا دیکھ سکتے ہیں۔',
+    admin_notice:'سپر ایڈمن موڈ — آپ تمام ڈیٹا کا انتظام کر سکتے ہیں۔',
+    editor_notice:'ایڈیٹر موڈ (خریداری) — آپ SOP کے مطابق ڈیٹا کا انتظام کر سکتے ہیں۔',
+    saved:'ڈیٹا کامیابی سے محفوظ ہو گیا', savebar_info:'ایڈیٹر موڈ — تبدیلیاں خودکار محفوظ ہوں گی۔',
+    form_section_a:'میٹریل / سپلائر کی معلومات', form_section_b:'منظوری کی وجہ',
+    form_section_c:'R&D کی منظوری', form_section_d:'QA کی منظوری',
+    form_section_e:'حلال کمیٹی کی منظوری', form_section_f:'GM آپریشنل کی منظوری',
+    form_nama_material:'میٹریل کا نام', form_kode_material:'میٹریل کوڈ',
+    form_nama_supplier:'سپلائر کا نام', form_nama_produsen:'مینوفیکچرر کا نام',
+    form_negara_produsen:'مینوفیکچرر کا ملک', form_kategori:'نازک قسم',
+    form_sangat_kritis:'انتہائی نازک', form_kritis:'نازک', form_tidak_kritis:'غیر نازک',
+    form_bahan_baru:'نیا میٹریل', form_supplier_baru:'نیا سپلائر', form_produsen_baru:'نیا مینوفیکچرر',
+    form_negara_baru:'نیا ملک', form_lainnya:'دیگر وجہ',
+    form_spec_check:'تفصیلات کی جانچ', form_trial:'ٹرائل کیا گیا',
+    form_halal_1:'مثبت فہرست', form_halal_2:'MUI حلال سرٹیفکیٹ',
+    form_halal_3:'LPPOM MUI منظوری خط', form_catatan:'نوٹس',
+    form_no_ma:'MA نمبر (خودکار)', form_tgl_berlaku:'مؤثر تاریخ', form_lokasi:'مقام اور تاریخ',
+    form_link_cloud:'کلاؤڈ اسٹوریج لنک', form_upload_kamera:'اپ لوڈ / کیمرہ',
+    master_material:'میٹریل', master_supplier:'سپلائر اور مینوفیکچرر',
+    laporan_compliance:'SOP تعمیل', laporan_avg_cycle:'اوسط دورانیہ (دن)',
+    laporan_deviasi:'انحراف', laporan_ringkasan:'خلاصہ',
+    settings_account:'اکاؤنٹ کی معلومات', settings_sop:'SOP کی معلومات', settings_dept:'شعبہ',
+    settings_user:'صارف نام', settings_code:'شعبہ کوڈ', settings_role:'کردار',
+    settings_lang:'زبان', settings_sop_no:'SOP نمبر', settings_sop_date:'مؤثر تاریخ',
+    settings_sop_valid:'درستگی کی مدت', role_superadmin:'سپر ایڈمن', role_user:'صارف (ناظر)',
+    role_purchasing:'خریداری (ایڈیٹر)', language_name:'اردو',
+    trend_title:'فی میٹریل رجحان', loam_add_title:'LOAM میں میٹریل شامل کریں',
+    loam_dok_terkait:'متعلقہ دستاویزات',
+    monitoring_dist:'LOAM تقسیم', monitoring_review:'باقاعدہ جائزہ (کم از کم 6 ماہ)',
+    monitoring_last_review:'آخری جائزہ', monitoring_next_review:'اگلا جائزہ',
+    monitoring_status:'حالت', monitoring_expiring:'میعاد ختم ہونے والی دستاویزات',
+    monitoring_purchasing:'خریداری کی ذمہ داریاں',
+    monitoring_notify:'QA اور حلال کمیٹی کو مطلع کریں',
+    monitoring_note:'تازہ ترین LOAM ورژن QA کی طرف سے تقسیم کیا گیا۔',
+    monitoring_responsibility:'QA اور حلال کمیٹی ہر 6 ماہ میں جائزہ لیتی ہے۔',
+    monitoring_expiring_note:'میعاد ختم ہونے والی دستاویزات فوری طور پر اپ ڈیٹ کی جائیں۔',
+    monitoring_purchasing_note:'سپلائر کی تبدیلیوں کی اطلاع QA اور کمیٹی کو دیں۔',
+    status_sent:'بھیجا گیا', status_pending:'زیر التوا', status_expired:'میعاد ختم', status_valid:'درست',
+    status_read:'پڑھا گیا', status_rejected:'مسترد', status_soon:'جلد جائزہ', status_late:'تاخیر',
+    ci_note:'نوٹس / ریمارکس', ci_actions:'ثبوت اور اعمال',
+    ci_sig_done:'دستخط محفوظ', ci_attach_done:'منسلکہ',
+    sig_hint:'ماؤس یا ٹچ اسکرین سے دستخط کریں۔',
+    err_no_signature:'دستخط خالی ہے', err_access_denied:'رسائی سے انکار',
+    err_file_too_large:'فائل بہت بڑی ہے (زیادہ سے زیادہ 3 MB)',
+    dist_status_label:'ہر شعبے کی حالت',
+    review_notes_label:'جائزہ نوٹس',
+    review_pic_label:'ذمہ دار شخص',
+    review_status_label:'جائزہ کی حالت',
+    review_progress:'جائزے کی عمر',
+    review_valid:'درست — شیڈول کے مطابق',
+    review_soon:'جلد جائزہ (≤ 30 دن)',
+    review_late:'تاخیر سے جائزہ',
+    review_proses:'جائزے کے عمل میں',
+    notify_subject:'تبدیلی کا موضوع',
+    notify_supplier:'سپلائر کا نام',
+    notify_message:'تبدیلی کی تفصیلات',
+    notify_wa:'واٹس ایپ پر بھیجیں',
+    notify_email:'ای میل پر بھیجیں (آؤٹ لک)',
+    notify_both:'دونوں بھیجیں',
+    days_left:'باقی دن',
+    action:'عمل',
+    auto_from_loam:'LOAM ڈیٹا سے خودکار',
+    no_contact:'رابطہ کنفیگر نہیں',
+    camera_title:'کیمرے سے تصویر لیں',
+    camera_hint:'آبجیکٹ کو کیمرے کے سامنے رکھیں، پھر "تصویر لیں" پر کلک کریں۔',
+    camera_switch:'کیمرہ تبدیل کریں',
+    camera_capture:'تصویر لیں',
+    camera_retake:'دوبارہ لیں',
+    camera_error:'کیمرے تک رسائی نہیں۔ اجازت دیں۔',
+    camera_not_supported:'براؤزر کیمرہ سپورٹ نہیں کرتا۔ فائل ان پٹ استعمال کریں۔'
+  },
+  hi: {
+    company:'पीटी इंडो सुल्तान जया', app_title:'सामग्री अनुमोदन डैशबोर्ड',
+    app_subtitle:'SOP-Z02_C — सामग्री अनुमोदन', dashboard_sub:'सामग्री अनुमोदन — पीटी इंडो सुल्तान जया',
+    pengajuan_sub:'SOP-Z02_C के अनुसार', loam_sub:'FR-Z02-02_C — प्रभावी: 20 फरवरी 2025',
+    master_sub:'संदर्भ: सामग्री, आपूर्तिकर्ता, निर्माता', laporan_sub:'ऑडिट ट्रेल लॉग और SOP अनुपालन',
+    riwayat_sub:'ऑडिट ट्रेल लॉग', akun_sub:'केवल सुपरएडमिन द्वारा सुलभ',
+    pengaturan_sub:'प्राथमिकताएं और खाता जानकारी', monitoring_sub:'LOAM निगरानी और अद्यतन',
+    login_username:'उपयोगकर्ता नाम', login_password:'पासवर्ड', login_btn:'साइन इन करें',
+    login_err:'अमान्य उपयोगकर्ता नाम या पासवर्ड!', logout:'लॉगआउट', lang:'भाषा',
+    tab_dashboard:'डैशबोर्ड', tab_pengajuan:'फॉर्म मटेरियल अप्रूवल', tab_loam:'LOAM',
+    tab_monitoring:'LOAM निगरानी', tab_master:'मास्टर डेटा', tab_laporan:'रिपोर्ट और ऑडिट',
+    tab_riwayat:'इतिहास', tab_akun:'खाता प्रबंधन', tab_pengaturan:'सेटिंग्स',
+    kpi_total:'कुल अनुरोध', kpi_pending:'अनुमोदन लंबित', kpi_approved:'अनुमोदित',
+    kpi_rejected:'अस्वीकृत', kpi_overdue:'अतिदेय (SLA)', kpi_compliance:'अनुपालन दर',
+    kpi_per_bahan:'प्रति सामग्री कुल', kpi_per_supplier:'प्रति आपूर्तिकर्ता कुल',
+    kpi_per_produsen:'प्रति निर्माता कुल', kpi_per_negara:'प्रति देश कुल',
+    btn_save:'सहेजें', btn_add:'जोड़ें', btn_edit:'संपादित करें', btn_delete:'हटाएं',
+    btn_submit:'जमा करें', btn_cancel:'रद्द करें', btn_export:'निर्यात करें', btn_search:'खोजें',
+    btn_print:'प्रिंट करें', btn_import:'आयात करें', btn_excel:'एक्सेल', btn_json:'JSON', btn_csv:'CSV',
+    btn_upload:'अपलोड', btn_camera:'कैमरा', btn_signature:'डिजिटल हस्ताक्षर',
+    btn_save_daily:'दैनिक इतिहास सहेजें', btn_reset:'रीसेट', btn_clear:'साफ़ करें',
+    search_ph:'खोजें...', filter_all_kategori:'सभी श्रेणियां', filter_all_supplier:'सभी आपूर्तिकर्ता',
+    filter_all_dept:'सभी विभाग', filter_all_status:'सभी स्थिति', filter_all_level:'सभी स्तर',
+    filter_all_jenis:'सभी प्रकार', filter_all_bulan:'सभी महीने', filter_all_tahun:'सभी वर्ष',
+    sort_by:'क्रमबद्ध करें', order_az:'A-Z', order_oldest:'सबसे पुराना', order_newest:'सबसे नया',
+    period_today:'आज', period_7d:'पिछले 7 दिन', period_30d:'पिछले 30 दिन', period_year:'वर्ष',
+    title_dashboard:'SOP-Z02_C अनुपालन सारांश',
+    title_pengajuan:'फॉर्म मटेरियल अप्रूवल (FR-Z02-01_C), प्रभावी: 20 फरवरी 2025',
+    title_loam:'स्वीकृत सामग्री की सूची (LOAM)',
+    title_monitoring:'LOAM वितरण और समीक्षा निगरानी',
+    title_master:'मास्टर डेटा सामग्री और आपूर्तिकर्ता', title_laporan:'रिपोर्ट और ऑडिट',
+    title_riwayat:'परिवर्तन इतिहास', title_akun:'खाता और पासवर्ड प्रबंधन',
+    title_pengaturan:'सिस्टम सेटिंग्स',
+    th_no:'क्रम', th_nama:'नाम', th_nama_material:'सामग्री का नाम', th_jenis:'सामग्री प्रकार',
+    th_produsen:'निर्माता', th_negara:'देश', th_kategori:'श्रेणी', th_supplier:'आपूर्तिकर्ता',
+    th_lembaga:'जारीकर्ता निकाय', th_nomor_sert:'हलाल प्रमाणपत्र संख्या', th_masa_berlaku:'वैधता',
+    th_dokumen:'सहायक दस्तावेज़', th_status:'स्थिति', th_aksi:'कार्रवाई', th_tanggal:'तारीख',
+    th_kode:'कोड', th_departemen:'विभाग', th_username:'उपयोगकर्ता नाम', th_password:'पासवर्ड',
+    th_role:'भूमिका', th_waktu:'समय', th_user:'उपयोगकर्ता', th_detail:'विवरण',
+    empty_data:'अभी कोई डेटा नहीं',
+    view_only_notice:'आप केवल अपने विभाग का डेटा देख सकते हैं।',
+    admin_notice:'सुपरएडमिन मोड — आप सभी डेटा प्रबंधित कर सकते हैं।',
+    editor_notice:'एडिटर मोड (खरीद) — आप SOP के अनुसार डेटा प्रबंधित कर सकते हैं।',
+    saved:'डेटा सफलतापूर्वक सहेजा गया', savebar_info:'एडिटर मोड — परिवर्तन स्वतः सहेजे जाएंगे।',
+    form_section_a:'सामग्री / आपूर्तिकर्ता जानकारी', form_section_b:'सामग्री या आपूर्तिकर्ता अनुमोदन का कारण',
+    form_section_c:'R&D अनुमोदन', form_section_d:'QA अनुमोदन',
+    form_section_e:'हलाल समिति अनुमोदन', form_section_f:'GM परिचालन अनुमोदन',
+    form_nama_material:'सामग्री का नाम', form_kode_material:'सामग्री कोड',
+    form_nama_supplier:'आपूर्तिकर्ता का नाम', form_nama_produsen:'निर्माता का नाम',
+    form_negara_produsen:'निर्माता देश', form_kategori:'क्रिटिकलिटी श्रेणी',
+    form_sangat_kritis:'अति गंभीर', form_kritis:'गंभीर', form_tidak_kritis:'गैर-गंभीर',
+    form_bahan_baru:'नई सामग्री', form_supplier_baru:'नया आपूर्तिकर्ता', form_produsen_baru:'नया निर्माता',
+    form_negara_baru:'नया देश', form_lainnya:'अन्य कारण',
+    form_spec_check:'विनिर्देश जांच', form_trial:'परीक्षण किया गया',
+    form_halal_1:'सकारात्मक सूची', form_halal_2:'MUI हलाल प्रमाणपत्र',
+    form_halal_3:'LPPOM MUI अनुमोदन पत्र', form_catatan:'नोट्स',
+    form_no_ma:'MA नंबर (स्वतः)', form_tgl_berlaku:'प्रभावी तिथि', form_lokasi:'स्थान और तिथि',
+    form_link_cloud:'क्लाउड स्टोरेज लिंक', form_upload_kamera:'अपलोड / कैमरा',
+    master_material:'सामग्री', master_supplier:'आपूर्तिकर्ता और निर्माता',
+    laporan_compliance:'SOP अनुपालन', laporan_avg_cycle:'औसत चक्र (दिन)',
+    laporan_deviasi:'विचलन', laporan_ringkasan:'सारांश',
+    settings_account:'खाता जानकारी', settings_sop:'SOP जानकारी', settings_dept:'विभाग',
+    settings_user:'उपयोगकर्ता नाम', settings_code:'विभाग कोड', settings_role:'भूमिका',
+    settings_lang:'भाषा', settings_sop_no:'SOP संख्या', settings_sop_date:'प्रभावी तिथि',
+    settings_sop_valid:'वैधता अवधि', role_superadmin:'सुपरएडमिन', role_user:'उपयोगकर्ता (दर्शक)',
+    role_purchasing:'खरीद (संपादक)', language_name:'हिन्दी',
+    trend_title:'प्रति सामग्री रुझान', loam_add_title:'LOAM में सामग्री जोड़ें',
+    loam_dok_terkait:'संबंधित दस्तावेज़',
+    monitoring_dist:'LOAM वितरण', monitoring_review:'आवधिक समीक्षा (न्यूनतम 6 माह)',
+    monitoring_last_review:'अंतिम समीक्षा', monitoring_next_review:'अगली समीक्षा',
+    monitoring_status:'स्थिति', monitoring_expiring:'समाप्त होने वाले दस्तावेज़',
+    monitoring_purchasing:'खरीद जिम्मेदारियां',
+    monitoring_notify:'QA और हलाल समिति को सूचित करें',
+    monitoring_note:'नवीनतम LOAM संस्करण QA द्वारा वितरित किया गया।',
+    monitoring_responsibility:'QA और हलाल समिति हर 6 महीने में समीक्षा करती है।',
+    monitoring_expiring_note:'समाप्त होने वाले दस्तावेज़ तुरंत अपडेट किए जाएं।',
+    monitoring_purchasing_note:'आपूर्तिकर्ता परिवर्तनों की सूचना QA और समिति को दें।',
+    status_sent:'भेजा गया', status_pending:'लंबित', status_expired:'समाप्त', status_valid:'वैध',
+    status_read:'पढ़ा गया', status_rejected:'अस्वीकृत', status_soon:'जल्द समीक्षा', status_late:'देर से',
+    ci_note:'नोट्स / टिप्पणी', ci_actions:'साक्ष्य और कार्रवाई',
+    ci_sig_done:'हस्ताक्षर सहेजा गया', ci_attach_done:'संलग्नक',
+    sig_hint:'माउस या टचस्क्रीन से हस्ताक्षर करें।',
+    err_no_signature:'हस्ताक्षर खाली है', err_access_denied:'पहुंच अस्वीकृत',
+    err_file_too_large:'फ़ाइल बहुत बड़ी है (अधिकतम 3 MB)',
+    dist_status_label:'प्रति विभाग स्थिति',
+    review_notes_label:'समीक्षा नोट्स',
+    review_pic_label:'प्रभारी व्यक्ति',
+    review_status_label:'समीक्षा स्थिति',
+    review_progress:'समीक्षा आयु',
+    review_valid:'वैध — समय पर',
+    review_soon:'जल्द समीक्षा (≤ 30 दिन)',
+    review_late:'देर से समीक्षा',
+    review_proses:'समीक्षा प्रक्रिया में',
+    notify_subject:'परिवर्तन विषय',
+    notify_supplier:'आपूर्तिकर्ता का नाम',
+    notify_message:'परिवर्तन विवरण',
+    notify_wa:'WhatsApp से भेजें',
+    notify_email:'Email से भेजें (Outlook)',
+    notify_both:'दोनों भेजें',
+    days_left:'शेष दिन',
+    action:'कार्रवाई',
+    auto_from_loam:'LOAM डेटा से स्वतः',
+    no_contact:'संपर्क कॉन्फ़िगर नहीं',
+    camera_title:'कैमरे से फोटो लें',
+    camera_hint:'वस्तु को कैमरे के सामने रखें, फिर "कैप्चर" पर क्लिक करें।',
+    camera_switch:'कैमरा बदलें',
+    camera_capture:'कैप्चर',
+    camera_retake:'फिर से लें',
+    camera_error:'कैमरे तक नहीं पहुंच सकते। अनुमति दें।',
+    camera_not_supported:'ब्राउज़र कैमरा सपोर्ट नहीं करता। फ़ाइल इनपुट उपयोग करें।'
+  },
+  zh: {
+    company:'PT Indo Sultan Jaya', app_title:'物料审批仪表板',
+    app_subtitle:'SOP-Z02_C — 物料审批', dashboard_sub:'物料审批 — PT Indo Sultan Jaya',
+    pengajuan_sub:'根据 SOP-Z02_C 物料审批', loam_sub:'FR-Z02-02_C — 生效日期：2025年2月20日',
+    master_sub:'参考：物料、供应商和制造商', laporan_sub:'审计跟踪日志与 SOP 合规性',
+    riwayat_sub:'审计跟踪日志', akun_sub:'仅限超级管理员访问',
+    pengaturan_sub:'首选项与账户信息', monitoring_sub:'LOAM 监控和更新',
+    login_username:'用户名', login_password:'密码', login_btn:'登录',
+    login_err:'用户名或密码无效！', logout:'登出', lang:'语言',
+    tab_dashboard:'仪表板', tab_pengajuan:'物料审批表', tab_loam:'LOAM',
+    tab_monitoring:'LOAM 监控', tab_master:'主数据', tab_laporan:'报告与审计',
+    tab_riwayat:'历史记录', tab_akun:'账户管理', tab_pengaturan:'设置',
+    kpi_total:'总申请', kpi_pending:'待审批', kpi_approved:'已批准',
+    kpi_rejected:'已拒绝', kpi_overdue:'逾期（SLA）', kpi_compliance:'合规率',
+    kpi_per_bahan:'每物料合计', kpi_per_supplier:'每供应商合计',
+    kpi_per_produsen:'每制造商合计', kpi_per_negara:'每国家合计',
+    btn_save:'保存', btn_add:'添加', btn_edit:'编辑', btn_delete:'删除',
+    btn_submit:'提交', btn_cancel:'取消', btn_export:'导出', btn_search:'搜索',
+    btn_print:'打印', btn_import:'导入', btn_excel:'Excel', btn_json:'JSON', btn_csv:'CSV',
+    btn_upload:'上传', btn_camera:'相机', btn_signature:'数字签名',
+    btn_save_daily:'保存每日历史', btn_reset:'重置', btn_clear:'清除',
+    search_ph:'搜索...', filter_all_kategori:'所有类别', filter_all_supplier:'所有供应商',
+    filter_all_dept:'所有部门', filter_all_status:'所有状态', filter_all_level:'所有级别',
+    filter_all_jenis:'所有类型', filter_all_bulan:'所有月份', filter_all_tahun:'所有年份',
+    sort_by:'排序', order_az:'A-Z', order_oldest:'最旧', order_newest:'最新',
+    period_today:'今天', period_7d:'最近7天', period_30d:'最近30天', period_year:'年',
+    title_dashboard:'SOP-Z02_C 合规摘要',
+    title_pengajuan:'物料审批表 (FR-Z02-01_C), 生效日期: 2025年2月20日',
+    title_loam:'已批准物料清单（LOAM）',
+    title_monitoring:'LOAM 分发和审查监控',
+    title_master:'主数据物料和供应商', title_laporan:'报告与审计',
+    title_riwayat:'变更历史', title_akun:'账户与密码管理',
+    title_pengaturan:'系统设置',
+    th_no:'编号', th_nama:'名称', th_nama_material:'物料名称', th_jenis:'物料类型',
+    th_produsen:'制造商', th_negara:'国家', th_kategori:'类别', th_supplier:'供应商',
+    th_lembaga:'颁发机构', th_nomor_sert:'清真证书编号', th_masa_berlaku:'有效期',
+    th_dokumen:'支持文件', th_status:'状态', th_aksi:'操作', th_tanggal:'日期',
+    th_kode:'代码', th_departemen:'部门', th_username:'用户名', th_password:'密码',
+    th_role:'角色', th_waktu:'时间', th_user:'用户', th_detail:'详情',
+    empty_data:'暂无数据',
+    view_only_notice:'您只能查看本部门的数据（查看者模式）。',
+    admin_notice:'超级管理员模式 — 您可以管理所有数据。',
+    editor_notice:'编辑模式（采购）— 您可以按 SOP 管理数据。',
+    saved:'数据保存成功', savebar_info:'编辑模式 — 更改将自动保存。',
+    form_section_a:'物料 / 供应商信息', form_section_b:'物料或供应商批准原因',
+    form_section_c:'R&D 批准', form_section_d:'质量保证批准',
+    form_section_e:'清真委员会批准', form_section_f:'GM 运营批准',
+    form_nama_material:'物料名称', form_kode_material:'物料代码',
+    form_nama_supplier:'供应商名称', form_nama_produsen:'制造商名称',
+    form_negara_produsen:'制造商国家', form_kategori:'关键性类别',
+    form_sangat_kritis:'非常关键', form_kritis:'关键', form_tidak_kritis:'非关键',
+    form_bahan_baru:'新物料', form_supplier_baru:'新供应商', form_produsen_baru:'新制造商',
+    form_negara_baru:'新国家', form_lainnya:'其他原因',
+    form_spec_check:'规格检查', form_trial:'已进行试验',
+    form_halal_1:'正面清单', form_halal_2:'MUI 清真证书',
+    form_halal_3:'LPPOM MUI 批准函', form_catatan:'备注',
+    form_no_ma:'MA 编号（自动）', form_tgl_berlaku:'生效日期', form_lokasi:'地点和日期',
+    form_link_cloud:'云存储链接', form_upload_kamera:'上传 / 相机',
+    master_material:'物料', master_supplier:'供应商与制造商',
+    laporan_compliance:'SOP 合规性', laporan_avg_cycle:'平均周期（天）',
+    laporan_deviasi:'偏差', laporan_ringkasan:'摘要',
+    settings_account:'账户信息', settings_sop:'SOP 信息', settings_dept:'部门',
+    settings_user:'用户名', settings_code:'部门代码', settings_role:'角色',
+    settings_lang:'语言', settings_sop_no:'SOP 编号', settings_sop_date:'生效日期',
+    settings_sop_valid:'有效期', role_superadmin:'超级管理员', role_user:'用户（查看者）',
+    role_purchasing:'采购（编辑）', language_name:'中文',
+    trend_title:'每物料趋势', loam_add_title:'添加物料到 LOAM',
+    loam_dok_terkait:'相关文件',
+    monitoring_dist:'LOAM 分发', monitoring_review:'定期审查（至少每 6 个月）',
+    monitoring_last_review:'上次审查', monitoring_next_review:'下次审查',
+    monitoring_status:'状态', monitoring_expiring:'即将/已过期文件',
+    monitoring_purchasing:'采购责任',
+    monitoring_notify:'通知 QA 和清真委员会',
+    monitoring_note:'最新 LOAM 版本由 QA 分发给各部门。',
+    monitoring_responsibility:'QA 和清真委员会至少每 6 个月审查一次。',
+    monitoring_expiring_note:'即将过期的文件必须立即更新。',
+    monitoring_purchasing_note:'供应商变更信息必须通知 QA 和委员会。',
+    status_sent:'已发送', status_pending:'待处理', status_expired:'已过期', status_valid:'有效',
+    status_read:'已读', status_rejected:'已拒绝', status_soon:'即将审查', status_late:'逾期',
+    ci_note:'备注 / 说明', ci_actions:'证据与操作',
+    ci_sig_done:'签名已保存', ci_attach_done:'附件',
+    sig_hint:'用鼠标或触摸屏签名。',
+    err_no_signature:'签名为空', err_access_denied:'访问被拒绝',
+    err_file_too_large:'文件太大（最大 3 MB）',
+    dist_status_label:'各部门状态',
+    review_notes_label:'审查备注',
+    review_pic_label:'负责人',
+    review_status_label:'审查状态',
+    review_progress:'审查时长',
+    review_valid:'有效 — 按计划',
+    review_soon:'即将审查（≤ 30 天）',
+    review_late:'逾期审查',
+    review_proses:'审查进行中',
+    notify_subject:'变更主题',
+    notify_supplier:'供应商名称',
+    notify_message:'变更详情',
+    notify_wa:'通过 WhatsApp 发送',
+    notify_email:'通过电子邮件发送（Outlook）',
+    notify_both:'两者都发送',
+    days_left:'剩余天数',
+    action:'操作',
+    auto_from_loam:'自动来自 LOAM 数据',
+    no_contact:'联系人未配置',
+    camera_title:'从相机拍照',
+    camera_hint:'将物体放在相机前，然后点击"拍摄"。',
+    camera_switch:'切换相机',
+    camera_capture:'拍摄',
+    camera_retake:'重拍',
+    camera_error:'无法访问相机。请授予相机权限。',
+    camera_not_supported:'浏览器不支持相机访问。使用文件输入作为替代。'
+  }
+};
+
+/* ================================================================
+   STATE
+================================================================ */
+let currentLang = 'id';
+let currentUser = null;
+let isSuperAdmin = false;
+let isPurchasing = false;
+let checklistItemCounter = 0;
+let loginAttempts = 0;
+let loginLockUntil = 0;
+
+/* State untuk kamera */
+let cameraStream = null;
+let currentFacingMode = 'environment';
+let currentCameraTargetId = null;
+let capturedPhotoData = null;
+
+/* ================================================================
+   PERMISSION HELPERS
+================================================================ */
+function canEdit(){ return isSuperAdmin || isPurchasing; }
+function canSuperadminOnly(){ return isSuperAdmin; }
+
+function applyPermissions(){
+  const editor = canEdit();
+  document.querySelectorAll('.admin-purchasing-only').forEach(el => {
+    if(el.tagName === 'BUTTON' || el.tagName === 'INPUT' || el.tagName === 'SELECT'){
+      el.disabled = !editor;
+    } else {
+      el.style.opacity = editor ? '1' : '.6';
+    }
+  });
+  document.querySelectorAll('.superadmin-only').forEach(el => {
+    if(el.tagName === 'BUTTON' || el.tagName === 'INPUT' || el.tagName === 'SELECT'){
+      el.disabled = !isSuperAdmin;
+    }
+  });
+  const saveBar = document.getElementById('saveBar');
+  if(saveBar){
+    if(editor) saveBar.classList.add('show');
+    else saveBar.classList.remove('show');
+  }
+}
+
+/* ================================================================
+   INISIALISASI DATA CONTOH LOAM (REVISI)
+   Dipanggil saat pertama kali aplikasi dibuka
+================================================================ */
+function initializeSampleLoamData(){
+  try {
+    const initialized = localStorage.getItem(STORAGE_KEYS.SAMPLE_INIT);
+    const existing = JSON.parse(localStorage.getItem(STORAGE_KEYS.LOAM_DATA) || '[]');
+
+    // Hanya inisialisasi jika belum pernah dan data kosong
+    if(!initialized && existing.length === 0){
+      localStorage.setItem(STORAGE_KEYS.LOAM_DATA, JSON.stringify(SAMPLE_LOAM_DATA));
+      localStorage.setItem(STORAGE_KEYS.SAMPLE_INIT, 'true');
+      console.log('✅ Sample LOAM data initialized: ' + SAMPLE_LOAM_DATA.length + ' items');
+    }
+  } catch(err) {
+    console.error('Error initializeSampleLoamData:', err);
+  }
+}
+
+/* ================================================================
+   LANGUAGE
+================================================================ */
+function setLanguage(lang){
+  try {
+    currentLang = lang;
+    const dict = I18N[lang] || I18N.id;
+
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if(dict[key] !== undefined) el.textContent = dict[key];
+    });
+    document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+      const key = el.getAttribute('data-i18n-ph');
+      if(dict[key] !== undefined) el.placeholder = dict[key];
+    });
+
+    document.body.classList.toggle('rtl', lang === 'ur');
+
+    const ll = document.getElementById('loginLang');
+    const al = document.getElementById('appLang');
+    if(ll) ll.value = lang;
+    if(al) al.value = lang;
+
+    const setLangEl = document.getElementById('setLang');
+    if(setLangEl) setLangEl.textContent = dict.language_name;
+
+    const sigSub = document.getElementById('sigSubtitle');
+    if(sigSub) sigSub.textContent = dict.sig_hint;
+
+    localStorage.setItem('lang', lang);
+  } catch(err) {
+    console.error('Error setLanguage:', err);
+  }
+}
+
+/* ================================================================
+   BUILD FILTER BAR
+================================================================ */
+function buildFilterBar(containerId){
+  const c = document.getElementById(containerId);
+  if(!c) return;
+  const dict = I18N[currentLang];
+
+  const months = ['Januari','Pebruari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  const monthOpts = months.map((m,i) => `<option value="${i+1}">${m}</option>`).join('');
+  const yearOpts = ['2024','2025','2026','2027','2028','2029','2030'].map(y => `<option value="${y}">${y}</option>`).join('');
+  const katDisabled = canEdit() ? '' : 'disabled';
+
+  c.innerHTML = `
+    <span class="filter-label" data-i18n="sort_by">${dict.sort_by}</span>
+    <select class="f-month">
+      <option value="">${dict.filter_all_bulan}</option>
+      ${monthOpts}
+    </select>
+    <select class="f-year">
+      <option value="">${dict.filter_all_tahun}</option>
+      ${yearOpts}
+    </select>
+    <select class="f-kategori admin-purchasing-only" ${katDisabled}>
+      <option value="">${dict.filter_all_kategori}</option>
+      <option value="sangat_kritis">${dict.form_sangat_kritis}</option>
+      <option value="kritis">${dict.form_kritis}</option>
+      <option value="tidak_kritis">${dict.form_tidak_kritis}</option>
+    </select>
+    <input type="text" class="f-search" placeholder="${dict.search_ph}">
+    <button class="btn btn-outline btn-sm superadmin-only" onclick="resetFilters('${containerId}')">
+      <span>🔄</span><span>${dict.btn_reset}</span>
+    </button>
+  `;
+
+  applyPermissions();
+}
+
+function resetFilters(containerId){
+  if(!isSuperAdmin){
+    showToast('Reset hanya untuk Superadmin', 'error');
+    return;
+  }
+  const c = document.getElementById(containerId);
+  if(!c) return;
+  c.querySelectorAll('select').forEach(s => s.selectedIndex = 0);
+  c.querySelectorAll('input[type=text]').forEach(i => i.value = '');
+  showToast('Filter direset', 'success');
+}
+
+/* ================================================================
+   BUILD TOOLBAR
+================================================================ */
+function buildToolbar(containerId){
+  const c = document.getElementById(containerId);
+  if(!c) return;
+  const dict = I18N[currentLang];
+
+  c.innerHTML = `
+    <button class="btn btn-outline btn-sm" onclick="toolbarAction('print','${containerId}')">
+      <span>🖨️</span><span>${dict.btn_print}</span>
+    </button>
+    <button class="btn btn-primary btn-sm admin-purchasing-only" onclick="toolbarAction('add','${containerId}')">
+      <span>➕</span><span>${dict.btn_add}</span>
+    </button>
+    <button class="btn btn-success btn-sm admin-purchasing-only" onclick="toolbarAction('save','${containerId}')">
+      <span>💾</span><span>${dict.btn_save}</span>
+    </button>
+    <span class="separator"></span>
+    <button class="btn btn-outline btn-sm admin-purchasing-only" onclick="toolbarAction('excel','${containerId}')">
+      <span>📊</span><span>${dict.btn_excel}</span>
+    </button>
+    <button class="btn btn-outline btn-sm admin-purchasing-only" onclick="toolbarAction('json','${containerId}')">
+      <span>📋</span><span>${dict.btn_json}</span>
+    </button>
+    <button class="btn btn-outline btn-sm admin-purchasing-only" onclick="toolbarAction('csv','${containerId}')">
+      <span>📄</span><span>${dict.btn_csv}</span>
+    </button>
+    <button class="btn btn-outline btn-sm admin-purchasing-only" onclick="toolbarAction('import','${containerId}')">
+      <span>📥</span><span>${dict.btn_import}</span>
+    </button>
+    <span class="separator"></span>
+    <button class="btn btn-outline btn-sm admin-purchasing-only" onclick="toolbarAction('edit','${containerId}')">
+      <span>✏️</span><span>${dict.btn_edit}</span>
+    </button>
+    <button class="btn btn-danger btn-sm admin-purchasing-only" onclick="toolbarAction('delete','${containerId}')">
+      <span>🗑️</span><span>${dict.btn_delete}</span>
+    </button>
+    <span class="separator"></span>
+    <span class="toolbar-info" id="toolbarDateTime_${containerId}"></span>
+  `;
+
+  updateToolbarDateTime(containerId);
+  setInterval(() => updateToolbarDateTime(containerId), 30000);
+  applyPermissions();
+}
+
+function updateToolbarDateTime(containerId){
+  const el = document.getElementById('toolbarDateTime_' + containerId);
+  if(!el) return;
+  const now = new Date();
+  const days = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+  const day = days[now.getDay()];
+  const dd = String(now.getDate()).padStart(2,'0');
+  const mm = String(now.getMonth()+1).padStart(2,'0');
+  const yyyy = now.getFullYear();
+  const hh = String(now.getHours()).padStart(2,'0');
+  const mi = String(now.getMinutes()).padStart(2,'0');
+  el.textContent = `${day}, ${dd}/${mm}/${yyyy}, ${hh}:${mi}`;
+}
+
+function toolbarAction(action, containerId){
+  if(action === 'print'){ window.print(); return; }
+  if(!canEdit()){
+    showToast(I18N[currentLang].err_access_denied, 'error');
+    return;
+  }
+  switch(action){
+    case 'add':
+      if(containerId === 'toolbarLoam'){
+        const form = document.getElementById('loamAddForm');
+        if(form){ form.style.display = 'block'; form.scrollIntoView({behavior:'smooth'}); }
+      } else {
+        showToast('Fitur tambah data siap digunakan', 'success');
+      }
+      break;
+    case 'save': saveAll(); break;
+    case 'excel': exportData('excel'); break;
+    case 'json':  exportData('json');  break;
+    case 'csv':   exportData('csv');   break;
+    case 'import': triggerImport(); break;
+    case 'edit':   showToast('Pilih baris data untuk diedit', 'success'); break;
+    case 'delete': showToast('Pilih baris data untuk dihapus', 'success'); break;
+    default: break;
+  }
+}
+
+/* ================================================================
+   EXPORT / IMPORT
+================================================================ */
+function exportData(type){
+  if(!canEdit()){
+    showToast(I18N[currentLang].err_access_denied, 'error');
+    return;
+  }
+  try{
+    const data = { generated:new Date().toISOString(), items:[] };
+    if(type === 'json'){
+      downloadBlob(JSON.stringify(data, null, 2), 'material-approval.json', 'application/json');
+    } else if(type === 'csv'){
+      downloadBlob('No,Nama,Kategori,Supplier,Status,Tanggal\n', 'material-approval.csv', 'text/csv');
+    } else if(type === 'excel'){
+      const html = '<table><tr><th>No</th><th>Nama</th><th>Kategori</th><th>Supplier</th><th>Status</th><th>Tanggal</th></tr></table>';
+      downloadBlob(html, 'material-approval.xls', 'application/vnd.ms-excel');
+    }
+    showToast('Data berhasil diexport', 'success');
+  }catch(err){
+    console.error(err);
+    showToast('Gagal export: ' + err.message, 'error');
+  }
+}
+
+function downloadBlob(content, filename, mime){
+  const blob = new Blob([content], {type:mime});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+
+function triggerImport(){
+  if(!canEdit()){
+    showToast(I18N[currentLang].err_access_denied, 'error');
+    return;
+  }
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '.json,.csv,.xls,.xlsx';
+  input.onchange = e => {
+    const file = e.target.files[0];
+    if(!file) return;
+    if(file.size > 5 * 1024 * 1024){
+      showToast('File terlalu besar (maks 5 MB)', 'error');
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = ev => {
+      try{
+        if(file.name.endsWith('.json')) JSON.parse(ev.target.result);
+        showToast('File berhasil diimpor: ' + file.name, 'success');
+      }catch(err){
+        showToast('File tidak valid: ' + err.message, 'error');
+      }
+    };
+    reader.onerror = () => showToast('Gagal membaca file', 'error');
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
+/* ================================================================
+   CHECKLIST RENDERER
+================================================================ */
+function renderChecklistItem(opts){
+  const itemId = 'ci_' + (++checklistItemCounter);
+  const dict = I18N[currentLang];
+
+  const dropdowns = (opts.dropdowns || []).map(arr =>
+    `<select class="ci-select">${arr.map(o => `<option>${o}</option>`).join('')}</select>`
+  ).join('');
+
+  const showSignature = opts.signature !== false;
+  const showUpload = opts.upload !== false;
+  const showCloud = opts.cloud !== false;
+  const isReadonly = !canEdit() ? 'disabled' : '';
+
+  return `
+    <div class="checklist-item" id="${itemId}">
+      <div class="ci-head">
+        <span class="ci-num">${opts.num}</span>
+        <span class="ci-label">${opts.label}</span>
+        ${dropdowns}
+      </div>
+      <div class="ci-body">
+        <div class="ci-field">
+          <label>📝 ${dict.ci_note}</label>
+          <textarea rows="2" placeholder="${dict.ci_note}..." ${isReadonly}></textarea>
+        </div>
+        <div class="ci-field">
+          <label>⚙️ ${dict.ci_actions}</label>
+          <div class="ci-actions">
+            ${showSignature ? `
+              <button type="button" class="ci-icon-btn" data-tooltip="${dict.btn_signature}"
+                onclick="openSignatureModal('${itemId}')" ${isReadonly}>✍</button>` : ''}
+            ${showUpload ? `
+              <label class="ci-icon-btn" data-tooltip="${dict.btn_upload}">
+                📎<input type="file" accept="image/*,application/pdf"
+                  onchange="handleCiUpload(this,'${itemId}')" ${isReadonly}>
+              </label>` : ''}
+            <button type="button" class="ci-icon-btn" data-tooltip="${dict.btn_camera}"
+              onclick="openCameraModal('${itemId}')" ${isReadonly}>📷</button>
+            ${showCloud ? `
+              <button type="button" class="ci-icon-btn" data-tooltip="${dict.form_link_cloud}"
+                onclick="toggleCloudInput('${itemId}')" ${isReadonly}>📁</button>` : ''}
+          </div>
+        </div>
+        ${showCloud ? `
+        <div class="ci-field" id="${itemId}_cloud" style="display:none;">
+          <label>${dict.form_link_cloud}</label>
+          <input type="url" placeholder="https://drive.google.com/..." ${isReadonly}>
+        </div>` : ''}
+        <div class="ci-attach-info" id="${itemId}_info" style="display:none;"></div>
+      </div>
+    </div>
+  `;
+}
+
+function renderFormChecklists(){
+  try {
+    checklistItemCounter = 0;
+
+    const alasanDet = document.getElementById('alasanLainnyaDetail');
+    if(alasanDet){
+      alasanDet.innerHTML = renderChecklistItem({
+        num:'B1', label:I18N[currentLang].form_lainnya, upload:true, signature:false
+      });
+    }
+
+    const rdEl = document.getElementById('rdChecklist');
+    if(rdEl){
+      rdEl.innerHTML = [
+        renderChecklistItem({num:'C1', label:I18N[currentLang].form_spec_check, upload:true, signature:false}),
+        renderChecklistItem({num:'C2', label:I18N[currentLang].form_trial, upload:true, signature:false})
+      ].join('');
+    }
+
+    const qaItems = [
+      {num:'D',  label:'Persetujuan QA — Catatan Umum'},
+      {num:'A1', label:'Spesifikasi Teknis Material', dropdowns:[['Sesuai','Tidak Sesuai']]},
+      {num:'A2', label:'CoA Batch Sampel', dropdowns:[['Lengkap','Tidak Lengkap']]},
+      {num:'A3', label:'MSDS', dropdowns:[['Diterima','Tidak Diterima'],['Sesuai','Tidak Sesuai']]},
+      {num:'A4', label:'Verifikasi Dokumen Halal oleh Komite Halal', dropdowns:[['Sudah Diverifikasi','Belum Terverifikasi']]},
+      {num:'A5', label:'Laporan Hasil Uji QC Internal', dropdowns:[['Passed','Not Passed']]},
+      {num:'A6', label:'Evaluasi Teknis R&D', dropdowns:[['Lolos','Tidak Lolos']]},
+      {num:'A7', label:'Hasil Rapat Evaluasi Material', dropdowns:[['Terdokumentasi','Tidak Terdokumentasi']]},
+      {num:'B8', label:'SOP-Z02_C', dropdowns:[['Telah Diikuti','Berbeda']]},
+      {num:'B9', label:'Kategori Kritis Material', dropdowns:[['Tepat','Tidak Tepat']]},
+      {num:'B10',label:'Tindak Lanjut Material Kritis', dropdowns:[['Ya, Sudah','Tidak, Belum']]},
+      {num:'B11',label:'Tidak ada Deviasi yang belum Selesai', dropdowns:[['Ya','Tidak']]},
+      {num:'B12',label:'Catatan Blacklist', dropdowns:[['Ya Tercatat','Tidak Tercatat']]},
+      {num:'C1', label:'Data Formulir Lengkap & Akurat', dropdowns:[['Ya','Tidak']], upload:false, signature:false, cloud:false},
+      {num:'C2', label:'Lampiran Pendukung Terlampir Rapi', dropdowns:[['Ya','Tidak']], upload:false, signature:false, cloud:false},
+      {num:'C3', label:'Persetujuan R&D Manager telah diperoleh', dropdowns:[['Ya','Tidak']]},
+      {num:'D1', label:'Tidak menyebabkan Kontaminasi Silang', dropdowns:[['Ya','Tidak']]},
+      {num:'D2', label:'Ketersediaan & Stabilitas Supply terjamin', dropdowns:[['Ya','Tidak']]}
+    ];
+    const qaEl = document.getElementById('qaChecklist');
+    if(qaEl) qaEl.innerHTML = qaItems.map(renderChecklistItem).join('');
+
+    const halalItems = [
+      {num:'E',  label:'Persetujuan Komite Halal — Catatan Umum'},
+      {num:'E1', label:I18N[currentLang].form_halal_1, dropdowns:[['Ya','Tidak']], upload:true, signature:false},
+      {num:'E2', label:'Sertifikat Halal', dropdowns:[['Terlampir','Tidak Terlampir']], upload:true, signature:false},
+      {num:'E3', label:'Surat Persetujuan LPPOM MUI', dropdowns:[['Terlampir','Tidak Terlampir']], upload:true, signature:false}
+    ];
+    const halalEl = document.getElementById('halalChecklist');
+    if(halalEl) halalEl.innerHTML = halalItems.map(renderChecklistItem).join('');
+
+    const gmEl = document.getElementById('gmChecklist');
+    if(gmEl) gmEl.innerHTML = renderChecklistItem({
+      num:'F1', label:'Persetujuan General Manager Operational'
+    });
+
+    applyPermissions();
+  } catch(err) {
+    console.error('Error renderFormChecklists:', err);
+  }
+}
+
+/* ================================================================
+   SIGNATURE
+================================================================ */
+let signatureTargetId = null;
+let sigDrawing = false;
+let sigCtx = null;
+
+function openSignatureModal(itemId){
+  if(!canEdit()){
+    showToast(I18N[currentLang].err_access_denied, 'error');
+    return;
+  }
+  try {
+    signatureTargetId = itemId;
+    const modal = document.getElementById('signatureModal');
+    if(!modal) return;
+    modal.style.display = 'flex';
+
+    const canvas = document.getElementById('signatureCanvas');
+    if(!canvas) return;
+    canvas.width = canvas.offsetWidth;
+    canvas.height = canvas.offsetHeight;
+
+    sigCtx = canvas.getContext('2d');
+    sigCtx.clearRect(0, 0, canvas.width, canvas.height);
+    sigCtx.strokeStyle = '#0f172a';
+    sigCtx.lineWidth = 2.2;
+    sigCtx.lineCap = 'round';
+    sigCtx.lineJoin = 'round';
+
+    canvas.onmousedown = startDraw;
+    canvas.onmousemove = draw;
+    canvas.onmouseup = stopDraw;
+    canvas.onmouseleave = stopDraw;
+    canvas.ontouchstart = e => { e.preventDefault(); startDraw(e.touches[0]); };
+    canvas.ontouchmove  = e => { e.preventDefault(); draw(e.touches[0]); };
+    canvas.ontouchend   = stopDraw;
+  } catch(err) {
+    console.error('Error openSignatureModal:', err);
+    showToast('Gagal membuka modal tanda tangan', 'error');
+  }
+}
+
+function getCanvasPos(e, canvas){
+  const rect = canvas.getBoundingClientRect();
+  const scaleX = canvas.width / rect.width;
+  const scaleY = canvas.height / rect.height;
+  return { x: (e.clientX - rect.left) * scaleX, y: (e.clientY - rect.top) * scaleY };
+}
+
+function startDraw(e){
+  sigDrawing = true;
+  const canvas = document.getElementById('signatureCanvas');
+  if(!canvas) return;
+  const pos = getCanvasPos(e, canvas);
+  sigCtx.beginPath();
+  sigCtx.moveTo(pos.x, pos.y);
+}
+function draw(e){
+  if(!sigDrawing) return;
+  const canvas = document.getElementById('signatureCanvas');
+  if(!canvas) return;
+  const pos = getCanvasPos(e, canvas);
+  sigCtx.lineTo(pos.x, pos.y);
+  sigCtx.stroke();
+}
+function stopDraw(){ sigDrawing = false; }
+
+function clearSignature(){
+  if(!sigCtx) return;
+  const canvas = document.getElementById('signatureCanvas');
+  if(!canvas) return;
+  sigCtx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+function closeSignatureModal(){
+  const modal = document.getElementById('signatureModal');
+  if(modal) modal.style.display = 'none';
+  signatureTargetId = null;
+  sigDrawing = false;
+}
+
+function saveSignature(){
+  if(!signatureTargetId) return;
+  try {
+    const canvas = document.getElementById('signatureCanvas');
+    if(!canvas || !sigCtx) return;
+    const data = sigCtx.getImageData(0, 0, canvas.width, canvas.height).data;
+    let hasInk = false;
+    for(let i = 3; i < data.length; i += 4){
+      if(data[i] > 0){ hasInk = true; break; }
+    }
+    if(!hasInk){
+      showToast(I18N[currentLang].err_no_signature, 'error');
+      return;
+    }
+
+    const info = document.getElementById(signatureTargetId + '_info');
+    if(info){
+      info.style.display = 'flex';
+      info.querySelectorAll('.attach-badge[data-kind="sig"]').forEach(el => el.remove());
+      const badge = document.createElement('span');
+      badge.className = 'attach-badge ok';
+      badge.setAttribute('data-kind', 'sig');
+      badge.textContent = '✍ ' + I18N[currentLang].ci_sig_done;
+      info.appendChild(badge);
+    }
+
+    addHistoryEntry({
+      who: currentUser.username,
+      dept: currentUser.dept,
+      action: 'SIGNATURE',
+      detail: 'Tanda tangan digital pada item ' + signatureTargetId,
+      time: new Date().toISOString()
+    });
+    showToast(I18N[currentLang].ci_sig_done, 'success');
+    closeSignatureModal();
+  } catch(err) {
+    console.error('Error saveSignature:', err);
+    showToast('Gagal menyimpan tanda tangan', 'error');
+  }
+}
+
+/* ================================================================
+   KAMERA (REVISI: akses kamera perangkat secara langsung)
+================================================================ */
+/**
+ * Buka modal kamera dan aktifkan stream kamera
+ * @param {string} itemId - ID checklist item target
+ */
+async function openCameraModal(itemId){
+  if(!canEdit()){
+    showToast(I18N[currentLang].err_access_denied, 'error');
+    return;
+  }
+
+  try {
+    currentCameraTargetId = itemId;
+    capturedPhotoData = null;
+
+    const modal = document.getElementById('cameraModal');
+    const video = document.getElementById('cameraVideo');
+    const preview = document.getElementById('cameraPreview');
+    if(!modal || !video) return;
+
+    modal.style.display = 'flex';
+    preview.style.display = 'none';
+    video.style.display = 'block';
+
+    // Cek dukungan getUserMedia
+    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+      showToast(I18N[currentLang].camera_not_supported, 'warning');
+      // Fallback ke input file
+      closeCameraModal();
+      const input = document.createElement('input');
+      input.type = 'file';
+      input.accept = 'image/*';
+      input.capture = 'environment';
+      input.onchange = e => handleCiUpload(e.target, itemId);
+      input.click();
+      return;
+    }
+
+    // Request akses kamera
+    await startCameraStream();
+  } catch(err) {
+    console.error('Error openCameraModal:', err);
+    showToast(I18N[currentLang].camera_error, 'error');
+    closeCameraModal();
+  }
+}
+
+/**
+ * Mulai stream kamera dengan facing mode tertentu
+ */
+async function startCameraStream(){
+  try {
+    // Hentikan stream lama jika ada
+    stopCameraStream();
+
+    const constraints = {
+      video: {
+        facingMode: currentFacingMode,
+        width: { ideal: 1280 },
+        height: { ideal: 720 }
+      },
+      audio: false
+    };
+
+    cameraStream = await navigator.mediaDevices.getUserMedia(constraints);
+    const video = document.getElementById('cameraVideo');
+    if(video){
+      video.srcObject = cameraStream;
+      await video.play().catch(e => console.warn('Video play warning:', e));
+    }
+  } catch(err) {
+    console.error('Error startCameraStream:', err);
+    // Coba fallback tanpa facingMode
+    try {
+      cameraStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: false });
+      const video = document.getElementById('cameraVideo');
+      if(video){
+        video.srcObject = cameraStream;
+        await video.play().catch(e => console.warn('Video play warning:', e));
+      }
+    } catch(err2) {
+      console.error('Fallback camera also failed:', err2);
+      throw new Error('Camera access denied');
+    }
+  }
+}
+
+/**
+ * Hentikan stream kamera
+ */
+function stopCameraStream(){
+  try {
+    if(cameraStream){
+      cameraStream.getTracks().forEach(track => track.stop());
+      cameraStream = null;
+    }
+  } catch(err) {
+    console.error('Error stopCameraStream:', err);
+  }
+}
+
+/**
+ * Tutup modal kamera
+ */
+function closeCameraModal(){
+  try {
+    stopCameraStream();
+    const modal = document.getElementById('cameraModal');
+    if(modal) modal.style.display = 'none';
+    currentCameraTargetId = null;
+    capturedPhotoData = null;
+  } catch(err) {
+    console.error('Error closeCameraModal:', err);
+  }
+}
+
+/**
+ * Ganti kamera depan/belakang
+ */
+async function switchCamera(){
+  try {
+    currentFacingMode = currentFacingMode === 'environment' ? 'user' : 'environment';
+    await startCameraStream();
+    showToast('Kamera diganti', 'success');
+  } catch(err) {
+    console.error('Error switchCamera:', err);
+    showToast('Gagal mengganti kamera', 'error');
+  }
+}
+
+/**
+ * Ambil foto dari video stream
+ */
+function capturePhoto(){
+  try {
+    const video = document.getElementById('cameraVideo');
+    const canvas = document.getElementById('cameraCanvas');
+    const preview = document.getElementById('cameraPreview');
+    const previewImg = document.getElementById('cameraPreviewImg');
+
+    if(!video || !canvas) return;
+
+    canvas.width = video.videoWidth || 640;
+    canvas.height = video.videoHeight || 480;
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+    capturedPhotoData = canvas.toDataURL('image/jpeg', 0.85);
+
+    if(previewImg) previewImg.src = capturedPhotoData;
+    if(preview) preview.style.display = 'block';
+    if(video) video.style.display = 'none';
+
+    showToast('Foto berhasil diambil', 'success');
+  } catch(err) {
+    console.error('Error capturePhoto:', err);
+    showToast('Gagal mengambil foto', 'error');
+  }
+}
+
+/**
+ * Ambil ulang foto
+ */
+function retakePhoto(){
+  try {
+    capturedPhotoData = null;
+    const preview = document.getElementById('cameraPreview');
+    const video = document.getElementById('cameraVideo');
+    if(preview) preview.style.display = 'none';
+    if(video) video.style.display = 'block';
+  } catch(err) {
+    console.error('Error retakePhoto:', err);
+  }
+}
+
+/**
+ * Simpan foto ke checklist item
+ */
+function savePhoto(){
+  try {
+    if(!capturedPhotoData){
+      showToast('Belum ada foto yang diambil', 'error');
+      return;
+    }
+    if(!currentCameraTargetId){
+      showToast('Target tidak ditemukan', 'error');
+      return;
+    }
+
+    const info = document.getElementById(currentCameraTargetId + '_info');
+    if(info){
+      info.style.display = 'flex';
+      const badge = document.createElement('span');
+      badge.className = 'attach-badge ok';
+      badge.textContent = '📷 Foto (' + new Date().toLocaleTimeString('id-ID') + ')';
+      info.appendChild(badge);
+    }
+
+    addHistoryEntry({
+      who: currentUser.username,
+      dept: currentUser.dept,
+      action: 'CAMERA_CAPTURE',
+      detail: 'Foto diambil dari kamera pada item ' + currentCameraTargetId,
+      time: new Date().toISOString()
+    });
+
+    showToast('Foto berhasil disimpan', 'success');
+    closeCameraModal();
+  } catch(err) {
+    console.error('Error savePhoto:', err);
+    showToast('Gagal menyimpan foto', 'error');
+  }
+}
+
+/* ================================================================
+   UPLOAD
+================================================================ */
+function handleCiUpload(input, itemId){
+  if(!canEdit()){
+    showToast(I18N[currentLang].err_access_denied, 'error');
+    input.value = '';
+    return;
+  }
+  try {
+    const file = input.files[0];
+    if(!file) return;
+
+    if(file.size > 3 * 1024 * 1024){
+      showToast(I18N[currentLang].err_file_too_large + ' — ' + file.name, 'error');
+      input.value = '';
+      return;
+    }
+    const allowed = ['image/', 'application/pdf'];
+    const okType = allowed.some(t => file.type.startsWith(t));
+    if(!okType){
+      showToast('Tipe file tidak didukung (hanya gambar/PDF)', 'error');
+      input.value = '';
+      return;
+    }
+
+    const info = document.getElementById(itemId + '_info');
+    if(info){
+      info.style.display = 'flex';
+      const badge = document.createElement('span');
+      badge.className = 'attach-badge';
+      badge.textContent = '📎 ' + file.name + ' (' + (file.size/1024).toFixed(1) + ' KB)';
+      info.appendChild(badge);
+    }
+    showToast(I18N[currentLang].ci_attach_done + ': ' + file.name, 'success');
+  } catch(err) {
+    console.error('Error handleCiUpload:', err);
+    showToast('Gagal upload file', 'error');
+  }
+}
+
+function toggleCloudInput(itemId){
+  try {
+    const el = document.getElementById(itemId + '_cloud');
+    if(!el) return;
+    el.style.display = el.style.display === 'none' ? 'block' : 'none';
+    if(el.style.display === 'block'){
+      const input = el.querySelector('input[type=url]');
+      if(input) setTimeout(() => input.focus(), 50);
+    }
+  } catch(err) {
+    console.error('Error toggleCloudInput:', err);
+  }
+}
+
+/* ================================================================
+   VALIDASI FILE LOAM
+================================================================ */
+function validateLoamFiles(input){
+  const maxFiles = 13;
+  const maxSize = 3 * 1024 * 1024;
+  const files = Array.from(input.files || []);
+
+  if(files.length > maxFiles){
+    showToast(`Maksimal ${maxFiles} file!`, 'error');
+    input.value = '';
+    return;
+  }
+  for(const f of files){
+    if(f.size > maxSize){
+      showToast(`File "${f.name}" melebihi 3 MB!`, 'error');
+      input.value = '';
+      return;
+    }
+    const allowed = ['image/', 'application/pdf'];
+    const okType = allowed.some(t => f.type.startsWith(t));
+    if(!okType){
+      showToast(`File "${f.name}" tipe tidak didukung!`, 'error');
+      input.value = '';
+      return;
+    }
+  }
+  const info = document.getElementById('loam_files_info');
+  if(info) info.textContent = `${files.length} / ${maxFiles} files`;
+  showToast(`${files.length} file siap diupload`, 'success');
+}
+
+/* ================================================================
+   SIMPAN LOAM
+================================================================ */
+function saveLoam(){
+  if(!canEdit()){
+    showToast(I18N[currentLang].err_access_denied, 'error');
+    return;
+  }
+  try {
+    const requiredFields = [
+      { id: 'loam_nama', label: 'Nama material' },
+      { id: 'loam_kategori', label: 'Kategori' },
+      { id: 'loam_produsen', label: 'Produsen' },
+      { id: 'loam_negara', label: 'Negara' },
+      { id: 'loam_supplier', label: 'Supplier' },
+      { id: 'loam_lembaga', label: 'Lembaga Penerbit' },
+      { id: 'loam_nomor_sert', label: 'No. Sertifikat Halal' },
+      { id: 'loam_masa_berlaku', label: 'Masa Berlaku' }
+    ];
+
+    for(const f of requiredFields){
+      const el = document.getElementById(f.id);
+      if(!el || !el.value.trim()){
+        showToast(`${f.label} wajib diisi`, 'error');
+        if(el) el.focus();
+        return;
+      }
+    }
+
+    const newLoam = {
+      id: 'loam_' + Date.now(),
+      nama: document.getElementById('loam_nama').value.trim(),
+      jenis: document.getElementById('loam_jenis').value.trim(),
+      produsen: document.getElementById('loam_produsen').value.trim(),
+      negara: document.getElementById('loam_negara').value.trim(),
+      kategori: document.getElementById('loam_kategori').value,
+      supplier: document.getElementById('loam_supplier').value.trim(),
+      lembaga: document.getElementById('loam_lembaga').value.trim(),
+      nomor_sert: document.getElementById('loam_nomor_sert').value.trim(),
+      masa_berlaku: document.getElementById('loam_masa_berlaku').value,
+      created_at: new Date().toISOString(),
+      created_by: currentUser.username
+    };
+
+    const existing = JSON.parse(localStorage.getItem(STORAGE_KEYS.LOAM_DATA) || '[]');
+    existing.push(newLoam);
+    localStorage.setItem(STORAGE_KEYS.LOAM_DATA, JSON.stringify(existing));
+
+    showToast('Data LOAM berhasil disimpan', 'success');
+    addHistoryEntry({
+      who: currentUser.username,
+      dept: currentUser.dept,
+      action: 'LOAM_ADD',
+      detail: `Tambah material: ${newLoam.nama}`,
+      time: new Date().toISOString()
+    });
+
+    renderLoamTable();
+    renderExpiringTable();
+    renderDashboard(); // Refresh KPI
+    cancelLoamAdd();
+  } catch(err) {
+    console.error('Error saveLoam:', err);
+    showToast('Gagal menyimpan data LOAM', 'error');
+  }
+}
+
+function cancelLoamAdd(){
+  try {
+    const form = document.getElementById('loamAddForm');
+    if(form){
+      form.style.display = 'none';
+      form.querySelectorAll('input, select, textarea').forEach(el => {
+        if(el.type === 'checkbox' || el.type === 'radio') el.checked = false;
+        else el.value = '';
+      });
+    }
+  } catch(err) {
+    console.error('Error cancelLoamAdd:', err);
+  }
+}
+
+/* ================================================================
+   RENDER TABEL LOAM
+================================================================ */
+function renderLoamTable(){
+  try {
+    const tbody = document.getElementById('tblLoam');
+    if(!tbody) return;
+    const data = JSON.parse(localStorage.getItem(STORAGE_KEYS.LOAM_DATA) || '[]');
+
+    if(data.length === 0){
+      tbody.innerHTML = `<tr class="empty-row"><td colspan="11"><span class="icon">📚</span><span>${I18N[currentLang].empty_data}</span></td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = data.map((d, i) => `
+      <tr>
+        <td>${i + 1}</td>
+        <td>${d.nama || '-'}</td>
+        <td>${d.jenis || '-'}</td>
+        <td>${d.produsen || '-'}</td>
+        <td>${d.negara || '-'}</td>
+        <td>${d.kategori || '-'}</td>
+        <td>${d.supplier || '-'}</td>
+        <td>${d.lembaga || '-'}</td>
+        <td>${d.nomor_sert || '-'}</td>
+        <td>${d.masa_berlaku || '-'}</td>
+        <td><span class="attach-badge">📎 Dokumen</span></td>
+      </tr>
+    `).join('');
+  } catch(err) {
+    console.error('Error renderLoamTable:', err);
+  }
+}
+
+/* ================================================================
+   DISTRIBUSI LOAM
+================================================================ */
+function renderDistribution(){
+  try {
+    const grid = document.getElementById('distGrid');
+    if(!grid) return;
+
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEYS.DISTRIBUTION) || 'null');
+    const distData = saved || LOAM_DISTRIBUTION;
+
+    const statusOptions = [
+      { value: 'pending', label: I18N[currentLang].status_pending },
+      { value: 'sent', label: I18N[currentLang].status_sent },
+      { value: 'read', label: I18N[currentLang].status_read },
+      { value: 'rejected', label: I18N[currentLang].status_rejected }
+    ];
+
+    const isReadonly = !canEdit() ? 'disabled' : '';
+
+    grid.innerHTML = distData.map((d, idx) => {
+      const statusClass = d.status === 'sent' ? 'sent' :
+                          d.status === 'read' ? 'read' :
+                          d.status === 'rejected' ? 'rejected' : 'pending';
+      const statusLabel = statusOptions.find(o => o.value === d.status)?.label || d.status;
+
+      return `
+        <div class="dist-card ${statusClass}">
+          <div class="name">${d.name}</div>
+          <div class="status">${I18N[currentLang].dist_status_label}: <strong>${statusLabel}</strong></div>
+          <select onchange="updateDistributionStatus(${idx}, this.value)" ${isReadonly}>
+            ${statusOptions.map(o => `
+              <option value="${o.value}" ${d.status === o.value ? 'selected' : ''}>${o.label}</option>
+            `).join('')}
+          </select>
+        </div>
+      `;
+    }).join('');
+
+    applyPermissions();
+  } catch(err) {
+    console.error('Error renderDistribution:', err);
+  }
+}
+
+function updateDistributionStatus(index, newStatus){
+  if(!canEdit()){
+    showToast(I18N[currentLang].err_access_denied, 'error');
+    return;
+  }
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEYS.DISTRIBUTION) || 'null');
+    const distData = saved || JSON.parse(JSON.stringify(LOAM_DISTRIBUTION));
+
+    if(!distData[index]){
+      showToast('Departemen tidak ditemukan', 'error');
+      return;
+    }
+
+    distData[index].status = newStatus;
+    localStorage.setItem(STORAGE_KEYS.DISTRIBUTION, JSON.stringify(distData));
+
+    renderDistribution();
+    showToast(`Status ${distData[index].name} diubah`, 'success');
+  } catch(err) {
+    console.error('Error updateDistributionStatus:', err);
+    showToast('Gagal mengubah status distribusi', 'error');
+  }
+}
+
+function saveDistribution(){
+  if(!canEdit()){
+    showToast(I18N[currentLang].err_access_denied, 'error');
+    return;
+  }
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEYS.DISTRIBUTION) || 'null');
+    const distData = saved || LOAM_DISTRIBUTION;
+    localStorage.setItem(STORAGE_KEYS.DISTRIBUTION, JSON.stringify(distData));
+    addHistoryEntry({
+      who: currentUser.username,
+      dept: currentUser.dept,
+      action: 'DISTRIBUTION_SAVE',
+      detail: 'Menyimpan status distribusi LOAM',
+      time: new Date().toISOString()
+    });
+    showToast('Distribusi LOAM berhasil disimpan', 'success');
+  } catch(err) {
+    console.error('Error saveDistribution:', err);
+    showToast('Gagal menyimpan distribusi', 'error');
+  }
+}
+
+/* ================================================================
+   REVIEW BERKALA
+================================================================ */
+function renderReview(){
+  try {
+    const saved = JSON.parse(localStorage.getItem(STORAGE_KEYS.REVIEW) || 'null');
+    const now = new Date();
+
+    const defaultLast = new Date(now); defaultLast.setMonth(defaultLast.getMonth() - 6);
+    const defaultNext = new Date(now); defaultNext.setMonth(defaultNext.getMonth() + 6);
+
+    const review = saved || {
+      lastReview: defaultLast.toISOString().slice(0,10),
+      nextReview: defaultNext.toISOString().slice(0,10),
+      status: 'valid',
+      pic: 'QA & Komite Halal',
+      notes: ''
+    };
+
+    const fmt = d => {
+      const date = new Date(d);
+      return `${String(date.getDate()).padStart(2,'0')}/${String(date.getMonth()+1).padStart(2,'0')}/${date.getFullYear()}`;
+    };
+
+    const elLast = document.getElementById('lastReview');
+    const elNext = document.getElementById('nextReview');
+    const elStatus = document.getElementById('reviewStatus');
+    const elStatusSel = document.getElementById('reviewStatusSelect');
+    const elPIC = document.getElementById('reviewPIC');
+    const elNotes = document.getElementById('reviewNotes');
+
+    if(elLast) elLast.value = fmt(review.lastReview);
+    if(elNext) elNext.value = fmt(review.nextReview);
+    if(elStatus) elStatus.value = review.status === 'valid' ? I18N[currentLang].status_valid :
+                                  review.status === 'segera' ? I18N[currentLang].status_soon :
+                                  review.status === 'terlambat' ? I18N[currentLang].status_late : 'Dalam Proses';
+    if(elStatusSel) elStatusSel.value = review.status;
+    if(elPIC) elPIC.value = review.pic || '';
+    if(elNotes) elNotes.value = review.notes || '';
+
+    updateReviewProgress(review.lastReview, review.nextReview);
+  } catch(err) {
+    console.error('Error renderReview:', err);
+  }
+}
+
+function updateReviewProgress(lastReview, nextReview){
+  try {
+    const bar = document.getElementById('reviewProgressBar');
+    const label = document.getElementById('reviewAgeLabel');
+    if(!bar || !label) return;
+
+    const last = new Date(lastReview).getTime();
+    const next = new Date(nextReview).getTime();
+    const now = Date.now();
+
+    const total = next - last;
+    if(total <= 0){
+      bar.style.width = '100%';
+      bar.className = 'bar danger';
+      label.textContent = '—';
+      return;
+    }
+
+    const elapsed = Math.max(0, now - last);
+    const percent = Math.min(100, Math.round((elapsed / total) * 100));
+
+    bar.style.width = percent + '%';
+    if(percent >= 100){
+      bar.className = 'bar danger';
+      label.textContent = I18N[currentLang].review_late;
+    } else if(percent >= 80){
+      bar.className = 'bar warning';
+      label.textContent = `${100 - percent}% tersisa`;
+    } else {
+      bar.className = 'bar';
+      label.textContent = `${percent}% dari siklus review`;
+    }
+  } catch(err) {
+    console.error('Error updateReviewProgress:', err);
+  }
+}
+
+function saveReview(){
+  if(!canEdit()){
+    showToast(I18N[currentLang].err_access_denied, 'error');
+    return;
+  }
+  try {
+    const status = document.getElementById('reviewStatusSelect')?.value || 'valid';
+    const pic = document.getElementById('reviewPIC')?.value.trim() || '';
+    const notes = document.getElementById('reviewNotes')?.value.trim() || '';
+
+    if(!pic){
+      showToast('Penanggung jawab review wajib diisi', 'error');
+      return;
+    }
+
+    const now = new Date();
+    const next = new Date(now); next.setMonth(next.getMonth() + 6);
+
+    const reviewData = {
+      lastReview: now.toISOString().slice(0,10),
+      nextReview: next.toISOString().slice(0,10),
+      status: status,
+      pic: pic,
+      notes: notes,
+      updated_at: now.toISOString(),
+      updated_by: currentUser.username
+    };
+
+    localStorage.setItem(STORAGE_KEYS.REVIEW, JSON.stringify(reviewData));
+    renderReview();
+
+    addHistoryEntry({
+      who: currentUser.username,
+      dept: currentUser.dept,
+      action: 'REVIEW_SAVE',
+      detail: `Review berkala: ${status} oleh ${pic}`,
+      time: new Date().toISOString()
+    });
+
+    showToast('Review berkala berhasil disimpan', 'success');
+  } catch(err) {
+    console.error('Error saveReview:', err);
+    showToast('Gagal menyimpan review', 'error');
+  }
+}
+
+function resetReview(){
+  try {
+    localStorage.removeItem(STORAGE_KEYS.REVIEW);
+    renderReview();
+    showToast('Review direset ke default', 'success');
+  } catch(err) {
+    console.error('Error resetReview:', err);
+  }
+}
+
+/* ================================================================
+   DOKUMEN AKAN/TELAH KEDALUWARSA (Auto-populate dari LOAM)
+================================================================ */
+function renderExpiringTable(){
+  try {
+    const tbody = document.getElementById('tblExpiring');
+    if(!tbody) return;
+
+    const loamData = JSON.parse(localStorage.getItem(STORAGE_KEYS.LOAM_DATA) || '[]');
+
+    if(loamData.length === 0){
+      tbody.innerHTML = `<tr class="empty-row"><td colspan="7"><span class="icon">⏳</span><span>${I18N[currentLang].empty_data}</span></td></tr>`;
+      return;
+    }
+
+    const now = new Date();
+    const thresholdDays = 90;
+
+    const expiring = loamData
+      .filter(d => d.masa_berlaku)
+      .map(d => {
+        const expiry = new Date(d.masa_berlaku);
+        const diffDays = Math.ceil((expiry - now) / (1000 * 60 * 60 * 24));
+        return { ...d, diffDays };
+      })
+      .filter(d => d.diffDays <= thresholdDays)
+      .sort((a, b) => a.diffDays - b.diffDays);
+
+    if(expiring.length === 0){
+      tbody.innerHTML = `<tr class="empty-row"><td colspan="7"><span class="icon">✅</span><span>Tidak ada dokumen yang akan kedaluwarsa dalam ${thresholdDays} hari</span></td></tr>`;
+      return;
+    }
+
+    tbody.innerHTML = expiring.map((d, i) => {
+      let statusBadge, statusClass;
+      if(d.diffDays < 0){
+        statusBadge = 'Kedaluwarsa';
+        statusClass = 'rejected';
+      } else if(d.diffDays <= 30){
+        statusBadge = 'Segera Kedaluwarsa';
+        statusClass = 'pending';
+      } else {
+        statusBadge = 'Akan Kedaluwarsa';
+        statusClass = 'pending';
+      }
+
+      return `
+        <tr>
+          <td>${i + 1}</td>
+          <td>${d.nama || '-'}</td>
+          <td>${d.supplier || '-'}</td>
+          <td>${d.masa_berlaku || '-'}</td>
+          <td>
+            <strong style="color:${d.diffDays < 0 ? 'var(--danger)' : d.diffDays <= 30 ? 'var(--warning)' : 'var(--text)'};">
+              ${d.diffDays < 0 ? `Terlewat ${Math.abs(d.diffDays)} hari` : `${d.diffDays} hari`}
+            </strong>
+          </td>
+          <td><span class="badge ${statusClass}">${statusBadge}</span></td>
+          <td>
+            <button class="btn btn-outline btn-sm admin-purchasing-only" onclick="notifyExpiring('${d.id}')">
+              <span>📨</span><span>Notif</span>
+            </button>
+          </td>
+        </tr>
+      `;
+    }).join('');
+
+    applyPermissions();
+  } catch(err) {
+    console.error('Error renderExpiringTable:', err);
+    const tbody = document.getElementById('tblExpiring');
+    if(tbody){
+      tbody.innerHTML = `<tr class="empty-row"><td colspan="7"><span class="icon">⚠️</span><span>Gagal memuat data</span></td></tr>`;
+    }
+  }
+}
+
+function notifyExpiring(loamId){
+  try {
+    const loamData = JSON.parse(localStorage.getItem(STORAGE_KEYS.LOAM_DATA) || '[]');
+    const item = loamData.find(d => d.id === loamId);
+    if(!item){
+      showToast('Data material tidak ditemukan', 'error');
+      return;
+    }
+
+    const subject = `Peringatan: Sertifikat Halal ${item.nama} akan kedaluwarsa`;
+    const message = `Material: ${item.nama}\nSupplier: ${item.supplier}\nNo. Sertifikat: ${item.nomor_sert}\nMasa Berlaku: ${item.masa_berlaku}\n\nMohon segera ditindaklanjuti untuk pembaruan dokumen.`;
+
+    const waText = encodeURIComponent(`*${subject}*\n\n${message}`);
+    window.open(`https://wa.me/${NOTIFY_CONFIG.whatsappNumber}?text=${waText}`, '_blank');
+
+    const emailSubject = encodeURIComponent(subject);
+    const emailBody = encodeURIComponent(message);
+    setTimeout(() => {
+      window.location.href = `mailto:${NOTIFY_CONFIG.emailAddress}?subject=${emailSubject}&body=${emailBody}`;
+    }, 1000);
+
+    showToast('Notifikasi dikirim ke WhatsApp & Email', 'success');
+  } catch(err) {
+    console.error('Error notifyExpiring:', err);
+    showToast('Gagal mengirim notifikasi', 'error');
+  }
+}
+
+/* ================================================================
+   NOTIFIKASI PURCHASING
+================================================================ */
+function validateNotifyForm(){
+  const subject = document.getElementById('notifySubject')?.value.trim() || '';
+  const supplier = document.getElementById('notifySupplier')?.value.trim() || '';
+  const message = document.getElementById('notifyMessage')?.value.trim() || '';
+
+  if(!subject){
+    showToast('Subjek perubahan wajib diisi', 'error');
+    document.getElementById('notifySubject')?.focus();
+    return null;
+  }
+  if(!supplier){
+    showToast('Nama supplier wajib diisi', 'error');
+    document.getElementById('notifySupplier')?.focus();
+    return null;
+  }
+  if(!message){
+    showToast('Detail perubahan wajib diisi', 'error');
+    document.getElementById('notifyMessage')?.focus();
+    return null;
+  }
+  return { subject, supplier, message };
+}
+
+function notifyViaWhatsApp(){
+  if(!canEdit()){
+    showToast(I18N[currentLang].err_access_denied, 'error');
+    return;
+  }
+  try {
+    const data = validateNotifyForm();
+    if(!data) return;
+
+    const fullMessage = `*${data.subject}*\n\nSupplier: ${data.supplier}\n\n${data.message}\n\n— Dikirim oleh: ${currentUser.username} (${currentUser.dept})\n${new Date().toLocaleString('id-ID')}`;
+
+    const waUrl = `https://wa.me/${NOTIFY_CONFIG.whatsappNumber}?text=${encodeURIComponent(fullMessage)}`;
+    window.open(waUrl, '_blank');
+
+    addHistoryEntry({
+      who: currentUser.username,
+      dept: currentUser.dept,
+      action: 'NOTIFY_WA',
+      detail: `WhatsApp ke ${NOTIFY_CONFIG.whatsappNumber}: ${data.subject}`,
+      time: new Date().toISOString()
+    });
+    showToast('Membuka WhatsApp...', 'success');
+  } catch(err) {
+    console.error('Error notifyViaWhatsApp:', err);
+    showToast('Gagal membuka WhatsApp', 'error');
+  }
+}
+
+function notifyViaEmail(){
+  if(!canEdit()){
+    showToast(I18N[currentLang].err_access_denied, 'error');
+    return;
+  }
+  try {
+    const data = validateNotifyForm();
+    if(!data) return;
+
+    const body = `${data.message}\n\n— Dikirim oleh: ${currentUser.username} (${currentUser.dept})\n${new Date().toLocaleString('id-ID')}`;
+
+    const mailtoUrl = `mailto:${NOTIFY_CONFIG.emailAddress}?subject=${encodeURIComponent(data.subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailtoUrl;
+
+    addHistoryEntry({
+      who: currentUser.username,
+      dept: currentUser.dept,
+      action: 'NOTIFY_EMAIL',
+      detail: `Email ke ${NOTIFY_CONFIG.emailAddress}: ${data.subject}`,
+      time: new Date().toISOString()
+    });
+    showToast('Membuka aplikasi email...', 'success');
+  } catch(err) {
+    console.error('Error notifyViaEmail:', err);
+    showToast('Gagal membuka email', 'error');
+  }
+}
+
+function notifyViaBoth(){
+  if(!canEdit()){
+    showToast(I18N[currentLang].err_access_denied, 'error');
+    return;
+  }
+  try {
+    const data = validateNotifyForm();
+    if(!data) return;
+
+    notifyViaWhatsApp();
+
+    setTimeout(() => {
+      try {
+        const body = `${data.message}\n\n— Dikirim oleh: ${currentUser.username} (${currentUser.dept})\n${new Date().toLocaleString('id-ID')}`;
+        const mailtoUrl = `mailto:${NOTIFY_CONFIG.emailAddress}?subject=${encodeURIComponent(data.subject)}&body=${encodeURIComponent(body)}`;
+        window.location.href = mailtoUrl;
+      } catch(e) {
+        console.error('Error in notifyViaBoth (email):', e);
+      }
+    }, 1500);
+
+    addHistoryEntry({
+      who: currentUser.username,
+      dept: currentUser.dept,
+      action: 'NOTIFY_BOTH',
+      detail: `WA & Email: ${data.subject}`,
+      time: new Date().toISOString()
+    });
+    showToast('Membuka WhatsApp & Email...', 'success');
+  } catch(err) {
+    console.error('Error notifyViaBoth:', err);
+    showToast('Gagal mengirim notifikasi', 'error');
+  }
+}
+
+/* ================================================================
+   NOMOR MA
+================================================================ */
+function generateNoMA(){
+  const year = new Date().getFullYear();
+  const key = 'ma_counter_' + year;
+  let counter = parseInt(localStorage.getItem(key) || '0', 10) + 1;
+  const no = String(counter).padStart(3,'0') + '/MA/' + year;
+  return { counter, no, key };
+}
+function incrementMACounter(){
+  if(!canEdit()) return;
+  try {
+    const { counter, no, key } = generateNoMA();
+    localStorage.setItem(key, String(counter));
+    const f = document.getElementById('f_no_ma');
+    if(f) f.value = no;
+  } catch(err) {
+    console.error('Error incrementMACounter:', err);
+  }
+}
+
+/* ================================================================
+   LOGIN / LOGOUT
+================================================================ */
+function doLogin(){
+  try {
+    const u = document.getElementById('username').value.trim();
+    const p = document.getElementById('password').value;
+    const err = document.getElementById('loginError');
+    const dict = I18N[currentLang] || I18N.id;
+
+    if(Date.now() < loginLockUntil){
+      const remaining = Math.ceil((loginLockUntil - Date.now()) / 1000);
+      err.textContent = `Terlalu banyak percobaan. Coba lagi dalam ${remaining} detik.`;
+      err.style.display = 'block';
+      return;
+    }
+
+    if(!u && !p){
+      err.textContent = 'Username dan password wajib diisi!';
+      err.style.display = 'block';
+      return;
+    }
+    if(!u){
+      err.textContent = 'Username wajib diisi!';
+      err.style.display = 'block';
+      return;
+    }
+    if(!p){
+      err.textContent = 'Password wajib diisi!';
+      err.style.display = 'block';
+      return;
+    }
+
+    const user = USERS.find(x => x.username === u && x.password === p);
+    if(!user){
+      loginAttempts++;
+      if(loginAttempts >= 3){
+        loginLockUntil = Date.now() + 5000;
+        loginAttempts = 0;
+        err.textContent = 'Terlalu banyak percobaan gagal. Tunggu 5 detik.';
+      } else {
+        err.textContent = dict.login_err;
+      }
+      err.style.display = 'block';
+      return;
+    }
+
+    loginAttempts = 0;
+    loginLockUntil = 0;
+    err.style.display = 'none';
+    currentUser = user;
+    isSuperAdmin = (user.username === SUPERADMIN_USER);
+    isPurchasing = (user.dept === PURCHASING_DEPT);
+    localStorage.setItem('session', JSON.stringify(user));
+    enterApp();
+  } catch(err) {
+    console.error('Error doLogin:', err);
+    const errEl = document.getElementById('loginError');
+    if(errEl){
+      errEl.textContent = 'Terjadi kesalahan saat login.';
+      errEl.style.display = 'block';
+    }
+  }
+}
+
+function enterApp(){
+  try {
+    document.getElementById('loginScreen').style.display = 'none';
+    document.getElementById('appScreen').style.display = 'block';
+
+    document.getElementById('userNameDisplay').textContent = currentUser.dept;
+    document.getElementById('userCodeDisplay').textContent = currentUser.code;
+
+    const notice = document.getElementById('roleNotice');
+    const dict = I18N[currentLang];
+    if(isSuperAdmin){
+      notice.className = 'notice warn';
+      notice.textContent = '👑 ' + dict.admin_notice;
+    } else if(isPurchasing){
+      notice.className = 'notice warn';
+      notice.textContent = '🛒 ' + dict.editor_notice;
+    } else {
+      notice.className = 'notice info';
+      notice.textContent = '👁️ ' + dict.view_only_notice;
+    }
+
+    const tabRiwayat = document.getElementById('tabRiwayat');
+    const tabAkun = document.getElementById('tabAkun');
+    const tabPengaturan = document.getElementById('tabPengaturan');
+    [tabRiwayat, tabAkun, tabPengaturan].forEach(t => {
+      if(t){
+        if(isSuperAdmin) t.classList.remove('hidden-tab');
+        else t.classList.add('hidden-tab');
+      }
+    });
+
+    const setDept = document.getElementById('setDept');
+    if(setDept) setDept.textContent = currentUser.dept;
+    const setUser = document.getElementById('setUser');
+    if(setUser) setUser.textContent = currentUser.username;
+    const setCode = document.getElementById('setCode');
+    if(setCode) setCode.textContent = currentUser.code;
+    const setRole = document.getElementById('setRole');
+    if(setRole) setRole.textContent = isSuperAdmin
+      ? I18N[currentLang].role_superadmin
+      : (isPurchasing ? I18N[currentLang].role_purchasing : I18N[currentLang].role_user);
+    const setLang = document.getElementById('setLang');
+    if(setLang) setLang.textContent = I18N[currentLang].language_name;
+
+    const noMA = document.getElementById('f_no_ma');
+    if(noMA){
+      const year = new Date().getFullYear();
+      const key = 'ma_counter_' + year;
+      const next = parseInt(localStorage.getItem(key) || '0', 10) + 1;
+      noMA.value = String(next).padStart(3,'0') + '/MA/' + year;
+    }
+    const lok = document.getElementById('f_lokasi_tgl');
+    if(lok){
+      const now = new Date();
+      const days = ['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'];
+      const dd = String(now.getDate()).padStart(2,'0');
+      const mm = String(now.getMonth()+1).padStart(2,'0');
+      const yyyy = now.getFullYear();
+      lok.value = `Kabupaten Bekasi, ${days[now.getDay()]}, ${dd}/${mm}/${yyyy}`;
+    }
+
+    buildFilterBar('filterPengajuan');  buildToolbar('toolbarPengajuan');
+    buildFilterBar('filterLoam');       buildToolbar('toolbarLoam');
+    buildFilterBar('filterMaster');     buildToolbar('toolbarMaster');
+    buildFilterBar('filterLaporan');    buildToolbar('toolbarLaporan');
+
+    renderFormChecklists();
+    renderDistribution();
+    renderReview();
+    renderLoamTable();
+    renderExpiringTable();
+    if(isSuperAdmin) buildAccountTable();
+    applyPermissions();
+    renderDashboard();
+  } catch(err) {
+    console.error('Error enterApp:', err);
+    showToast('Terjadi kesalahan saat memuat aplikasi', 'error');
+  }
+}
+
+function logout(){
+  currentUser = null;
+  isSuperAdmin = false;
+  isPurchasing = false;
+  localStorage.removeItem('session');
+  document.getElementById('appScreen').style.display = 'none';
+  document.getElementById('loginScreen').style.display = 'flex';
+  document.getElementById('username').value = '';
+  document.getElementById('password').value = '';
+  document.getElementById('loginError').style.display = 'none';
+}
+
+/* ================================================================
+   TABS
+================================================================ */
+document.getElementById('mainTabs').addEventListener('click', e => {
+  const btn = e.target.closest('button[data-tab]');
+  if(!btn || btn.classList.contains('hidden-tab')) return;
+
+  document.querySelectorAll('#mainTabs button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+
+  const tabId = btn.getAttribute('data-tab');
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  const panel = document.getElementById('panel-' + tabId);
+  if(panel) panel.classList.add('active');
+
+  if(tabId === 'monitoring'){
+    renderDistribution();
+    renderReview();
+    renderExpiringTable();
+  }
+  if(tabId === 'loam'){
+    renderLoamTable();
+  }
+  if(tabId === 'dashboard'){
+    renderDashboard();
+  }
+});
+
+/* ================================================================
+   DASHBOARD RENDER (REVISI: KPI dari data LOAM)
+================================================================ */
+function renderDashboard(){
+  try {
+    // REVISI: Ambil data dari localStorage LOAM, bukan dummy
+    const loamData = JSON.parse(localStorage.getItem(STORAGE_KEYS.LOAM_DATA) || '[]');
+
+    const total = loamData.length;
+    // Semua data LOAM dianggap "Disetujui" karena sudah masuk daftar approved
+    const approved = total;
+    const pending = 0;
+    const rejected = 0;
+    const overdue = 0;
+    const compliance = total > 0 ? 100 : 0;
+
+    const elTotal = document.getElementById('kpiTotal');
+    if(elTotal) elTotal.textContent = total;
+    const elPending = document.getElementById('kpiPending');
+    if(elPending) elPending.textContent = pending;
+    const elApproved = document.getElementById('kpiApproved');
+    if(elApproved) elApproved.textContent = approved;
+    const elRejected = document.getElementById('kpiRejected');
+    if(elRejected) elRejected.textContent = rejected;
+    const elOverdue = document.getElementById('kpiOverdue');
+    if(elOverdue) elOverdue.textContent = overdue;
+    const elCompliance = document.getElementById('kpiCompliance');
+    if(elCompliance) elCompliance.textContent = compliance + '%';
+
+    // Summary cards
+    const uniqueBahan = new Set(loamData.map(d => d.jenis).filter(Boolean)).size;
+    const uniqueSupplier = new Set(loamData.map(d => d.supplier).filter(Boolean)).size;
+    const uniqueProdusen = new Set(loamData.map(d => d.produsen).filter(Boolean)).size;
+    const uniqueNegara = new Set(loamData.map(d => d.negara).filter(Boolean)).size;
+
+    const elBahan = document.getElementById('kpiPerBahan');
+    if(elBahan) elBahan.textContent = uniqueBahan;
+    const elSup = document.getElementById('kpiPerSupplier');
+    if(elSup) elSup.textContent = uniqueSupplier;
+    const elProd = document.getElementById('kpiPerProdusen');
+    if(elProd) elProd.textContent = uniqueProdusen;
+    const elNeg = document.getElementById('kpiPerNegara');
+    if(elNeg) elNeg.textContent = uniqueNegara;
+
+    // Render tabel dashboard dari data LOAM
+    const tbody = document.getElementById('tblDashboard');
+    if(tbody){
+      if(loamData.length === 0){
+        tbody.innerHTML = `<tr class="empty-row"><td colspan="6"><span class="icon">📋</span><span>${I18N[currentLang].empty_data}</span></td></tr>`;
+      } else {
+        tbody.innerHTML = loamData.slice(0, 10).map((d, i) => `
+          <tr>
+            <td>${i + 1}</td>
+            <td>${d.nama || '-'}</td>
+            <td>${d.kategori || '-'}</td>
+            <td>${d.supplier || '-'}</td>
+            <td><span class="badge user">Disetujui</span></td>
+            <td>${d.created_at ? new Date(d.created_at).toLocaleDateString('id-ID') : '-'}</td>
+          </tr>
+        `).join('');
+      }
+    }
+  } catch(err) {
+    console.error('Error renderDashboard:', err);
+  }
+}
+
+/* ================================================================
+   ACCOUNT TABLE
+================================================================ */
+function buildAccountTable(){
+  try {
+    const tbody = document.getElementById('tblAkun');
+    if(!tbody) return;
+    const dict = I18N[currentLang];
+    tbody.innerHTML = '';
+    USERS.forEach((u, i) => {
+      const tr = document.createElement('tr');
+      let roleBadge;
+      if(u.username === SUPERADMIN_USER){
+        roleBadge = '<span class="badge admin">' + dict.role_superadmin + '</span>';
+      } else if(u.dept === PURCHASING_DEPT){
+        roleBadge = '<span class="badge purchasing">' + dict.role_purchasing + '</span>';
+      } else {
+        roleBadge = '<span class="badge user">' + dict.role_user + '</span>';
+      }
+      tr.innerHTML = `
+        <td>${i + 1}</td>
+        <td>${u.dept}</td>
+        <td><code>${u.username}</code></td>
+        <td><span class="pwd">${u.password}</span></td>
+        <td><strong>${u.code}</strong></td>
+        <td>${roleBadge}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  } catch(err) {
+    console.error('Error buildAccountTable:', err);
+  }
+}
+
+/* ================================================================
+   SAVE
+================================================================ */
+function saveAll(){
+  if(!canEdit()){
+    showToast(I18N[currentLang].err_access_denied, 'error');
+    return;
+  }
+  try {
+    const namaMaterial = document.getElementById('f_nama_material');
+    if(namaMaterial && !namaMaterial.value.trim()){
+      showToast('Nama Material wajib diisi sebelum menyimpan', 'error');
+      namaMaterial.focus();
+      return;
+    }
+
+    const btn = document.getElementById('btnSaveAuto');
+    const original = btn ? btn.innerHTML : '';
+    if(btn){
+      btn.classList.add('saved');
+      btn.innerHTML = '<span>✅</span><span>' + I18N[currentLang].saved + '</span>';
+    }
+    showToast(I18N[currentLang].saved, 'success');
+    addHistoryEntry({
+      who: currentUser.username,
+      dept: currentUser.dept,
+      action: 'SAVE',
+      detail: 'Data disimpan otomatis ke sistem',
+      time: new Date().toISOString()
+    });
+    incrementMACounter();
+    if(btn){
+      setTimeout(() => {
+        btn.classList.remove('saved');
+        btn.innerHTML = original;
+      }, 2000);
+    }
+  } catch(err) {
+    console.error('Error saveAll:', err);
+    showToast('Gagal menyimpan data', 'error');
+  }
+}
+
+function saveDailyHistory(){
+  if(!isSuperAdmin){
+    showToast('Khusus Superadmin', 'error');
+    return;
+  }
+  try {
+    const key = 'daily_history_' + new Date().toISOString().slice(0,10);
+    const arr = JSON.parse(localStorage.getItem('history_log') || '[]');
+    localStorage.setItem(key, JSON.stringify(arr));
+    showToast('Riwayat harian disimpan', 'success');
+  } catch(err) {
+    console.error('Error saveDailyHistory:', err);
+    showToast('Gagal menyimpan riwayat harian', 'error');
+  }
+}
+
+function showToast(msg, type){
+  try {
+    const t = document.getElementById('toast');
+    if(!t) return;
+    t.textContent = msg;
+    t.className = 'show ' + (type || '');
+    setTimeout(() => { t.className = ''; }, 2600);
+  } catch(err) {
+    console.error('Error showToast:', err);
+  }
+}
+
+/* ================================================================
+   HISTORY
+================================================================ */
+function addHistoryEntry(entry){
+  try {
+    const key = 'history_log';
+    const arr = JSON.parse(localStorage.getItem(key) || '[]');
+    arr.unshift(entry);
+    localStorage.setItem(key, JSON.stringify(arr.slice(0, 500)));
+    renderHistory();
+  } catch(err) {
+    console.error('Error addHistoryEntry:', err);
+  }
+}
+
+function renderHistory(){
+  try {
+    const container = document.getElementById('historyList');
+    if(!container) return;
+    const arr = JSON.parse(localStorage.getItem('history_log') || '[]');
+    if(arr.length === 0){
+      container.innerHTML = `
+        <div class="empty-row" style="text-align:center; padding:40px; color:#64748b;">
+          <span class="icon" style="display:block; font-size:32px; opacity:.4;">🕒</span>
+          <span>${I18N[currentLang].empty_data}</span>
+        </div>`;
+      return;
+    }
+    container.innerHTML = arr.map(h => `
+      <div class="history-item">
+        <div class="meta">
+          <span class="who">${h.who}</span>
+          <span>${h.dept || ''}</span>
+          <span>${h.action}</span>
+          <span>${new Date(h.time).toLocaleString()}</span>
+        </div>
+        <div class="body">${h.detail || ''}</div>
+      </div>
+    `).join('');
+  } catch(err) {
+    console.error('Error renderHistory:', err);
+  }
+}
+
+/* ================================================================
+   AUTO-SAVE DRAFT FORM
+================================================================ */
+function autoSaveDraft(){
+  if(!currentUser || !canEdit()) return;
+  try {
+    const draft = {
+      f_nama_material: document.getElementById('f_nama_material')?.value || '',
+      f_kode_material: document.getElementById('f_kode_material')?.value || '',
+      f_nama_supplier: document.getElementById('f_nama_supplier')?.value || '',
+      f_nama_produsen: document.getElementById('f_nama_produsen')?.value || '',
+      f_negara_produsen: document.getElementById('f_negara_produsen')?.value || '',
+      f_kategori: document.getElementById('f_kategori')?.value || '',
+      loam_nama: document.getElementById('loam_nama')?.value || '',
+      loam_jenis: document.getElementById('loam_jenis')?.value || '',
+      loam_produsen: document.getElementById('loam_produsen')?.value || '',
+      loam_negara: document.getElementById('loam_negara')?.value || '',
+      savedAt: new Date().toISOString()
+    };
+    localStorage.setItem('draft_form_' + currentUser.username, JSON.stringify(draft));
+  } catch(err) {
+    console.error('Error autoSaveDraft:', err);
+  }
+}
+
+function loadDraftForm(){
+  if(!currentUser) return;
+  try {
+    const saved = localStorage.getItem('draft_form_' + currentUser.username);
+    if(!saved) return;
+    const draft = JSON.parse(saved);
+    const age = Date.now() - new Date(draft.savedAt).getTime();
+    if(age > 24 * 60 * 60 * 1000) return;
+    if(draft.f_nama_material) document.getElementById('f_nama_material').value = draft.f_nama_material;
+    if(draft.f_kode_material) document.getElementById('f_kode_material').value = draft.f_kode_material;
+    if(draft.f_nama_supplier) document.getElementById('f_nama_supplier').value = draft.f_nama_supplier;
+    if(draft.f_nama_produsen) document.getElementById('f_nama_produsen').value = draft.f_nama_produsen;
+    if(draft.f_negara_produsen) document.getElementById('f_negara_produsen').value = draft.f_negara_produsen;
+    if(draft.f_kategori) document.getElementById('f_kategori').value = draft.f_kategori;
+  } catch(err) {
+    console.error('Error loadDraftForm:', err);
+  }
+}
+
+/* ================================================================
+   INIT
+================================================================ */
+(function init(){
+  try {
+    // Inisialisasi data contoh LOAM terlebih dahulu
+    initializeSampleLoamData();
+
+    const savedLang = localStorage.getItem('lang') || 'id';
+    setLanguage(savedLang);
+
+    const session = localStorage.getItem('session');
+    if(session){
+      try{
+        const u = JSON.parse(session);
+        const found = USERS.find(x => x.username === u.username);
+        if(found){
+          currentUser = found;
+          isSuperAdmin = (found.username === SUPERADMIN_USER);
+          isPurchasing = (found.dept === PURCHASING_DEPT);
+          enterApp();
+          loadDraftForm();
+        }
+      }catch(e){ /* ignore */ }
+    }
+
+    ['username','password'].forEach(id => {
+      const el = document.getElementById(id);
+      if(el) el.addEventListener('keydown', ev => {
+        if(ev.key === 'Enter') doLogin();
+      });
+    });
+
+    const origSetLanguage = window.setLanguage;
+    window.setLanguage = function(lang){
+      origSetLanguage(lang);
+      if(currentUser){
+        buildFilterBar('filterPengajuan');  buildToolbar('toolbarPengajuan');
+        buildFilterBar('filterLoam');       buildToolbar('toolbarLoam');
+        buildFilterBar('filterMaster');     buildToolbar('toolbarMaster');
+        buildFilterBar('filterLaporan');    buildToolbar('toolbarLaporan');
+        renderFormChecklists();
+        renderDistribution();
+        renderReview();
+        renderExpiringTable();
+        renderLoamTable();
+        if(isSuperAdmin) buildAccountTable();
+        renderDashboard();
+      }
+    };
+
+    setInterval(autoSaveDraft, 30000);
+
+    document.addEventListener('keydown', ev => {
+      if((ev.ctrlKey || ev.metaKey) && ev.key === 's'){
+        ev.preventDefault();
+        if(currentUser && canEdit()) saveAll();
+      }
+      if(ev.key === 'Escape'){
+        closeSignatureModal();
+        closeCameraModal();
+      }
+    });
+  } catch(err) {
+    console.error('Error init:', err);
+  }
+})();
+</script>
+</body>
+</html>
